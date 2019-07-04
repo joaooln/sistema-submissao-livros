@@ -35,10 +35,15 @@ session_start();
         </style>
         <!-- Custom styles for this template -->
         <link href="css/dashboard.css" rel="stylesheet">
+        <link href="css/all.min.css" rel="stylesheet">
+
     </head>
     <body>
 
         <nav class="navbar navbar-expand navbar-dark bg-dark">
+            <a class="sidebar-toggle text-light mr-3">
+                <span class="navbar-toggler-icon"></span>
+            </a>
             <a class="navbar-brand" href="#">SS Editora</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -51,8 +56,8 @@ session_start();
                             <img class="rounded-circle" src="imagens/logo.png" width="20" height="20"> &nbsp;<span class="d-none d-sm-inline">Usuário</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Perfil</a>
-                            <a class="dropdown-item" href="#">Sair</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Perfil</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Sair</a>
                         </div>
                     </li>
                 </ul>                
@@ -62,14 +67,29 @@ session_start();
         <div class="d-flex">
             <nav class="sidebar">
                 <ul class="list-unstyled">
-                    <li><a href="#"> Dashboard</a></li>
-                    <li><a href="#"> Usuários</a></li>
-                    <li><a href="#"> Menu</a></li>
+                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li>
+                        <a href="#submenu1" data-toggle="collapse">
+                            <i class="fas fa-user"></i> Usuário
+                        </a>
+                        <ul id="submenu1" class="list-unstyled collapse">
+                            <li><a href="#"><i class="fas fa-users"></i> Usuários</a></li>
+                            <li><a href="#"><i class="fas fa-key"></i> Nível de Acesso</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu2" data-toggle="collapse"><i class="fas fa-list-ul"></i> Menu</a>
+                        <ul id="submenu2" class="list-unstyled collapse">
+                            <li><a href="#"><i class="fas fa-file-alt"></i> Páginas</a></li>
+                            <li><a href="#"><i class="fab fa-elementor"></i> Item de Menu</a></li>
+                        </ul>
+
+                    </li>
                     <li><a href="#"> Item 1</a></li>
                     <li><a href="#"> Item 2</a></li>
                     <li><a href="#"> Item 3</a></li>
                     <li class="active"><a href="#"> Item 4</a></li>
-                    <li><a href="#"> Item 5</a></li>
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
                 </ul>
             </nav>
         </div>
@@ -77,6 +97,8 @@ session_start();
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="js/dashboard.js" ></script>
+        <script defer src="js/all.min.js"></script>
 
     </body>
 </html>
