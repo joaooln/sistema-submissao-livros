@@ -67,7 +67,7 @@ session_start();
         <div class="d-flex">
             <nav class="sidebar">
                 <ul class="list-unstyled">
-                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Listar Usuários</a></li>
                     <li>
                         <a href="#submenu1" data-toggle="collapse">
                             <i class="fas fa-user"></i> Usuário
@@ -92,62 +92,14 @@ session_start();
                     <li><a href="#"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
                 </ul>
             </nav>
-            <div class="content p-1">
-                <div class="list-group-item">
-                    <div class="d-flex">
-                        <div class="mr-auto p-2">
-                            <h2 class="display-4 titulo">Dashboard</h2>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card bg-success text-white">
-                                <div class="card-body">
-                                    <i class="fas fa-users fa-3x"></i>
-                                    <h6 class="card-title">Usuários</h6>
-                                    <h2 class="lead-4">147</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card bg-danger text-white">
-                                <div class="card-body">
-                                    <i class="fas fa-file fa-3x"></i>
-                                    <h6 class="card-title">Artigos</h6>
-                                    <h2 class="lead-4">63</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card bg-warning text-white">
-                                <div class="card-body">
-                                    <i class="fas fa-eye fa-3x"></i>
-                                    <h6 class="card-title">Visitas</h6>
-                                    <h2 class="lead-4">648</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card bg-info text-white">
-                                <div class="card-body">
-                                   <i class="fas fa-comments fa-3x"></i>
-                                    <h6 class="card-title">Comentários</h6>
-                                    <h2 class="lead-4">17</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
-    </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="js/dashboard.js" ></script>
+        <script defer src="js/all.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="js/dashboard.js" ></script>
-    <script defer src="js/all.min.js"></script>
-
-</body>
+    </body>
 </html>
