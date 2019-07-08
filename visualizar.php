@@ -96,77 +96,43 @@ session_start();
                 <div class="list-group-item">
                     <div class="d-flex">
                         <div class="mr-auto p-2">
-                            <h2 class="display-4 titulo">Usuários</h2>
+                            <h2 class="display-4 titulo">Visualizar</h2>
                         </div>
-                        <a href="cadastrar.php">
+                        <a href="listar.php">
                             <div class="p-2">
-                                <button class="btn btn-outline-success btn-sm">
-                                    Cadastrar
-                                </button>
+                                <div class="d-none d-md-block">
+                                    <a href="listar.php" class="btn btn-outline-info btn-sm">Listar</a>
+                                    <a href="editar.php" class="btn btn-outline-warning btn-sm">Editar</a>
+                                    <a href="apagar.php" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#apagarRegistro">Apagar</a>
+                                </div>
+                                <div class="dropdown d-block d-md-none">
+                                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ações
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
+                                        <a class="dropdown-item" href="listar.php">Listar</a>
+                                        <a class="dropdown-item" href="editar.php">Editar</a>
+                                        <a class="dropdown-item" href="apagar.php" data-toggle="modal" data-target="#apagarRegistro">Apagar</a>
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>
-                    <div class="alert alert-success" role="alert">
-                        Usuário apagado com sucesso!
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th class="d-none d-sm-table-cell">E-mail</th>
-                                    <th class="d-none d-lg-table-cell">Data de Cadastro</th>
-                                    <th class="text-center">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>1</th>
-                                    <td>Cesár</td>
-                                    <td class="d-none d-sm-table-cell">cesar@celke.com.br</td>
-                                    <td class="d-none d-lg-table-cell">05/12/2017 11:44:39</td>
-                                    <td class="text-center">
-                                        <span class="d-none d-md-block">
-                                            <a href="visualizar.php" class="btn btn-outline-primary btn-sm">Visualizar</a>
-                                            <a href="editar.php" class="btn btn-outline-warning btn-sm">Editar</a>
-                                            <a href="apagar.php" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#apagarRegistro">Apagar</a>
-                                        </span>
-                                        <div class="dropdown d-block d-md-none">
-                                            <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Ações
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
-                                                <a class="dropdown-item" href="visualizar.php">Visualizar</a>
-                                                <a class="dropdown-item" href="editar.php">Editar</a>
-                                                <a class="dropdown-item" href="apagar.php" data-toggle="modal" data-target="#apagarRegistro">Apagar</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <nav aria-label="paginacao">
-                            <ul class="pagination pagination-sm justify-content-center">
-                                <li class="page-item disabled">
-                                    <span class="page-link">Primeira</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">3</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Ultima</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <hr>
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9">1</dd>
+
+                        <dt class="col-sm-3">Nome</dt>
+                        <dd class="col-sm-9">Cesar</dd>
+
+                        <dt class="col-sm-3">E-mail</dt>
+                        <dd class="col-sm-9">cesar@celke.com.br</dd>
+
+                        <dt class="col-sm-3 text-truncate">Data de Cadastro</dt>
+                        <dd class="col-sm-9">05/12/2017 11:44:39</dd>
+
+                    </dl>
                 </div>
             </div>
         </div>
