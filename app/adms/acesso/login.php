@@ -13,7 +13,7 @@ include_once 'app/adms/include/head_login.php';
         <label for="inputPassword" class="sr-only">Senha</label>
         <input type="password" name="senha" class="form-control" placeholder="Senha" required>
 
-        <input name="btnLogin" class="btn btn-lg btn-primary btn-block" type="submit" value="Acessar">
+        <input name="SendLogin" class="btn btn-lg btn-primary btn-block" type="submit" value="Acessar">
 
         <p class="text-center text-danger">
             <?php
