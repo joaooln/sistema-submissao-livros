@@ -27,13 +27,11 @@ include_once 'app/adms/include/head.php';
                         ?>
                     </div>
                 </div>
-                <div class="alert alert-success" role="alert">
-                    Usuário apagado com sucesso!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <?php
+                if(isset($_SESSION['msg'])){
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                }
                 //Receber o número da página
                 $pagina_atual = filter_input(INPUT_GET, 'pagina', FILTER_SANITIZE_NUMBER_INT);
                 $pagina = (!empty($pagina_atual)) ? $pagina_atual : 1;
@@ -43,7 +41,11 @@ include_once 'app/adms/include/head.php';
 
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
-                $resul_niv_aces = "SELECT * FROM adms_niveis_acessos WHERE ordem >= '" . $_SESSION['ordem'] . "' ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg";
+                if($_SESSION['adms_niveis_acesso_id'] == 1){
+                    $resul_niv_aces = "SELECT * FROM adms_niveis_acessos ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg";
+                }else{
+                    $resul_niv_aces = "SELECT * FROM adms_niveis_acessos WHERE ordem > '" . $_SESSION['ordem'] . "' ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg";
+                }
                 $resultado_niv_aces = mysqli_query($conn, $resul_niv_aces);
                 if (($resultado_niv_aces) AND ( $resultado_niv_aces->num_rows != 0)) {
                     ?>
@@ -78,7 +80,7 @@ include_once 'app/adms/include/head.php';
                                             }
                                             $btn_apagar = carregar_btn('processa/apagar_niv_aces', $conn);
                                             if ($btn_apagar) {
-                                                echo "<a href='" . pg . "/processa/apagar_niv_aces?id=".$row_niv_aces['id']."' class='btn btn-outline-danger btn-sm' data-toggle='modal' data-target='#apagarRegistro'>Apagar</a> ";
+                                                echo "<a href='" . pg . "/processa/apagar_niv_aces?id=".$row_niv_aces['id']."' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a> ";
                                             }
                                             ?>
                                             </span>
@@ -87,9 +89,17 @@ include_once 'app/adms/include/head.php';
                                                     Ações
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
-                                                    <a class="dropdown-item" href="visualizar.html">Visualizar</a>
-                                                    <a class="dropdown-item" href="editar.html">Editar</a>
-                                                    <a class="dropdown-item" href="apagar.html" data-toggle="modal" data-target="#apagarRegistro">Apagar</a>
+                                                    <?php
+                                                    if ($btn_vis) {
+                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_niv_aces?id=".$row_niv_aces['id']."'>Visualizar</a>";
+                                                    }
+                                                    if ($btn_edit) {
+                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_niv_aces?id=".$row_niv_aces['id']."'>Editar</a>";
+                                                    }
+                                                    if ($btn_apagar) {
+                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a>";
+                                                    }
+                                                    ?>
                                                 </div>
                                             </div>
                                         </td>
