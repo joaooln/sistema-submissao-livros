@@ -28,7 +28,7 @@ include_once 'app/adms/include/head.php';
                     </div>
                 </div>
                 <?php
-                if(isset($_SESSION['msg'])){
+                if (isset($_SESSION['msg'])) {
                     echo $_SESSION['msg'];
                     unset($_SESSION['msg']);
                 }
@@ -41,9 +41,9 @@ include_once 'app/adms/include/head.php';
 
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
-                if($_SESSION['adms_niveis_acesso_id'] == 1){
+                if ($_SESSION['adms_niveis_acesso_id'] == 1) {
                     $resul_niv_aces = "SELECT * FROM adms_niveis_acessos ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg";
-                }else{
+                } else {
                     $resul_niv_aces = "SELECT * FROM adms_niveis_acessos WHERE ordem > '" . $_SESSION['ordem'] . "' ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg";
                 }
                 $resultado_niv_aces = mysqli_query($conn, $resul_niv_aces);
@@ -61,6 +61,7 @@ include_once 'app/adms/include/head.php';
                             </thead>
                             <tbody>
                                 <?php
+                                $qnt_linhas_exe = 1;
                                 while ($row_niv_aces = mysqli_fetch_assoc($resultado_niv_aces)) {
                                     ?>
                                     <tr>
@@ -69,20 +70,37 @@ include_once 'app/adms/include/head.php';
                                         <td class="d-none d-sm-table-cell"><?php echo $row_niv_aces['ordem']; ?></td>
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
-                                            <?php
-                                            $btn_vis = carregar_btn('visualizar/vis_niv_aces', $conn);
-                                            if ($btn_vis) {
-                                                echo "<a href='" . pg . "/visualizar/vis_niv_aces?id=".$row_niv_aces['id']."' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
-                                            }
-                                            $btn_edit = carregar_btn('editar/edit_niv_aces', $conn);
-                                            if ($btn_edit) {
-                                                echo "<a href='" . pg . "/editar/edit_niv_aces?id=".$row_niv_aces['id']."' class='btn btn-outline-warning btn-sm'>Editar </a> ";
-                                            }
-                                            $btn_apagar = carregar_btn('processa/apagar_niv_aces', $conn);
-                                            if ($btn_apagar) {
-                                                echo "<a href='" . pg . "/processa/apagar_niv_aces?id=".$row_niv_aces['id']."' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a> ";
-                                            }
-                                            ?>
+                                                <?php
+                                                $btn_or_nivac = carregar_btn('processa/proc_ordem_niv_aces', $conn);
+                                                if ($qnt_linhas_exe == 1) {
+                                                    if ($btn_or_nivac) {
+                                                        echo "<button class='btn btn-outline-secondary btn-sm disabled'><i class='fas fa-angle-double-up'></i></button> ";
+                                                    }
+                                                } else {
+                                                    if ($btn_or_nivac) {
+                                                        echo "<a href='" . pg . "/processa/proc_ordem_niv_aces?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-secondary btn-sm'><i class='fas fa-angle-double-up'></i></a> ";
+                                                    }
+                                                }
+                                                $qnt_linhas_exe++;
+
+                                                $btn_list_per = carregar_btn('listar/list_permissao', $conn);
+                                                if ($btn_list_per) {
+                                                    echo "<a href='" . pg . "/listar/list_permissao?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-info btn-sm'>Permissão</a> ";
+                                                }
+
+                                                $btn_vis = carregar_btn('visualizar/vis_niv_aces', $conn);
+                                                if ($btn_vis) {
+                                                    echo "<a href='" . pg . "/visualizar/vis_niv_aces?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                                }
+                                                $btn_edit = carregar_btn('editar/edit_niv_aces', $conn);
+                                                if ($btn_edit) {
+                                                    echo "<a href='" . pg . "/editar/edit_niv_aces?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
+                                                }
+                                                $btn_apagar = carregar_btn('processa/apagar_niv_aces', $conn);
+                                                if ($btn_apagar) {
+                                                    echo "<a href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
+                                                }
+                                                ?>
                                             </span>
                                             <div class="dropdown d-block d-md-none">
                                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -91,13 +109,13 @@ include_once 'app/adms/include/head.php';
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                                     <?php
                                                     if ($btn_vis) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_niv_aces?id=".$row_niv_aces['id']."'>Visualizar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_niv_aces?id=" . $row_niv_aces['id'] . "'>Visualizar</a>";
                                                     }
                                                     if ($btn_edit) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_niv_aces?id=".$row_niv_aces['id']."'>Editar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_niv_aces?id=" . $row_niv_aces['id'] . "'>Editar</a>";
                                                     }
                                                     if ($btn_apagar) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
                                                     }
                                                     ?>
                                                 </div>

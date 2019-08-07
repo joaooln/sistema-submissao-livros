@@ -41,7 +41,7 @@ include_once 'app/adms/include/head.php';
                         }
                         $btn_apagar = carregar_btn('processa/apagar_niv_aces', $conn);
                         if ($btn_apagar) {
-                            echo "<a href='" . pg . "/processa/apagar_niv_aces' class='btn btn-outline-danger btn-sm' data-toggle='modal' data-target='#apagarRegistro' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a> ";
+                            echo "<a href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
                         }
                         ?>
                         </span>
@@ -58,7 +58,7 @@ include_once 'app/adms/include/head.php';
                                     echo "<a class='dropdown-item' href='" . pg . "/editar/edit_niv_aces?id=" . $row_niv_aces['id'] . "'>Editar</a>";
                                 }
                                 if ($btn_apagar) {
-                                    echo "<a class='dropdown-item' href=''" . pg . "/processa/apagar_niv_aces' data-toggle='modal' data-target='#apagarRegistro' data-confirm='Tem certeza que deseja excluir o item selecionado?'>Apagar</a>";
+                                    echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_niv_aces?id=" . $row_niv_aces['id'] . "' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
                                 }
                                 ?>
                             </div>
@@ -82,7 +82,7 @@ include_once 'app/adms/include/head.php';
                         <dt class="col-sm-3 text-truncate">Data do Cadastro</dt>
                         <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($row_niv_aces['created'])); ?></dd>
 
-                        <dt class="col-sm-3 text-truncate">Data do Cadastro</dt>
+                        <dt class="col-sm-3 text-truncate">Data de Edição</dt>
                         <dd class="col-sm-9"><?php
                             if (!empty($row_niv_aces['modified'])) {
                                 echo date('d/m/Y H:i:s', strtotime($row_niv_aces['modified']));

@@ -26,3 +26,8 @@ $(document).ready(function () {
         return false;
     });
 });
+
+//Apresentar tooltip
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+})

@@ -15,9 +15,11 @@ if(isset($_SESSION['adms_niveis_acesso_id'])){
 }else{
     $adms_niveis_acesso_id = 0;
 }
-$result_pg = "SELECT pg.id id_pg, pg.tp_pagina, pg.endereco 
+$result_pg = "SELECT pg.id id_pg, pg.endereco,
+        tpg.tipo
         FROM adms_paginas pg
-        LEFT JOIN adms_nivacs_pgs nivpg ON nivpg.adms_pagina_id=pg.id        
+        LEFT JOIN adms_nivacs_pgs nivpg ON nivpg.adms_pagina_id=pg.id 
+        INNER JOIN adms_tps_pgs tpg ON tpg.id=pg.adms_tps_pg_id
         WHERE pg.endereco='" . $url_limpa . "' 
         AND (pg.adms_sits_pg_id=1
         AND (nivpg.adms_niveis_acesso_id='" . $adms_niveis_acesso_id . "'
@@ -30,7 +32,7 @@ $resultado_pg = mysqli_query($conn, $result_pg);
     <?php
     if (($resultado_pg) AND ( $resultado_pg->num_rows != 0)) {
         $row_pg = mysqli_fetch_assoc($resultado_pg);
-        $file = "app/" . $row_pg['tp_pagina'] . "/" . $row_pg['endereco'] . ".php";
+        $file = "app/" . $row_pg['tipo'] . "/" . $row_pg['endereco'] . ".php";
         if (file_exists($file)) {
             include $file;
         } else {
