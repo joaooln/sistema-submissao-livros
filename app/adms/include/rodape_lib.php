@@ -8,3 +8,12 @@ if (!isset($seg)) {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="<?php echo pg; ?>/assets/js/dashboard.js" ></script>
 <script defer src="<?php echo pg; ?>/assets/js/all.min.js"></script>
+<script defer src="<?php echo pg; ?>/assets/js/bs-custom-file-input.min.js"></script>
+<script>
+    bsCustomFileInput.init();
+    var btn = document.getElementById('btnResetForm');
+    var form = document.querySelector('form');
+    btn.addEventListener('click', function () {
+        form.reset();
+    });
+</script>

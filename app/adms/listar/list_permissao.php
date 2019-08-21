@@ -86,6 +86,7 @@ if (!empty($id)) {
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $qnt_linhas_exe = 1;
                                     while ($row_niv_ac = mysqli_fetch_assoc($resultado_niv_ac)) {
                                         ?>
                                         <tr>
@@ -97,59 +98,74 @@ if (!empty($id)) {
                                                 <?php echo $row_niv_ac['nome_pagina']; ?>
                                             </td>
                                             <td class="d-none d-sm-table-cell text-center">
-                                                <?php 
+                                                <?php
                                                 $btn_lib_per = carregar_btn('processa/proc_lib_per', $conn);
-                                                if($btn_lib_per){
-                                                    if($row_niv_ac['permissao'] == 1){
-                                                        echo "<a href='".pg."/processa/proc_lib_per?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-success'>Liberado</span></a>";
-                                                    }else{
-                                                        echo "<a href='".pg."/processa/proc_lib_per?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-danger'>Bloqueado</span></a>";
+                                                if ($btn_lib_per) {
+                                                    if ($row_niv_ac['permissao'] == 1) {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_per?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-success'>Liberado</span></a>";
+                                                    } else {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_per?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-danger'>Bloqueado</span></a>";
                                                     }
-                                                }else{
-                                                    if($row_niv_ac['permissao'] == 1){
+                                                } else {
+                                                    if ($row_niv_ac['permissao'] == 1) {
                                                         echo "<span class='badge badge-pill badge-success'>Liberado</span>";
-                                                    }else{
+                                                    } else {
                                                         echo "<span class='badge badge-pill badge-danger'>Bloqueado</span>";
                                                     }
                                                 }
                                                 ?>
                                             </td>
                                             <td class="d-none d-sm-table-cell text-center">
-                                                <?php 
+                                                <?php
                                                 $btn_lib_menu = carregar_btn('processa/proc_lib_menu', $conn);
-                                                if($btn_lib_menu){
-                                                    if($row_niv_ac['lib_menu'] == 1){
-                                                        echo "<a href='".pg."/processa/proc_lib_menu?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-success'>Liberado</span></a>";
-                                                    }else{
-                                                        echo "<a href='".pg."/processa/proc_lib_menu?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-danger'>Bloqueado</span></a>";
+                                                if ($btn_lib_menu) {
+                                                    if ($row_niv_ac['lib_menu'] == 1) {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_menu?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-success'>Liberado</span></a>";
+                                                    } else {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_menu?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-danger'>Bloqueado</span></a>";
                                                     }
-                                                }else{
-                                                    if($row_niv_ac['lib_menu'] == 1){
+                                                } else {
+                                                    if ($row_niv_ac['lib_menu'] == 1) {
                                                         echo "<span class='badge badge-pill badge-success'>Liberado</span>";
-                                                    }else{
+                                                    } else {
                                                         echo "<span class='badge badge-pill badge-danger'>Bloqueado</span>";
                                                     }
                                                 }
                                                 ?>
                                             </td>
-                                            <td class="d-none d-sm-table-cell text-center"><?php 
-                                            $btn_lib_dropdown = carregar_btn('processa/proc_lib_dropdown', $conn);
-                                                if($btn_lib_dropdown){
-                                                    if($row_niv_ac['dropdown'] == 1){
-                                                        echo "<a href='".pg."/processa/proc_lib_dropdown?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-success'>Sim</span></a>";
-                                                    }else{
-                                                        echo "<a href='".pg."/processa/proc_lib_dropdown?id=".$row_niv_ac['id']."'><span class='badge badge-pill badge-danger'>Não</span></a>";
+                                            <td class="d-none d-sm-table-cell text-center"><?php
+                                                $btn_lib_dropdown = carregar_btn('processa/proc_lib_dropdown', $conn);
+                                                if ($btn_lib_dropdown) {
+                                                    if ($row_niv_ac['dropdown'] == 1) {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_dropdown?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-success'>Sim</span></a>";
+                                                    } else {
+                                                        echo "<a href='" . pg . "/processa/proc_lib_dropdown?id=" . $row_niv_ac['id'] . "'><span class='badge badge-pill badge-danger'>Não</span></a>";
                                                     }
-                                                }else{
-                                                    if($row_niv_ac['dropdown'] == 1){
+                                                } else {
+                                                    if ($row_niv_ac['dropdown'] == 1) {
                                                         echo "<span class='badge badge-pill badge-success'>Sim</span>";
-                                                    }else{
+                                                    } else {
                                                         echo "<span class='badge badge-pill badge-danger'>Não</span>";
                                                     }
                                                 }
-                                            ?></td>
+                                                ?></td>
                                             <td class="d-none d-sm-table-cell"><?php echo $row_niv_ac['ordem']; ?></td>
-                                            <td>Ações</td>
+                                            <td><?php
+                                                $btn_edit = carregar_btn('editar/edit_permissao', $conn);
+                                                if ($btn_edit) {
+                                                    echo "<a href='" . pg . "/editar/edit_permissao?id=" . $row_niv_ac['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
+                                                }
+
+                                                $btn_ordem_menu = carregar_btn('processa/proc_ordem_menu', $conn);
+                                                if ($btn_ordem_menu) {
+                                                    if ($qnt_linhas_exe == 1) {
+                                                        echo "<button class='btn btn-outline-secondary btn-sm disabled'><i class='fas fa-angle-double-up'></i></button> ";
+                                                    } else {
+                                                        echo "<a href='" . pg . "/processa/proc_ordem_menu?id=" . $row_niv_ac['id'] . "' class='btn btn-outline-secondary btn-sm'><i class='fas fa-angle-double-up'></i></a> ";
+                                                    }
+                                                }
+                                                $qnt_linhas_exe++;
+                                                ?></td>
                                         <?php } ?>
                                 </tbody>
                             </table>

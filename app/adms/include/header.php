@@ -32,7 +32,7 @@ $prim_nome = $nome[0];
                     <span class="d-none d-sm-inline"><?php echo $prim_nome; ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Perfil</a>
+                    <a class="dropdown-item" href="<?php echo pg . '/visualizar/vis_perfil' ?>"><i class="fas fa-user"></i> Perfil</a>
                     <a class="dropdown-item" href="<?php echo pg; ?>/acesso/sair"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </li>

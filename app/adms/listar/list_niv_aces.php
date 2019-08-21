@@ -20,6 +20,10 @@ include_once 'app/adms/include/head.php';
                     </div>
                     <div class="p-2">
                         <?php
+                        $btn_sincro = carregar_btn('processa/proc_sincro_nivac_pg', $conn);
+                        if ($btn_sincro) {
+                            echo "<a href='" . pg . "/processa/proc_sincro_nivac_pg' class='btn btn-outline-success btn-sm'>Sinconizar</a>";
+                        }
                         $btn_cad = carregar_btn('cadastrar/cad_niv_aces', $conn);
                         if ($btn_cad) {
                             echo "<a href='" . pg . "/cadastrar/cad_niv_aces' class='btn btn-outline-success btn-sm'>Cadastrar</a>";
