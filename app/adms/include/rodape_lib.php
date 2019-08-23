@@ -9,6 +9,7 @@ if (!isset($seg)) {
 <script src="<?php echo pg; ?>/assets/js/dashboard.js" ></script>
 <script defer src="<?php echo pg; ?>/assets/js/all.min.js"></script>
 <script defer src="<?php echo pg; ?>/assets/js/bs-custom-file-input.min.js"></script>
+<script defer src="<?php echo pg; ?>/assets/js/jquery.mask.min.js"></script>
 <script>
     bsCustomFileInput.init();
     var btn = document.getElementById('btnResetForm');

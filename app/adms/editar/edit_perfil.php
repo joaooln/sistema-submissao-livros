@@ -44,9 +44,9 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
                     ?>
                     <form method="POST" action="<?php echo pg; ?>/processa/proc_edit_perfil" enctype="multipart/form-data">  
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-5">
                                 <label>                                
-                                    <span class="text-danger">*</span> Nome
+                                    <span class="text-danger">*</span> Nome Completo
                                 </label>
                                 <input name="nome" type="text" class="form-control" id="nome" placeholder="Nome do usuário completo" value="<?php
                                 if (isset($_SESSION['dados']['nome'])) {
@@ -56,9 +56,9 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
                                 }
                                 ?>">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-5">
                                 <label><span class="text-danger">*</span> E-mail</label>
-                                <input name="email" type="email" class="form-control" id="email" placeholder="O melhor e-mail do usuário" value="<?php
+                                <input name="email" type="email" class="form-control" placeholder="O melhor e-mail do usuário" value="<?php
                                 if (isset($_SESSION['dados']['email'])) {
                                     echo $_SESSION['dados']['email'];
                                 } elseif (isset($row_edit_user['email'])) {
@@ -71,31 +71,130 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
                         <div class="form-row">
                             <div class="form-group col-md-5">
                                 <label>                                
-                                    <span class="text-danger">*</span> Usuário
+                                    <span class="text-danger">*</span> CPF
                                 </label>
-                                <input name="usuario" type="text" class="form-control" id="nome" placeholder="Nome de usuário para login" value="<?php
-                                if (isset($_SESSION['dados']['usuario'])) {
-                                    echo $_SESSION['dados']['usuario'];
-                                } elseif (isset($row_edit_user['usuario'])) {
-                                    echo $row_edit_user['usuario'];
+                                <input name="cpf" type="text" class="form-control cpf" placeholder="CPF" value="<?php
+                                if (isset($_SESSION['dados']['cpf'])) {
+                                    echo $_SESSION['dados']['cpf'];
+                                } elseif (isset($row_edit_user['cpf'])) {
+                                    echo $row_edit_user['cpf'];
+                                }
+                                ?>">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>
+                                    <span class="text-danger">*</span> Telefone
+                                </label>
+                                <input name="telefone" type="text" class="form-control phone_with_ddd" placeholder="Telefone com DDD" value="<?php
+                                if (isset($_SESSION['dados']['telefone'])) {
+                                    echo $_SESSION['dados']['telefone'];
+                                } elseif (isset($row_edit_user['telefone'])) {
+                                    echo $row_edit_user['telefone'];
+                                }
+                                ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>                                
+                                    <span class="text-danger">*</span> Endereço
+                                </label>
+                                <input name="rua" type="text" class="form-control" placeholder="Rua" value="<?php
+                                if (isset($_SESSION['dados']['rua'])) {
+                                    echo $_SESSION['dados']['rua'];
+                                } elseif (isset($row_edit_user['rua'])) {
+                                    echo $row_edit_user['rua'];
                                 }
                                 ?>">
                             </div>
                             <div class="form-group col-md-4">
-                                <label> Senha</label>
-                                <input name="senha" type="password" class="form-control" id="email" placeholder="A senha deve ter 6 caracteres" value="<?php
-                                if (isset($_SESSION['dados']['senha'])) {
-                                    echo $_SESSION['dados']['senha'];
+                                <label>
+                                    <span class="text-danger">*</span> Número
+                                </label>
+                                <input name="num_end" type="text" class="form-control" placeholder="Número" value="<?php
+                                if (isset($_SESSION['dados']['num_end'])) {
+                                    echo $_SESSION['dados']['num_end'];
+                                } elseif (isset($row_edit_user['num_end'])) {
+                                    echo $row_edit_user['num_end'];
+                                }
+                                ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>                                
+                                    <span class="text-danger">*</span> Bairro
+                                </label>
+                                <input name="bairro" type="text" class="form-control" placeholder="Bairro" value="<?php
+                                if (isset($_SESSION['dados']['bairro'])) {
+                                    echo $_SESSION['dados']['bairro'];
+                                } elseif (isset($row_edit_user['bairro'])) {
+                                    echo $row_edit_user['bairro'];
+                                }
+                                ?>">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>
+                                    Complemento
+                                </label>
+                                <input name="complemento" type="text" class="form-control" placeholder="Complemento" value="<?php
+                                if (isset($_SESSION['dados']['complemento'])) {
+                                    echo $_SESSION['dados']['complemento'];
+                                } elseif (isset($row_edit_user['complemento'])) {
+                                    echo $row_edit_user['complemento'];
+                                }
+                                ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>                                
+                                    <span class="text-danger">*</span> Cidade
+                                </label>
+                                <input name="cidade" type="text" class="form-control" placeholder="Cidade" value="<?php
+                                if (isset($_SESSION['dados']['cidade'])) {
+                                    echo $_SESSION['dados']['cidade'];
+                                } elseif (isset($row_edit_user['cidade'])) {
+                                    echo $row_edit_user['cidade'];
+                                }
+                                ?>">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>
+                                    <span class="text-danger">*</span> Estado
+                                </label>
+                                <input name="estado" type="text-only" maxlength="2" class="form-control" placeholder="Estado Sigla" value="<?php
+                                if (isset($_SESSION['dados']['estado'])) {
+                                    echo $_SESSION['dados']['estado'];
+                                } elseif (isset($row_edit_user['estado'])) {
+                                    echo $row_edit_user['estado'];
                                 }
                                 ?>">
                             </div>
                             <div class="form-group col-md-3">
-                                <label> Apelido </label>
-                                <input name="apelido" type="text" class="form-control" id="email" placeholder="Apelido do usuário" value="<?php
-                                if (isset($_SESSION['dados']['apelido'])) {
-                                    echo $_SESSION['dados']['apelido'];
-                                } elseif (isset($row_edit_user['apelido'])) {
-                                    echo $row_edit_user['apelido'];
+                                <label>
+                                    <span class="text-danger">*</span> País
+                                </label>
+                                <input name="pais" type="text-only" class="form-control" placeholder="País" value="<?php
+                                if (isset($_SESSION['dados']['pais'])) {
+                                    echo $_SESSION['dados']['pais'];
+                                } elseif (isset($row_edit_user['pais'])) {
+                                    echo $row_edit_user['pais'];
+                                }
+                                ?>">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>
+                                    <span class="text-danger">*</span> CEP
+                                </label>
+                                <input name="cep" type="text-only" class="form-control cep" placeholder="CEP" value="<?php
+                                if (isset($_SESSION['dados']['cep'])) {
+                                    echo $_SESSION['dados']['cep'];
+                                } elseif (isset($row_edit_user['cep'])) {
+                                    echo $row_edit_user['cep'];
                                 }
                                 ?>">
                             </div>

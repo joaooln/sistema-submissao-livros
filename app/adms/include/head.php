@@ -36,5 +36,7 @@ if (!isset($seg)) {
     <!-- Custom styles for this template -->
     <link href="<?php echo pg; ?>/assets/css/dashboard.css" rel="stylesheet">
     <link href="<?php echo pg; ?>/assets/css/all.min.css" rel="stylesheet">
+    <link href="<?php echo pg; ?>/assets/css/form-validation.css" rel="stylesheet">
+
 
 </head>

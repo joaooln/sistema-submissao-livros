@@ -86,7 +86,7 @@ if (!empty($SendCadUser)) {
         //Criptografar a senha
         $dados_validos['senha'] = password_hash($dados_validos['senha'], PASSWORD_DEFAULT);
 
-        $result_cad_user = "INSERT INTO adms_usuarios (nome, email, usuario, senha, $campo_foto adms_niveis_acesso_id, adms_sits_usuario_id, created) VALUES (
+        $result_cad_user = "INSERT INTO adms_usuarios (nome, email, usuario, senha, $campo_foto, adms_niveis_acesso_id, adms_sits_usuario_id, created) VALUES (
         '" . $dados_validos['nome'] . "',
         '" . $dados_validos['email'] . "',
         '" . $dados_validos['usuario'] . "',

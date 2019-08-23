@@ -51,7 +51,9 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                         <dd class="col-sm-9">
                             <?php
                             if (!empty($row_user_vis['imagem'])) {
-                                echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_user_vis['id'] . "/" . $row_user_vis['imagem'] . "' width='150' height='150'>";
+                                echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_user_vis['id'] . "/" . $row_user_vis['imagem'] . "' width='200' height='200'>";
+                            } else {
+                                echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
                             }
                             ?>
                         </dd>
@@ -62,16 +64,28 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                         <dt class="col-sm-3">Nome</dt>
                         <dd class="col-sm-9"><?php echo $row_user_vis['nome']; ?></dd>
 
-                        <dt class="col-sm-3">Apelido</dt>
-                        <dd class="col-sm-9"><?php echo $row_user_vis['apelido']; ?></dd>
+                        <dt class="col-sm-3">CPF</dt>
+                        <dd class="col-sm-9"><?php echo $row_user_vis['cpf']; ?></dd>
+
+                        <dt class="col-sm-3">Telefone</dt>
+                        <dd class="col-sm-9"><?php echo $row_user_vis['telefone']; ?></dd>
 
                         <dt class="col-sm-3">E-mail</dt>
                         <dd class="col-sm-9"><?php echo $row_user_vis['email']; ?></dd>
 
-                        <dt class="col-sm-3">Usuário</dt>
-                        <dd class="col-sm-9"><?php echo $row_user_vis['usuario']; ?></dd>
+                        <dt class="col-sm-3">Endereço</dt>
+                        <dd class="col-sm-6"><?php echo $row_user_vis['rua']; ?></dd>
+                        <dd class="col-sm-3">Nº <?php echo $row_user_vis['num_end']; ?></dd>
 
+                        <dt class="col-sm-3"></dt>
+                        <dd class="col-sm-4">Bairro: <?php echo $row_user_vis['bairro']; ?></dd>
+                        <dd class="col-sm-4">Complemento: <?php echo $row_user_vis['complemento']; ?></dd>
 
+                        <dt class="col-sm-3"></dt>
+                        <dd class="col-sm-4">Cidade: <?php echo $row_user_vis['cidade']; ?></dd>
+                        <dd class="col-sm-2">Estado: <?php echo $row_user_vis['complemento']; ?></dd>
+                        <dd class="col-sm-3">CEP: <?php echo $row_user_vis['cep']; ?></dd>
+                        
                     </dl>
                 </div>
             </div>

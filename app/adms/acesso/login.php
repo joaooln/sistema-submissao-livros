@@ -21,12 +21,16 @@ include_once 'app/adms/include/head_login.php';
                 echo $_SESSION['msg'];
                 unset($_SESSION['msg']);
             }
+            if (isset($_SESSION['msgcad'])) {
+                echo $_SESSION['msgcad'];
+                unset($_SESSION['msgcad']);
+            }
             ?>
         </p>
 
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="<?php echo pg.'/cadastrar/cad_user_login'; ?>">Ainda não tem cadastro? Cadastre-se</a>
-        <a class="dropdown-item" href="<?php echo pg.'/acesso/recuperar_login'; ?>">Esqueceu a senha?</a>
+        <a class="btn btn-secondary" href="<?php echo pg . '/cadastrar/cad_user_login'; ?>">Ainda não tem cadastro? Cadastre-se</a>
+        <a class="dropdown-item" href="<?php echo pg . '/acesso/recuperar_login'; ?>">Esqueceu a senha?</a>
 
         <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
     </form>

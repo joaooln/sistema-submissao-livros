@@ -99,14 +99,27 @@ if (!empty($id)) {
                             <dt class="col-sm-3">Nome</dt>
                             <dd class="col-sm-9"><?php echo $row_user_vis['nome']; ?></dd>
 
-                            <dt class="col-sm-3">Apelido</dt>
-                            <dd class="col-sm-9"><?php echo $row_user_vis['apelido']; ?></dd>
+                            <dt class="col-sm-3">CPF</dt>
+                            <dd class="col-sm-9"><?php echo $row_user_vis['cpf']; ?></dd>
+                            
+                            <dt class="col-sm-3">Telefone</dt>
+                            <dd class="col-sm-9"><?php echo $row_user_vis['telefone']; ?></dd>
 
                             <dt class="col-sm-3">E-mail</dt>
                             <dd class="col-sm-9"><?php echo $row_user_vis['email']; ?></dd>
 
-                            <dt class="col-sm-3">Usuário</dt>
-                            <dd class="col-sm-9"><?php echo $row_user_vis['usuario']; ?></dd>
+                            <dt class="col-sm-3">Endereço</dt>
+                            <dd class="col-sm-6"><?php echo $row_user_vis['rua']; ?></dd>
+                            <dd class="col-sm-3">Nº <?php echo $row_user_vis['num_end']; ?></dd>
+                            
+                            <dt class="col-sm-3"></dt>
+                            <dd class="col-sm-4">Bairro: <?php echo $row_user_vis['bairro']; ?></dd>
+                            <dd class="col-sm-4">Complemento: <?php echo $row_user_vis['complemento']; ?></dd>
+                            
+                            <dt class="col-sm-3"></dt>
+                            <dd class="col-sm-4">Cidade: <?php echo $row_user_vis['cidade']; ?></dd>
+                            <dd class="col-sm-2">Estado: <?php echo $row_user_vis['complemento']; ?></dd>
+                            <dd class="col-sm-3">CEP: <?php echo $row_user_vis['cep']; ?></dd>
 
                             <dt class="col-sm-3">Nível de Acesso</dt>
                             <dd class="col-sm-9"><?php echo $row_user_vis['nome_niv_ac']; ?></dd>
