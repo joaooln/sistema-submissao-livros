@@ -4,6 +4,15 @@ if (!isset($seg)) {
     exit;
 }
 
+function uploadDOC($arquivo, $destino) {
+    mkdir($destino, 0755);
+    switch ($arquivo['type']) {
+        case 'application/msword';
+            imagepng($arquivo['tmp_name'], $destino . $arquivo['name']);
+            break;
+    }
+}
+
 function upload($foto, $destino, $largura, $altura) {
     mkdir($destino, 0755);
     switch ($foto['type']) {

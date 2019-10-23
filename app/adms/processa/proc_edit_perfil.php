@@ -46,7 +46,7 @@ if ($SendEditPerfil) {
             $_SESSION['msg'] = "<div class='alert alert-danger'>CPF inválido!</div>";
         }
         //Proibir cadastro de CPF duplicado
-        $result_cpf_dupli = "SELECT id FROM adms_usuarios WHERE cpf='" . $dados_validos['cpf'] . "'";
+        $result_cpf_dupli = "SELECT id FROM adms_usuarios WHERE cpf='" . $dados_validos['cpf'] . "' AND id<>'" . $_SESSION['id'] . "'";
         $resultado_cpf_dupli = mysqli_query($conn, $result_cpf_dupli);
         if (($resultado_cpf_dupli) AND ( $resultado_cpf_dupli->num_rows != 0 )) {
             $erro = true;

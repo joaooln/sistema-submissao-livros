@@ -166,13 +166,50 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
                                 <label>
                                     <span class="text-danger">*</span> Estado
                                 </label>
-                                <input name="estado" type="text-only" maxlength="2" class="form-control" placeholder="Estado Sigla" value="<?php
-                                if (isset($_SESSION['dados']['estado'])) {
-                                    echo $_SESSION['dados']['estado'];
-                                } elseif (isset($row_edit_user['estado'])) {
-                                    echo $row_edit_user['estado'];
-                                }
-                                ?>">
+                                <select name="estado" class="custom-select" required>
+                                    <option selected>Estado</option>
+                                    <?php
+                                    $estados = array(
+                                        'AC' => 'Acre',
+                                        'AL' => 'Alagoas',
+                                        'AP' => 'Amapá',
+                                        'AM' => 'Amazonas',
+                                        'BA' => 'Bahia',
+                                        'CE' => 'Ceará',
+                                        'DF' => 'Distrito Federal',
+                                        'ES' => 'Espirito Santo',
+                                        'GO' => 'Goiás',
+                                        'MA' => 'Maranhão',
+                                        'MS' => 'Mato Grosso do Sul',
+                                        'MT' => 'Mato Grosso',
+                                        'MG' => 'Minas Gerais',
+                                        'PA' => 'Pará',
+                                        'PB' => 'Paraíba',
+                                        'PR' => 'Paraná',
+                                        'PE' => 'Pernambuco',
+                                        'PI' => 'Piauí',
+                                        'RJ' => 'Rio de Janeiro',
+                                        'RN' => 'Rio Grande do Norte',
+                                        'RS' => 'Rio Grande do Sul',
+                                        'RO' => 'Rondônia',
+                                        'RR' => 'Roraima',
+                                        'SC' => 'Santa Catarina',
+                                        'SP' => 'São Paulo',
+                                        'SE' => 'Sergipe',
+                                        'TO' => 'Tocantins',
+                                    );
+
+                                    foreach ($estados as $sigla_estado => $nome_estado) {
+                                        if (isset($_SESSION['dados']['estado']) AND ( $_SESSION['dados']['estado'] == $sigla_estado)) {
+                                            echo " <option value=" . $sigla_estado . ">" . $nome_estado . "</option>";
+                                        } elseif (!isset($_SESSION['dados']['estado']) AND ( isset($row_edit_user['estado']) AND ( $row_edit_user['estado'] == $sigla_estado))) {
+                                            echo "<option value='" . $row_edit_user['estado'] . "' selected>" . $nome_estado . "</option>";
+                                        } else {
+                                            echo " <option value=" . $sigla_estado . ">" . $nome_estado . "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="form-group col-md-3">
                                 <label>

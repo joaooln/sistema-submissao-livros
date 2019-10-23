@@ -88,7 +88,7 @@ if (!empty($id)) {
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>                                
-                                        <span class="text-danger">*</span> Nome
+                                        <span class="text-danger">*</span> Nome Completo
                                     </label>
                                     <input name="nome" type="text" class="form-control" id="nome" placeholder="Nome do usuário completo" value="<?php
                                     if (isset($_SESSION['dados']['nome'])) {
@@ -113,31 +113,31 @@ if (!empty($id)) {
                             <div class="form-row">
                                 <div class="form-group col-md-5">
                                     <label>                                
-                                        <span class="text-danger">*</span> Usuário
+                                        <span class="text-danger">*</span> Telefone
                                     </label>
-                                    <input name="usuario" type="text" class="form-control" id="nome" placeholder="Nome de usuário para login" value="<?php
-                                    if (isset($_SESSION['dados']['usuario'])) {
-                                        echo $_SESSION['dados']['usuario'];
-                                    } elseif (isset($row_edit_user['usuario'])) {
-                                        echo $row_edit_user['usuario'];
+                                    <input name="telefone" type="text" class="form-control phone_with_ddd" placeholder="Telefone com DDD" value="<?php
+                                    if (isset($_SESSION['dados']['telefone'])) {
+                                        echo $_SESSION['dados']['telefone'];
+                                    } elseif (isset($row_edit_user['telefone'])) {
+                                        echo $row_edit_user['telefone'];
                                     }
                                     ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label> Senha</label>
-                                    <input name="senha" type="password" class="form-control" id="email" placeholder="A senha deve ter 6 caracteres" value="<?php
+                                    <input name="senha" type="password" class="form-control" id="email" placeholder="A senha deve ter 8 caracteres" value="<?php
                                     if (isset($_SESSION['dados']['senha'])) {
                                         echo $_SESSION['dados']['senha'];
                                     }
                                     ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label> Apelido </label>
-                                    <input name="apelido" type="text" class="form-control" id="email" placeholder="Apelido do usuário" value="<?php
-                                    if (isset($_SESSION['dados']['apelido'])) {
-                                        echo $_SESSION['dados']['apelido'];
-                                    } elseif (isset($row_edit_user['apelido'])) {
-                                        echo $row_edit_user['apelido'];
+                                    <label> CPF </label>
+                                    <input name="cpf" type="text" class="form-control cpf" placeholder="CPF" value="<?php
+                                    if (isset($_SESSION['dados']['cpf'])) {
+                                        echo $_SESSION['dados']['cpf'];
+                                    } elseif (isset($row_edit_user['cpf'])) {
+                                        echo $row_edit_user['cpf'];
                                     }
                                     ?>">
                                 </div>

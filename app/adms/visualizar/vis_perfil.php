@@ -83,7 +83,7 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
 
                         <dt class="col-sm-3"></dt>
                         <dd class="col-sm-4">Cidade: <?php echo $row_user_vis['cidade']; ?></dd>
-                        <dd class="col-sm-2">Estado: <?php echo $row_user_vis['complemento']; ?></dd>
+                        <dd class="col-sm-2">Estado: <?php echo $row_user_vis['estado']; ?></dd>
                         <dd class="col-sm-3">CEP: <?php echo $row_user_vis['cep']; ?></dd>
                         
                     </dl>
