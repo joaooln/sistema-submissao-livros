@@ -52,6 +52,7 @@ function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = nu
             $mail->send();
             return true;
         } catch (Exception $e) {
+            echo $e;
             return false;
         }
     }else{

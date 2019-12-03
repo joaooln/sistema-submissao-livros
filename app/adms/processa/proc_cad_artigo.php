@@ -16,10 +16,10 @@ if (!empty($SendCadArtigo)) {
 
     //Grava dados nome e cpf coautores para vetor
     for ($index = 4; $index > 0; $index--) {
-        if (empty($dados['nomeCoautor'][$index])) {
+        if (empty($dados_nomeCoautor[$index])) {
             $dados_nomeCoautor[$index] = "";
         }
-        if (empty($dados['cpfCoautor'][$index])) {
+        if (empty($dados_cpfCoautor[$index])) {
             $dados_cpfCoautor[$index] = "";
         }
     }
@@ -41,6 +41,8 @@ if (!empty($SendCadArtigo)) {
 
     //Remove caractes especiais
     include_once 'lib/lib_caracter_esp.php';
+    include_once 'lib/lib_email.php';
+    include_once 'lib/lib_env_email.php';
     $arquivo['name'] = caracterEspecial($_FILES['arquivo']['name']);
     $extensao = strtolower(end(explode('.', $_FILES['arquivo']['name'])));
 
@@ -85,7 +87,7 @@ if (!empty($SendCadArtigo)) {
         $nome_final = $dados_validos['tituloArtigo'] . "." . $extensao;
 
         $result_cad_artigo = "INSERT INTO adms_artigos (tituloLivro, tituloArtigo, nomeCoautor1, cpfCoautor1, nomeCoautor2, cpfCoautor2, nomeCoautor3, cpfCoautor3, nomeCoautor4, cpfCoautor4,
-      nomeCoautor5, cpfCoautor5, arquivo, adms_usuario_id, created) VALUES (
+      nomeCoautor5, cpfCoautor5, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
       '" . $dados_validos['tituloLivro'] . "',
       '" . $dados_validos['tituloArtigo'] . "',
       '" . $dados_nomeCoautor[0] . "',
@@ -99,6 +101,7 @@ if (!empty($SendCadArtigo)) {
       '" . $dados_nomeCoautor[4] . "',
       '" . $dados_cpfCoautor[4] . "',
       $valor_arquivo
+      '" . 1 . "',
       '" . $_SESSION['id'] . "',
       NOW())";
         mysqli_query($conn, $result_cad_artigo);
@@ -116,16 +119,72 @@ if (!empty($SendCadArtigo)) {
                 //echo "Upload efetuado com sucesso, exibe uma mensagem e um link para o arquivo";
                 //echo '<br /><a href="' . $_UP['pasta'] . $nome_final . '">Clique aqui para acessar o arquivo</a>';
             } else {
-                echo $nome_final;
+                //echo $nome_final;
                 //$_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Falha no Upload!</div>";
                 //$url_destino = pg . '/listar/list_artigo';
                 header("Location: $url_destino");
                 // Não foi possível fazer o upload, provavelmente a pasta está incorreta
             }
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Artigo cadastrado com sucesso!</div>";
-            $url_destino = pg . '/listar/list_artigo';
-            header("Location: $url_destino");
+            //$_SESSION['msg'] = "<div class='alert alert-success'>Artigo cadastrado com sucesso!</div>";
+            //$url_destino = pg . '/listar/list_artigo';
+            //header("Location: $url_destino");
+
+            $result_user = "SELECT user.*
+            FROM adms_usuarios user
+            WHERE user.id=" . $_SESSION['id'] . " LIMIT 1";
+
+            $resultado_user = mysqli_query($conn, $result_user);
+            if (($resultado_user) AND ( $resultado_user->num_rows != 0)) {
+                $row_user = mysqli_fetch_assoc($resultado_user);
+            }
+
+            $nome = explode(" ", $row_user['nome']);
+            $prim_nome = $nome[0];
+
+            $assunto = "Confirmação de Recebimento";
+
+            $mensagem = "Caro(a) $prim_nome,<br><br>";
+            $mensagem .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
+            $mensagem .= "Titulo do Artigo: '" . $dados_validos['tituloArtigo'] . "'<br>";
+            $mensagem .= "Titulo do Livro: '" . $dados_validos['tituloLivro'] . "'<br>";
+            $mensagem .= "Coautores: <br>";
+            for ($index = 0; $index < 4; $index++) {
+                if ($dados_nomeCoautor[$index] != "") {
+                    $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_cpfCoautor[$index] . "'<br>";
+                }
+            }
+            $mensagem .= "Data da Submissão: '" . date('d/m/y') . "'<br>";
+            $mensagem .= "Situação: Em Avaliação <br>";
+            $mensagem .= "Arquivo: ";
+            $mensagem .= "<a href = '" . pg . "/" . $_UP['pasta'] . "" . $nome_final . "'>" . $nome_final . "</a><br><br>";
+            $mensagem .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
+            $mensagem .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
+
+            echo $mensagem;
+
+            $mensagem_texto = "Caro(a) $prim_nome ,<br><br>";
+            $mensagem_texto .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
+            $mensagem_texto .= "Titulo do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
+            $mensagem_texto .= "Titulo do Livro: " . $dados_validos['tituloLivro'] . "<br>";
+            $mensagem_texto .= "Coautores: <br>";
+            for ($index = 0; $index < 4; $index++) {
+                if (!empty($dados['nomeCoautor'][$index])) {
+                    $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_cpfCoautor[$index] . "'<br>";
+                }
+            }
+            $mensagem_texto .= "Data da Submissão: '" . date('d/m/y') . "'<br>";
+            $mensagem_texto .= "Situação: Em Avaliação <br>";
+            $mensagem_texto .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
+            $mensagem_texto .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
+
+            if (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_user['email'], $conn)) {
+                echo "Email Enviado";
+//$_SESSION['msgcad'] = "<div class='alert alert-success'>Email Enviado</div>";
+            } else {
+                echo "Erro";
+//$_SESSION['msgcad'] = "<div class='alert alert-danger'>Erro ao enviar o email</div>";
+            }
         } else {
             $erro = true;
             //$dados['apelido'] = $dados_apelido;

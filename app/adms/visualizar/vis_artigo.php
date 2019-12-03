@@ -4,8 +4,12 @@ if (!isset($seg)) {
 }
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 if (!empty($id)) {
-    $result_artigo_vis = "SELECT artigo.*
+    $result_artigo_vis = "SELECT artigo.*,
+            sitartigo.nome nome_sitartigo,
+            cors.cor cor_cors
             FROM adms_artigos artigo
+            INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
+            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
             WHERE artigo.id=$id LIMIT 1";
     $resultado_artigo_vis = mysqli_query($conn, $result_artigo_vis);
     if (($resultado_artigo_vis) AND ( $resultado_artigo_vis->num_rows != 0)) {
@@ -94,19 +98,21 @@ if (!empty($id)) {
 
                             <dt class="col-sm-3 text-truncate">Data de Edição</dt>
                             <dd class="col-sm-9"><?php
-                                if (!empty($row_user_vis['modified'])) {
+                                if (!empty($row_artigo_vis['modified'])) {
                                     echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['modified']));
                                 }
                                 ?>
                             </dd>
 
                             <dt class="col-sm-3">Situação</dt>
-                            <dd class="col-sm-9"></dd>
+                            <dd class="col-sm-9"><?php
+                                echo "<span class='badge badge-" . $row_artigo_vis['cor_cors'] . "'>" . $row_artigo_vis['nome_sitartigo'] . "</span>";
+                                ?></dd>
 
                             <dt class="col-sm-3">Arquivo</dt>
                             <dd class="col-sm-9">
                                 <?php
-                                echo "<a href = '" . pg . "/assets/artigosRecebidos/" . $row_artigo_vis['id'] . "/" . $row_artigo_vis['arquivo'] . "'>".$row_artigo_vis["arquivo"]."</a>";
+                                echo "<a href = '" . pg . "/assets/artigosRecebidos/" . $row_artigo_vis['id'] . "/" . $row_artigo_vis['arquivo'] . "'>" . $row_artigo_vis["arquivo"] . "</a>";
                                 ?>
                             </dd>
 

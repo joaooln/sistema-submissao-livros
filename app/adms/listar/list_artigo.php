@@ -43,9 +43,11 @@ include_once 'app/adms/include/head.php';
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, sitartigo.nome nome_sitartigo, cors.cor cor_cors
                             FROM adms_artigos artigo
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
+                            INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
+                            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
                             ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
 
 
@@ -59,7 +61,7 @@ include_once 'app/adms/include/head.php';
                                     <th>Código</th>
                                     <th>Título do Artigo</th>
                                     <th class="d-none d-sm-table-cell">Título do Livro</th>
-                                    <th class="d-none d-sm-table-cell">Pagamento</th>
+                                    <th class="d-none d-sm-table-cell">Status</th>
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -71,7 +73,9 @@ include_once 'app/adms/include/head.php';
                                         <th><?php echo $row_artigo['id']; ?></th>
                                         <td><?php echo $row_artigo['tituloArtigo']; ?></td>
                                         <td class="d-none d-sm-table-cell"><?php echo $row_artigo['tituloLivro']; ?></td>
-                                        <td class="d-none d-sm-table-cell"><?php echo $row_artigo['arquivo']; ?></td>
+                                        <td class="d-none d-sm-table-cell"><?php
+                                echo "<span class='badge badge-" . $row_artigo['cor_cors'] . "'>" . $row_artigo['nome_sitartigo'] . "</span>";
+                                ?></td>
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
                                                 <?php

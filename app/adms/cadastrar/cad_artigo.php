@@ -72,7 +72,7 @@ include_once 'app/adms/include/head.php';
                             <label>
                                 CPFs
                             </label>
-                            <input name="cpfCoautor[]" type="text" class="form-control cpf" placeholder="CPF" id="cpfCoautor[]" placeholder="CPF" value="<?php
+                            <input name="cpfCoautor[]" type="text" class="form-control" placeholder="CPF" id="cpfCoautor[]" value="<?php
                             if (isset($_SESSION['dados']['cpfCoautor[]'])) {
                                 echo $_SESSION['dados']['cpfCoautor[]'];
                             }
@@ -96,9 +96,6 @@ include_once 'app/adms/include/head.php';
                             </div>
                         </div>
 
-                        <div class="form-group col-sm-6">
-                            <img src="<?php echo pg . '/assets/imagens/usuario/preview_img.png'; ?>" id="preview-user" class="img-thumbnail" style="width: 200px; height: 200px;">
-                        </div>
                     </div>
 
                     <p>
@@ -140,7 +137,7 @@ include_once 'app/adms/include/head.php';
                     if (x < campos_max) {
                         $('#co-autores').append('\
                                 <div id="campo_nome' + cont + '" class="form-group col-md-5"><input name="nomeCoautor[]" type="text" class="form-control" id="nomeCoautor[]" placeholder="Nome" value=""></div>\
-                                <div id="campo_cpf' + cont + '" class="form-group col-md-4"><input name="cpfCoautor[]" type="text" class="form-control" id="cpfCoautor" placeholder="CPF" value=""></div>\
+                                <div id="campo_cpf' + cont + '" class="form-group col-md-4"><input name="cpfCoautor[]" type="text" class="form-control" id="cpfCoautor[]" placeholder="CPF" value=""></div>\
                                 <div id="campo_botao' + cont + '" class="form-group col-md-3"><button id="' + cont + '" type="button" class="btn btn-danger btn-remover_campo"><i class="fas fa-minus-circle"></i></button></div>\
                                 ');
                         x++;
