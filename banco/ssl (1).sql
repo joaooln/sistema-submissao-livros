@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 24-Ago-2019 às 00:45
+-- Generation Time: 06-Dez-2019 às 23:54
 -- Versão do servidor: 10.1.36-MariaDB
 -- versão do PHP: 5.6.38
 
@@ -21,6 +21,59 @@ SET time_zone = "+00:00";
 --
 -- Database: `ssl`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `adms_artigos`
+--
+
+CREATE TABLE `adms_artigos` (
+  `id` int(11) NOT NULL,
+  `tituloLivro` varchar(220) NOT NULL,
+  `tituloArtigo` varchar(220) NOT NULL,
+  `nomeCoautor1` varchar(220) DEFAULT NULL,
+  `cpfCoautor1` varchar(14) NOT NULL,
+  `nomeCoautor2` varchar(220) NOT NULL,
+  `cpfCoautor2` varchar(14) DEFAULT NULL,
+  `nomeCoautor3` varchar(220) NOT NULL,
+  `cpfCoautor3` varchar(14) DEFAULT NULL,
+  `nomeCoautor4` varchar(220) DEFAULT NULL,
+  `cpfCoautor4` varchar(14) NOT NULL,
+  `nomeCoautor5` varchar(220) NOT NULL,
+  `cpfCoautor5` varchar(14) NOT NULL,
+  `normas` int(11) NOT NULL,
+  `nota_outro_cpf` int(11) NOT NULL,
+  `cpf_nota` varchar(14) DEFAULT NULL,
+  `email_nota` varchar(220) DEFAULT NULL,
+  `arquivo` varchar(220) NOT NULL,
+  `adms_sit_artigo_id` int(11) NOT NULL,
+  `adms_usuario_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `adms_artigos`
+--
+
+INSERT INTO `adms_artigos` (`id`, `tituloLivro`, `tituloArtigo`, `nomeCoautor1`, `cpfCoautor1`, `nomeCoautor2`, `cpfCoautor2`, `nomeCoautor3`, `cpfCoautor3`, `nomeCoautor4`, `cpfCoautor4`, `nomeCoautor5`, `cpfCoautor5`, `normas`, `nota_outro_cpf`, `cpf_nota`, `email_nota`, `arquivo`, `adms_sit_artigo_id`, `adms_usuario_id`, `created`, `modified`) VALUES
+(101, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 2.docx', 1, 3, '2019-12-03 16:45:07', NULL),
+(102, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 2.docx', 1, 3, '2019-12-03 16:45:55', NULL),
+(103, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:49:11', NULL),
+(104, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:50:49', NULL),
+(105, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:53:06', NULL),
+(106, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:55:27', NULL),
+(107, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:56:14', NULL),
+(108, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:56:45', NULL),
+(109, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:12', NULL),
+(110, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:36', NULL),
+(111, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:58', NULL),
+(112, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 16:59:52', NULL),
+(113, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:01:42', NULL),
+(114, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:01:47', NULL),
+(115, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:02:54', NULL),
+(116, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:24:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -68,7 +121,7 @@ CREATE TABLE `adms_confs_emails` (
 --
 
 INSERT INTO `adms_confs_emails` (`id`, `nome`, `email`, `host`, `usuario`, `senha`, `smtpsecure`, `porta`, `created`, `modified`) VALUES
-(1, 'SS Editora', 'admin@sseditora.com.br', 'mail.sseditora.com.br', 'admin@sseditora.com.br', 'eEo!9MR2WR1I', 'ssl', 465, '2019-08-15 00:00:00', '2019-08-19 16:24:36');
+(1, 'SS Editora', 'admin@sseditora.com.br', 'mail.sseditora.com.br', 'admin@sseditora.com.br', 'eEo!9MR2WR1I', 'ssl', 465, '2019-08-15 00:00:00', '2019-12-03 17:22:14');
 
 -- --------------------------------------------------------
 
@@ -148,9 +201,10 @@ CREATE TABLE `adms_menus` (
 INSERT INTO `adms_menus` (`id`, `nome`, `icone`, `ordem`, `adms_sit_id`, `created`, `modified`) VALUES
 (1, 'Dashboard', 'fas fa-tachometer-alt', 1, 1, '2018-03-23 00:00:00', NULL),
 (2, 'Usuario', 'fas fa-user', 2, 1, '2018-03-23 00:00:00', NULL),
-(3, 'Menu', 'fas fa-list-ul', 3, 1, '2018-03-23 00:00:00', '2019-08-13 12:04:30'),
-(4, 'Sair', 'fas fa-sign-out-alt', 5, 1, '2018-03-23 00:00:00', '2019-08-15 16:35:13'),
-(10, 'ConfiguraÃ§Ãµes', 'fas fa-cogs', 4, 1, '2019-08-15 16:33:46', '2019-08-15 16:35:13');
+(3, 'Menu', 'fas fa-list-ul', 4, 1, '2018-03-23 00:00:00', '2019-09-04 14:40:49'),
+(4, 'Sair', 'fas fa-sign-out-alt', 6, 1, '2018-03-23 00:00:00', '2019-09-04 14:40:39'),
+(11, 'Artigos', 'fas fa-book', 3, 0, '2019-09-04 14:40:36', '2019-10-01 17:33:24'),
+(10, 'ConfiguraÃ§Ãµes', 'fas fa-cogs', 5, 1, '2019-08-15 16:33:46', '2019-09-04 14:40:48');
 
 -- --------------------------------------------------------
 
@@ -464,7 +518,23 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (290, 1, 61, 1, 2, 3, 1, 63, '2019-08-23 14:39:56', NULL),
 (291, 2, 61, 1, 2, 3, 2, 63, '2019-08-23 14:39:56', NULL),
 (292, 2, 61, 1, 2, 3, 3, 63, '2019-08-23 14:39:56', NULL),
-(293, 2, 61, 1, 2, 3, 4, 63, '2019-08-23 14:39:56', NULL);
+(293, 2, 61, 1, 2, 3, 4, 63, '2019-08-23 14:39:56', NULL),
+(294, 1, 63, 1, 1, 11, 1, 64, '2019-09-05 11:30:16', '2019-10-01 17:35:15'),
+(295, 2, 62, 1, 2, 3, 2, 64, '2019-09-05 11:30:16', NULL),
+(296, 2, 62, 1, 2, 3, 3, 64, '2019-09-05 11:30:16', NULL),
+(297, 2, 62, 1, 2, 3, 4, 64, '2019-09-05 11:30:16', NULL),
+(298, 1, 64, 1, 2, 3, 1, 65, '2019-09-19 11:22:48', '2019-10-01 17:35:06'),
+(299, 2, 63, 1, 2, 3, 2, 65, '2019-09-19 11:22:48', NULL),
+(300, 2, 63, 1, 2, 3, 3, 65, '2019-09-19 11:22:48', NULL),
+(301, 2, 63, 1, 2, 3, 4, 65, '2019-09-19 11:22:48', NULL),
+(302, 1, 62, 1, 1, 11, 1, 66, '2019-10-01 17:28:03', '2019-10-01 17:35:15'),
+(303, 2, 64, 1, 2, 3, 2, 66, '2019-10-01 17:28:03', NULL),
+(304, 2, 64, 1, 2, 3, 3, 66, '2019-10-01 17:28:03', NULL),
+(305, 2, 64, 1, 2, 3, 4, 66, '2019-10-01 17:28:03', NULL),
+(306, 1, 65, 1, 2, 3, 1, 67, '2019-10-14 14:05:28', NULL),
+(307, 2, 65, 1, 2, 3, 2, 67, '2019-10-14 14:05:28', NULL),
+(308, 2, 65, 1, 2, 3, 3, 67, '2019-10-14 14:05:28', NULL),
+(309, 2, 65, 1, 2, 3, 4, 67, '2019-10-14 14:05:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -580,7 +650,11 @@ INSERT INTO `adms_paginas` (`id`, `nome_pagina`, `endereco`, `obs`, `keywords`, 
 (60, 'Processa formulÃ¡rio editar tipo de pÃ¡gina', 'processa/proc_edit_tps_pgs', 'Processa formulÃ¡rio editar tipo de pÃ¡gina', 'Processa formulÃ¡rio editar tipo pagina', 'Processa formulÃ¡rio editar tipo de pÃ¡gina', 'JoÃ£o de Oliveira Lima Neto', 2, '', 59, 3, 1, 4, 1, '2019-08-21 16:37:24', NULL),
 (61, 'Apagar Tipo PÃ¡gina', 'processa/apagar_tps_pgs', 'PÃ¡gina para apagar tipo de pÃ¡gina', 'Apagar Tipo Pagina', 'Apagar Tipo Pagina', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 4, 1, 4, 1, '2019-08-21 17:01:03', NULL),
 (62, 'Ordem Tipo PÃ¡gina', 'processa/proc_ordem_tps_pgs', 'PÃ¡gina para alterar a ordem do tipo de pÃ¡gina', 'Ordem Tipo Pagina', 'Ordem Tipo Pagina', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-08-21 17:31:50', NULL),
-(63, 'Processa FormulÃ¡rio Editar Perfil', 'processa/proc_edit_perfil', 'Processa FormulÃ¡rio Editar Perfil', 'Processa Formulario Editar Perfil', 'Processa Formulario Editar Perfil', 'JoÃ£o de Oliveira Lima Neto', 2, '', 45, 3, 1, 4, 1, '2019-08-23 14:39:56', NULL);
+(63, 'Processa FormulÃ¡rio Editar Perfil', 'processa/proc_edit_perfil', 'Processa FormulÃ¡rio Editar Perfil', 'Processa Formulario Editar Perfil', 'Processa Formulario Editar Perfil', 'JoÃ£o de Oliveira Lima Neto', 2, '', 45, 3, 1, 4, 1, '2019-08-23 14:39:56', NULL),
+(64, 'Cadastrar Artigo', 'cadastrar/cad_artigo', 'FormulÃ¡rio para cadastrar artigos', 'Cadastrar Artigo', 'Cadastrar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 2, 1, 4, 1, '2019-09-05 11:30:16', '2019-09-18 14:04:40'),
+(65, 'Processa FormulÃ¡rio Cadastrar Artigo', 'processa/proc_cad_artigo', 'Processa FormulÃ¡rio Cadastrar Artigo', 'Processa Formulario Cadastrar Artigo', 'Processa FormulÃ¡rio Cadastrar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 64, 2, 1, 4, 1, '2019-09-19 11:22:48', NULL),
+(66, 'Listar Artigos', 'listar/list_artigo', 'PÃ¡gina para listar artigos do autor logado', 'Listar Artigos', 'Listar Artigos', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 1, 1, 4, 1, '2019-10-01 17:28:03', '2019-10-01 17:29:16'),
+(67, 'Visualizar Artigo', 'visualizar/vis_artigo', 'PÃ¡gina para visualizar artigo', 'Visualizar Artigo', 'Visualizar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 5, 1, 4, 1, '2019-10-14 14:05:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -629,6 +703,31 @@ INSERT INTO `adms_sits` (`id`, `nome`, `adms_cor_id`, `created`, `modified`) VAL
 (1, 'Ativo', 3, '2018-03-23 00:00:00', NULL),
 (2, 'Inativo', 4, '2018-03-23 00:00:00', NULL),
 (3, 'Analise', 1, '2018-03-23 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `adms_sits_artigos`
+--
+
+CREATE TABLE `adms_sits_artigos` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(110) NOT NULL,
+  `adms_cor_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `adms_sits_artigos`
+--
+
+INSERT INTO `adms_sits_artigos` (`id`, `nome`, `adms_cor_id`, `created`, `modified`) VALUES
+(1, 'Em avaliacao', 1, '2019-12-02 00:00:00', NULL),
+(2, 'Aceito aguardando pagamento', 3, '2019-12-02 00:00:00', NULL),
+(3, 'Aguardando publicação', 5, '2019-12-02 00:00:00', NULL),
+(4, 'Rejeitado', 4, '2019-12-02 00:00:00', NULL),
+(5, 'Publicado', 6, '2019-12-02 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -738,13 +837,19 @@ CREATE TABLE `adms_usuarios` (
 INSERT INTO `adms_usuarios` (`id`, `nome`, `cpf`, `telefone`, `email`, `senha`, `rua`, `num_end`, `complemento`, `bairro`, `cidade`, `estado`, `cep`, `pais`, `recuperar_senha`, `chave_descadastro`, `conf_email`, `imagem`, `adms_niveis_acesso_id`, `adms_sits_usuario_id`, `created`, `modified`) VALUES
 (1, 'Cesar N. Szpak', 'Cesar', '', 'cesar@celke.com.br', '$2y$10$UDdxOqZghWMPVQQ094COZeNdT/VFBJXqwFfAyRNLZnycaXhY8yK9u', '', '', '', '', '', '', '', '', NULL, NULL, NULL, 'celke.jpg', 1, 1, '2018-03-23 00:00:00', NULL),
 (2, 'Jessica', 'jessica', '', 'jessica@celke.com.br', '$2y$10$UDdxOqZghWMPVQQ094COZeNdT/VFBJXqwFfAyRNLZnycaXhY8yK9u', '', '', '', '', '', '', '', '', NULL, NULL, NULL, 'jessica.png', 3, 1, '2019-07-24 00:00:00', NULL),
-(3, 'JoÃ£o de Oliveira Lima Neto', '232.499.160-80', '(68) 99914-4544', 'joaooln@gmail.com', '$2y$10$t4lf5AxCPgSTa3dUDbeIPeSxw9pX6UdaRE9ZE47/vSS8y0fWLF8PG', 'Rua Luiz Z da Silva', '292', 'Bloco C6 - Apt 424', 'Manoel JuliÃ£o', 'Rio Branco', 'AC', '69918-452', 'Brasil', NULL, NULL, NULL, 'elfmaker.png', 1, 1, '2019-08-14 14:36:11', '2019-08-23 15:11:11'),
-(15, 'JoÃ£o de Oliveira Lima Neto', '942.227.702-72', '(68) 91445-4444', 'joaooln3@gmail.com', '$2y$10$Xd8LJenA7w8ThQvAhgD.0uFlQU58ngMRPIUyN.hkF1kx2Zyvr9Usa', 'Rua A', '29', '123', 'Moel', 'Rio Branco', 'AC', '69918-452', 'Brasil', NULL, NULL, 'b61aaa10b63358ebdffdcde693d3ee6b', NULL, 4, 3, '2019-08-23 14:08:12', NULL),
+(3, 'JoÃ£o de Oliveira Lima Neto', '232.499.160-80', '(68) 99914-4544', 'joaooln@gmail.com', '$2y$10$t4lf5AxCPgSTa3dUDbeIPeSxw9pX6UdaRE9ZE47/vSS8y0fWLF8PG', 'Rua Luiz Z da Silva', '292', 'Bloco C6 - Apt 424', 'Manoel JuliÃ£o', 'Rio Branco', 'AC', '69918-452', 'Brasil', NULL, NULL, NULL, 'elfmaker.png', 1, 1, '2019-08-14 14:36:11', '2019-09-03 17:34:38'),
+(15, 'JoÃ£o', '942.227.702-72', '(68) 91445-4444', 'joaooln3@uol.com', '$2y$10$Xd8LJenA7w8ThQvAhgD.0uFlQU58ngMRPIUyN.hkF1kx2Zyvr9Usa', 'Rua A', '29', '123', 'Moel', 'Rio Branco', 'AC', '69918-452', 'Brasil', NULL, NULL, 'b61aaa10b63358ebdffdcde693d3ee6b', NULL, 4, 3, '2019-08-23 14:08:12', '2019-09-03 17:54:51'),
 (14, 'JoÃ£o de Oliveira Lima Neto', '123.456.789-79', '(68) 99914-4454', 'joaooln5@gmail.com', '$2y$10$z1mth1Ouizv1ldGNW2hQqedPLuBURgi0QxNiJe9TtR1zP4hrqTUq.', 'Rua A', '29', '', 'Moel', 'Rio Branco', 'AC', '69918-452', 'Brasil', NULL, NULL, 'b14dab71cf63e1533192cf6b8903e525', NULL, 4, 3, '2019-08-23 14:04:39', NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `adms_artigos`
+--
+ALTER TABLE `adms_artigos`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `adms_cads_usuarios`
@@ -807,6 +912,12 @@ ALTER TABLE `adms_sits`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `adms_sits_artigos`
+--
+ALTER TABLE `adms_sits_artigos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `adms_sits_pgs`
 --
 ALTER TABLE `adms_sits_pgs`
@@ -833,6 +944,12 @@ ALTER TABLE `adms_usuarios`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `adms_artigos`
+--
+ALTER TABLE `adms_artigos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `adms_cads_usuarios`
@@ -862,13 +979,13 @@ ALTER TABLE `adms_grps_pgs`
 -- AUTO_INCREMENT for table `adms_menus`
 --
 ALTER TABLE `adms_menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `adms_nivacs_pgs`
 --
 ALTER TABLE `adms_nivacs_pgs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=310;
 
 --
 -- AUTO_INCREMENT for table `adms_niveis_acessos`
@@ -880,7 +997,7 @@ ALTER TABLE `adms_niveis_acessos`
 -- AUTO_INCREMENT for table `adms_paginas`
 --
 ALTER TABLE `adms_paginas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `adms_robots`
@@ -893,6 +1010,12 @@ ALTER TABLE `adms_robots`
 --
 ALTER TABLE `adms_sits`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `adms_sits_artigos`
+--
+ALTER TABLE `adms_sits_artigos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `adms_sits_pgs`

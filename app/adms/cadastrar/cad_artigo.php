@@ -86,6 +86,101 @@ include_once 'app/adms/include/head.php';
                     </div>
 
                     <div class="form-row">
+                        <div class="form-group col-sm-5">
+                            <label for="normas">
+                                <span class="text-danger">*</span> Trabalho está formatado nas normas?
+                            </label>
+                            <div class="custom-file">
+                                <select name="normas" id="normas" class="custom-select" required>
+                                    <?php
+                                    if (isset($_SESSION['dados']['normas']) AND ( $_SESSION['dados']['normas'] == 1)) {
+                                        echo "<option value=''>Selecione</option>";
+                                        echo "<option value='1' selected>Sim</option>";
+                                        echo "<option value='2' onclick='cadastrarInstituicao();'>Não. Desejo que a empresa realize a normatização</option>";
+                                    } elseif (isset($_SESSION['dados']['normas']) AND ( $_SESSION['dados']['normas'] == 2)) {
+                                        echo "<option value=''>Selecione</option>";
+                                        echo "<option value='1'>Sim</option>";
+                                        echo "<option value='2' onclick='cadastrarInstituicao();' selected>Não. Desejo que a empresa realize a normatização</option>";
+                                    } else {
+                                        echo "<option value='' selected>Selecione</option>";
+                                        echo "<option value='1'>Sim</option>";
+                                        echo "<option value='2' onclick='cadastrarInstituicao();'>Não. Desejo que a empresa realize a normatização</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-5">
+                            <label>
+                                <span class="text-danger">*</span> Nota Fiscal será no seu nome?
+                            </label>
+                            <div class="custom-file">
+                                <select name="normas" id="normas" class="custom-select" required>
+                                    <?php
+                                    if (isset($_SESSION['dados']['normas']) AND ( $_SESSION['dados']['normas'] == 1)) {
+                                        echo "<option value=''>Selecione</option>";
+                                        echo "<option value='1' selected>Sim</option>";
+                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoa</option>";
+                                        echo "<option value='3'>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
+                                    } elseif (isset($_SESSION['dados']['normas']) AND ( $_SESSION['dados']['normas'] == 2)) {
+                                        echo "<option value=''>Selecione</option>";
+                                        echo "<option value='1'>Sim</option>";
+                                        echo "<option value='2' selected>Não. A Nota Fiscal deverá ser no nome de outra pessoa</option>";
+                                        echo "<option value='3'>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
+                                    } elseif (isset($_SESSION['dados']['normas']) AND ( $_SESSION['dados']['normas'] == 2)) {
+                                        echo "<option value=''>Selecione</option>";
+                                        echo "<option value='1'>Sim</option>";
+                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoao</option>";
+                                        echo "<option value='3' selected>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
+                                    } else {
+                                        echo "<option value='' selected>Selecione</option>";
+                                        echo "<option value='1'>Sim</option>";
+                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoao</option>";
+                                        echo "<option value='3'>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="nota-pessoal-fisica" hidden="true">
+                        <div class="form-group col-md-5">
+                            <label>                                
+                                Nome
+                            </label>
+                            <input name="nome_nota" type="text" class="form-control" id="nome_nota" placeholder="Nome para ser emitido a Nota Fiscal" value="<?php
+                            if (isset($_SESSION['dados']['nome_nota'])) {
+                                echo $_SESSION['dados']['nome_nota'];
+                            }
+                            ?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>                                
+                                CPF
+                            </label>
+                            <input name="cpf_nota" type="text" class="form-control cpf" id="cpf_nota" placeholder="CPF para ser emitido a Nota Fiscal" value="<?php
+                            if (isset($_SESSION['dados']['cpf_nota'])) {
+                                echo $_SESSION['dados']['cpf_nota'];
+                            }
+                            ?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>
+                                E-mail
+                            </label>
+                            <input name="email-nota" type="email" class="form-control email" placeholder="E-mail para ser emitido a Nota Fiscal" id="email-nota" value="<?php
+                            if (isset($_SESSION['dados']['email-nota'])) {
+                                echo $_SESSION['dados']['email-nota'];
+                            }
+                            ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group col-sm-6">
                             <label>
                                 <span class="text-danger">*</span> Arquivo
@@ -95,7 +190,6 @@ include_once 'app/adms/include/head.php';
                                 <label class="custom-file-label" for="arquivo" data-browse="Escolher">Selecionar o aquivo Word</label>
                             </div>
                         </div>
-
                     </div>
 
                     <p>
@@ -152,7 +246,7 @@ include_once 'app/adms/include/head.php';
                     $('#campo_botao' + button_id + '').remove();
                     x--;
                 });
-                
+
                 $("#SendCadArtigo").click(function () {
                     //Receber os dados do formulário
                     var dadosCoautores = $("#formCadArtigo").serialize();
@@ -165,6 +259,18 @@ include_once 'app/adms/include/head.php';
                     });
                 });
             });
+
+            function nota_pessoal_fisica() {
+//Abre a função que mostra o campo CadastrarInstituicao se a opção "Instituição não encontrada" no select instituicao.
+                var normas = document.getElementById("normas").value;
+                if (instituicao === 'novaInstituicao') {
+                    document.getElementById("cadastrarInstituicao").style.display = "block";
+                    document.getElementById("lblCadastrarInstituicao").style.display = "block";
+                } else {
+                    document.getElementById("cadastrarInstituicao").style.display = "none";
+                    document.getElementById("lblCadastrarInstituicao").style.display = "none";
+                }
+            }//Fecha a função
         </script>
     </div>
 </body>
