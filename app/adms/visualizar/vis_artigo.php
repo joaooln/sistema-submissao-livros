@@ -93,6 +93,48 @@ if (!empty($id)) {
                             <dt class="col-sm-3">Nome Coautor 5</dt>
                             <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor5']; ?></dd>
 
+                            <dt class="col-sm-3">Trabalho está nas Normas?</dt>
+                            <?php
+                            if ($row_artigo_vis['normas'] == 1) {
+                                $normas_texto = "Sim";
+                            } else {
+                                $normas_texto = "Não. A empresa irá realizar a normatização";
+                            }
+                            ?>
+                            <dd class="col-sm-9"><?php echo $normas_texto ?></dd>
+
+                            <dt class="col-sm-3">Nota Fiscal será emitida em seu nome?</dt>
+                            <?php
+                            if ($row_artigo_vis['nota_outro_nome'] == 1) {
+                                $nota_outro_nome_texto = "Sim";
+                            } elseif ($row_artigo_vis['nota_outro_nome'] == 2) {
+                                $nota_outro_nome_texto = "Não. A Nota Fiscal deverá ser no nome de outra pessoa.";
+                            } else {
+                                $nota_outro_nome_texto = "Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa.";
+                            }
+                            ?>
+                            <dd class="col-sm-9"><?php echo $nota_outro_nome_texto ?></dd>
+
+                            <?php if (!empty($row_artigo_vis['nome_nota'])) { ?>
+                                <dt class="col-sm-3">Nota será emitida com os seguintes dados:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    echo $row_artigo_vis['nome_nota'];
+                                    if (!empty($row_artigo_vis['cpf_nota'])) {
+                                        echo " - CPF: " . $row_artigo_vis['cpf_nota'] . "";
+                                    } else {
+                                        echo " - CNPJ: " . $row_artigo_vis['cnpj_nota'] . "";
+                                    }
+
+                                    if (!empty($row_artigo_vis['email_nota'])) {
+                                        echo " - E-mail: " . $row_artigo_vis['email_nota'] . "";
+                                    }
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
+
                             <dt class="col-sm-3">Data do Envio</dt>
                             <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['created'])); ?></dd>
 
@@ -108,6 +150,17 @@ if (!empty($id)) {
                             <dd class="col-sm-9"><?php
                                 echo "<span class='badge badge-" . $row_artigo_vis['cor_cors'] . "'>" . $row_artigo_vis['nome_sitartigo'] . "</span>";
                                 ?></dd>
+
+                            <?php if (!empty($row_artigo_vis['motivo_rejeicao'])) { ?>
+                                <dt class="col-sm-3">Motivo da Rejeição:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    echo $row_artigo_vis['motivo_rejeicao'];
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
 
                             <dt class="col-sm-3">Arquivo</dt>
                             <dd class="col-sm-9">
@@ -135,4 +188,4 @@ if (!empty($id)) {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Página não encontrada!</div>";
     $url_destino = pg . ' / acesso / login';
     header("Location: $url_destino");
-}
+}    

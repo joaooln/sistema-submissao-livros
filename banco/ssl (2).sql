@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 06-Dez-2019 às 23:54
+-- Generation Time: 21-Dez-2019 às 00:03
 -- Versão do servidor: 10.1.36-MariaDB
 -- versão do PHP: 5.6.38
 
@@ -43,10 +43,14 @@ CREATE TABLE `adms_artigos` (
   `nomeCoautor5` varchar(220) NOT NULL,
   `cpfCoautor5` varchar(14) NOT NULL,
   `normas` int(11) NOT NULL,
-  `nota_outro_cpf` int(11) NOT NULL,
+  `nota_outro_nome` int(11) NOT NULL,
+  `nome_nota` varchar(220) DEFAULT NULL,
   `cpf_nota` varchar(14) DEFAULT NULL,
+  `cnpj_nota` varchar(18) DEFAULT NULL,
   `email_nota` varchar(220) DEFAULT NULL,
   `arquivo` varchar(220) NOT NULL,
+  `motivo_rejeicao` varchar(520) DEFAULT NULL,
+  `transaction_id` int(11) DEFAULT NULL,
   `adms_sit_artigo_id` int(11) NOT NULL,
   `adms_usuario_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
@@ -57,23 +61,46 @@ CREATE TABLE `adms_artigos` (
 -- Extraindo dados da tabela `adms_artigos`
 --
 
-INSERT INTO `adms_artigos` (`id`, `tituloLivro`, `tituloArtigo`, `nomeCoautor1`, `cpfCoautor1`, `nomeCoautor2`, `cpfCoautor2`, `nomeCoautor3`, `cpfCoautor3`, `nomeCoautor4`, `cpfCoautor4`, `nomeCoautor5`, `cpfCoautor5`, `normas`, `nota_outro_cpf`, `cpf_nota`, `email_nota`, `arquivo`, `adms_sit_artigo_id`, `adms_usuario_id`, `created`, `modified`) VALUES
-(101, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 2.docx', 1, 3, '2019-12-03 16:45:07', NULL),
-(102, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 2.docx', 1, 3, '2019-12-03 16:45:55', NULL),
-(103, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:49:11', NULL),
-(104, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:50:49', NULL),
-(105, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:53:06', NULL),
-(106, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:55:27', NULL),
-(107, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:56:14', NULL),
-(108, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:56:45', NULL),
-(109, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:12', NULL),
-(110, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:36', NULL),
-(111, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 3.docx', 1, 3, '2019-12-03 16:57:58', NULL),
-(112, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 16:59:52', NULL),
-(113, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:01:42', NULL),
-(114, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:01:47', NULL),
-(115, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:02:54', NULL),
-(116, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, '', 'Teste 5.docx', 1, 3, '2019-12-03 17:24:44', NULL);
+INSERT INTO `adms_artigos` (`id`, `tituloLivro`, `tituloArtigo`, `nomeCoautor1`, `cpfCoautor1`, `nomeCoautor2`, `cpfCoautor2`, `nomeCoautor3`, `cpfCoautor3`, `nomeCoautor4`, `cpfCoautor4`, `nomeCoautor5`, `cpfCoautor5`, `normas`, `nota_outro_nome`, `nome_nota`, `cpf_nota`, `cnpj_nota`, `email_nota`, `arquivo`, `motivo_rejeicao`, `transaction_id`, `adms_sit_artigo_id`, `adms_usuario_id`, `created`, `modified`) VALUES
+(101, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 2.docx', NULL, NULL, 1, 3, '2019-12-03 16:45:07', NULL),
+(102, 'Teste 2', 'Teste 2', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 2.docx', NULL, NULL, 1, 3, '2019-12-03 16:45:55', NULL),
+(103, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', '', '', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:49:11', NULL),
+(104, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:50:49', NULL),
+(105, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:53:06', NULL),
+(106, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:55:27', NULL),
+(107, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:56:14', NULL),
+(108, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:56:45', NULL),
+(109, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:57:12', NULL),
+(110, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:57:36', NULL),
+(111, 'Teste 3', 'Teste 3', 'JoÃ£o', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 3.docx', NULL, NULL, 1, 3, '2019-12-03 16:57:58', NULL),
+(112, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 5.docx', NULL, NULL, 1, 3, '2019-12-03 16:59:52', NULL),
+(113, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 5.docx', NULL, NULL, 1, 3, '2019-12-03 17:01:42', NULL),
+(114, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 5.docx', NULL, NULL, 1, 3, '2019-12-03 17:01:47', NULL),
+(115, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 5.docx', NULL, NULL, 1, 3, '2019-12-03 17:02:54', NULL),
+(116, 'Teste 5', 'Teste 5', 'Joao', '123', 'Neto', '456', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, '', 'Teste 5.docx', NULL, NULL, 1, 3, '2019-12-03 17:24:44', NULL),
+(117, '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, NULL, '.docx', NULL, NULL, 1, 3, '2019-12-10 15:07:03', NULL),
+(118, 'Teste 1012', 'Teste 1012', '', '', '', '', '', '', '', '', '', '', 0, 0, NULL, NULL, NULL, NULL, 'Teste 1012.docx', NULL, NULL, 1, 3, '2019-12-10 15:08:11', NULL),
+(119, 'Teste 1012', 'Teste 1012', '', '', '', '', '', '', '', '', '', '', 1, 1, NULL, NULL, NULL, NULL, 'Teste 1012.docx', NULL, NULL, 1, 3, '2019-12-10 15:26:14', NULL),
+(120, 'Teste 1012', 'Teste 1012', '', '', '', '', '', '', '', '', '', '', 1, 1, NULL, NULL, NULL, NULL, 'Teste 1012.docx', NULL, NULL, 1, 3, '2019-12-10 15:27:14', NULL),
+(121, 'Teste 10122', 'Teste 10122', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.456.789-87', '', '', 'Teste 10122.docx', NULL, NULL, 1, 3, '2019-12-10 17:00:56', NULL),
+(122, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', NULL, NULL, 1, 3, '2019-12-10 17:15:05', NULL),
+(123, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', NULL, NULL, 1, 3, '2019-12-10 17:16:50', NULL),
+(124, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', NULL, NULL, 1, 3, '2019-12-10 17:17:33', NULL),
+(125, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', NULL, NULL, 1, 3, '2019-12-10 17:19:07', NULL),
+(126, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', '', NULL, 1, 3, '2019-12-10 17:19:10', '2019-12-13 14:14:41'),
+(127, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', '', NULL, 1, 3, '2019-12-10 17:19:54', '2019-12-13 14:03:13'),
+(128, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', '', NULL, 1, 3, '2019-12-10 17:20:05', '2019-12-13 13:31:35'),
+(129, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', 'Ridiculo', NULL, 4, 3, '2019-12-10 17:20:48', '2019-12-16 14:57:31'),
+(130, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', 'Feio', NULL, 0, 3, '2019-12-10 17:21:08', '2019-12-16 14:55:14'),
+(131, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', '', NULL, 4, 3, '2019-12-10 17:22:29', '2019-12-16 14:44:20'),
+(132, 'Teste 10123', 'Teste 10123', 'JoÃ£o', '11111111111111', '', '', '', '', '', '', '', '', 2, 2, '', '123.123.132-13', '', '', 'Teste 10123.docx', '', NULL, 0, 3, '2019-12-10 17:22:47', '2019-12-16 14:43:35'),
+(133, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', '', NULL, 4, 3, '2019-12-10 17:29:56', '2019-12-13 15:17:52'),
+(134, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', '', NULL, 4, 3, '2019-12-10 17:31:19', '2019-12-13 14:42:24'),
+(135, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', '', NULL, 4, 3, '2019-12-10 17:31:51', '2019-12-13 14:40:50'),
+(136, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', NULL, NULL, 2, 3, '2019-12-10 17:32:32', '2019-12-12 17:05:47'),
+(137, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', NULL, NULL, 2, 3, '2019-12-10 17:32:57', '2019-12-12 17:04:44'),
+(138, 'Teste JoÃ£o 5', 'Teste JoÃ£o 5', 'Neto', '123456', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', 'Teste JoÃ£o 5.docx', NULL, NULL, 2, 14, '2019-12-11 17:19:54', '2019-12-12 15:39:48'),
+(139, 'Teste 6', 'Teste 6', 'Neto', '123456789', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', 'Teste 6.docx', NULL, NULL, 2, 14, '2019-12-19 15:46:46', '2019-12-20 14:25:37');
 
 -- --------------------------------------------------------
 
@@ -522,19 +549,35 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (294, 1, 63, 1, 1, 11, 1, 64, '2019-09-05 11:30:16', '2019-10-01 17:35:15'),
 (295, 2, 62, 1, 2, 3, 2, 64, '2019-09-05 11:30:16', NULL),
 (296, 2, 62, 1, 2, 3, 3, 64, '2019-09-05 11:30:16', NULL),
-(297, 2, 62, 1, 2, 3, 4, 64, '2019-09-05 11:30:16', NULL),
+(297, 1, 62, 1, 1, 11, 4, 64, '2019-09-05 11:30:16', '2019-12-11 17:05:49'),
 (298, 1, 64, 1, 2, 3, 1, 65, '2019-09-19 11:22:48', '2019-10-01 17:35:06'),
 (299, 2, 63, 1, 2, 3, 2, 65, '2019-09-19 11:22:48', NULL),
 (300, 2, 63, 1, 2, 3, 3, 65, '2019-09-19 11:22:48', NULL),
-(301, 2, 63, 1, 2, 3, 4, 65, '2019-09-19 11:22:48', NULL),
+(301, 1, 63, 1, 2, 3, 4, 65, '2019-09-19 11:22:48', '2019-12-11 17:04:40'),
 (302, 1, 62, 1, 1, 11, 1, 66, '2019-10-01 17:28:03', '2019-10-01 17:35:15'),
 (303, 2, 64, 1, 2, 3, 2, 66, '2019-10-01 17:28:03', NULL),
 (304, 2, 64, 1, 2, 3, 3, 66, '2019-10-01 17:28:03', NULL),
-(305, 2, 64, 1, 2, 3, 4, 66, '2019-10-01 17:28:03', NULL),
+(305, 1, 64, 1, 1, 11, 4, 66, '2019-10-01 17:28:03', '2019-12-11 17:06:07'),
 (306, 1, 65, 1, 2, 3, 1, 67, '2019-10-14 14:05:28', NULL),
 (307, 2, 65, 1, 2, 3, 2, 67, '2019-10-14 14:05:28', NULL),
 (308, 2, 65, 1, 2, 3, 3, 67, '2019-10-14 14:05:28', NULL),
-(309, 2, 65, 1, 2, 3, 4, 67, '2019-10-14 14:05:28', NULL);
+(309, 1, 65, 1, 2, 3, 4, 67, '2019-10-14 14:05:28', '2019-12-11 17:06:46'),
+(310, 1, 66, 1, 1, 11, 1, 68, '2019-12-11 16:59:03', '2019-12-11 17:00:13'),
+(311, 2, 66, 1, 2, 3, 2, 68, '2019-12-11 16:59:03', NULL),
+(312, 2, 66, 1, 2, 3, 3, 68, '2019-12-11 16:59:03', NULL),
+(313, 2, 66, 1, 2, 3, 4, 68, '2019-12-11 16:59:03', NULL),
+(314, 1, 67, 1, 2, 3, 1, 69, '2019-12-12 15:16:52', NULL),
+(315, 2, 67, 1, 2, 3, 2, 69, '2019-12-12 15:16:52', NULL),
+(316, 2, 67, 1, 2, 3, 3, 69, '2019-12-12 15:16:52', NULL),
+(317, 2, 67, 1, 2, 3, 4, 69, '2019-12-12 15:16:52', NULL),
+(318, 1, 68, 1, 2, 3, 1, 70, '2019-12-12 17:45:18', NULL),
+(319, 2, 68, 1, 2, 3, 2, 70, '2019-12-12 17:45:18', NULL),
+(320, 2, 68, 1, 2, 3, 3, 70, '2019-12-12 17:45:18', NULL),
+(321, 2, 68, 1, 2, 3, 4, 70, '2019-12-12 17:45:18', NULL),
+(322, 1, 69, 1, 2, 3, 1, 71, '2019-12-19 15:34:53', NULL),
+(323, 2, 69, 1, 2, 3, 2, 71, '2019-12-19 15:34:53', NULL),
+(324, 2, 69, 1, 2, 3, 3, 71, '2019-12-19 15:34:53', NULL),
+(325, 1, 69, 1, 2, 3, 4, 71, '2019-12-19 15:34:53', '2019-12-19 15:41:38');
 
 -- --------------------------------------------------------
 
@@ -651,10 +694,14 @@ INSERT INTO `adms_paginas` (`id`, `nome_pagina`, `endereco`, `obs`, `keywords`, 
 (61, 'Apagar Tipo PÃ¡gina', 'processa/apagar_tps_pgs', 'PÃ¡gina para apagar tipo de pÃ¡gina', 'Apagar Tipo Pagina', 'Apagar Tipo Pagina', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 4, 1, 4, 1, '2019-08-21 17:01:03', NULL),
 (62, 'Ordem Tipo PÃ¡gina', 'processa/proc_ordem_tps_pgs', 'PÃ¡gina para alterar a ordem do tipo de pÃ¡gina', 'Ordem Tipo Pagina', 'Ordem Tipo Pagina', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-08-21 17:31:50', NULL),
 (63, 'Processa FormulÃ¡rio Editar Perfil', 'processa/proc_edit_perfil', 'Processa FormulÃ¡rio Editar Perfil', 'Processa Formulario Editar Perfil', 'Processa Formulario Editar Perfil', 'JoÃ£o de Oliveira Lima Neto', 2, '', 45, 3, 1, 4, 1, '2019-08-23 14:39:56', NULL),
-(64, 'Cadastrar Artigo', 'cadastrar/cad_artigo', 'FormulÃ¡rio para cadastrar artigos', 'Cadastrar Artigo', 'Cadastrar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 2, 1, 4, 1, '2019-09-05 11:30:16', '2019-09-18 14:04:40'),
+(64, 'Cadastrar Artigo', 'cadastrar/cad_artigo', 'FormulÃ¡rio para cadastrar artigos', 'Cadastrar Artigo', 'Cadastrar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 2, 1, 4, 1, '2019-09-05 11:30:16', '2019-12-11 17:05:05'),
 (65, 'Processa FormulÃ¡rio Cadastrar Artigo', 'processa/proc_cad_artigo', 'Processa FormulÃ¡rio Cadastrar Artigo', 'Processa Formulario Cadastrar Artigo', 'Processa FormulÃ¡rio Cadastrar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 64, 2, 1, 4, 1, '2019-09-19 11:22:48', NULL),
-(66, 'Listar Artigos', 'listar/list_artigo', 'PÃ¡gina para listar artigos do autor logado', 'Listar Artigos', 'Listar Artigos', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 1, 1, 4, 1, '2019-10-01 17:28:03', '2019-10-01 17:29:16'),
-(67, 'Visualizar Artigo', 'visualizar/vis_artigo', 'PÃ¡gina para visualizar artigo', 'Visualizar Artigo', 'Visualizar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 5, 1, 4, 1, '2019-10-14 14:05:28', NULL);
+(66, 'Meus Artigos', 'listar/list_artigo', 'PÃ¡gina para listar artigos do autor logado', 'Listar Artigos', 'Listar Artigos', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 1, 1, 4, 1, '2019-10-01 17:28:03', '2019-12-11 17:06:07'),
+(67, 'Visualizar Artigo', 'visualizar/vis_artigo', 'PÃ¡gina para visualizar artigo', 'Visualizar Artigo', 'Visualizar Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 5, 1, 4, 1, '2019-10-14 14:05:28', NULL),
+(68, 'Artigos Recebidos', 'listar/list_artigo_adm', 'PÃ¡gina para visualizar todos os artigos recebidos', 'Visualizar Artigos Recebidos', 'Visualizar Artigos Recebidos', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 1, 1, 4, 1, '2019-12-11 16:59:03', '2019-12-11 17:00:02'),
+(69, 'Processa Aceite Artigo', 'processa/proc_aceite', 'PÃ¡gina para processar o aceite do artigo', 'Processa Aceite Artigo', 'Processa Aceite Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-12 15:16:52', NULL),
+(70, 'Processa Rejeita Artigo', 'processa/proc_rejeita', 'PÃ¡gina para Rejeitar Artigo Enviado', 'Rejeita Artigo', 'Rejeita Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-12 17:45:18', NULL),
+(71, 'Checkout PagSeguro', 'pagseguro/checkout', 'PÃ¡gina para processar pagamento do artigo', 'Processa pagamento pagseguro', 'Processa pagamento pagseguro', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-19 15:34:53', '2019-12-19 15:40:24');
 
 -- --------------------------------------------------------
 
@@ -724,7 +771,7 @@ CREATE TABLE `adms_sits_artigos` (
 
 INSERT INTO `adms_sits_artigos` (`id`, `nome`, `adms_cor_id`, `created`, `modified`) VALUES
 (1, 'Em avaliacao', 1, '2019-12-02 00:00:00', NULL),
-(2, 'Aceito aguardando pagamento', 3, '2019-12-02 00:00:00', NULL),
+(2, 'Aceito. Aguardando pagamento', 3, '2019-12-02 00:00:00', NULL),
 (3, 'Aguardando publicação', 5, '2019-12-02 00:00:00', NULL),
 (4, 'Rejeitado', 4, '2019-12-02 00:00:00', NULL),
 (5, 'Publicado', 6, '2019-12-02 00:00:00', NULL);
@@ -949,7 +996,7 @@ ALTER TABLE `adms_usuarios`
 -- AUTO_INCREMENT for table `adms_artigos`
 --
 ALTER TABLE `adms_artigos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `adms_cads_usuarios`
@@ -985,7 +1032,7 @@ ALTER TABLE `adms_menus`
 -- AUTO_INCREMENT for table `adms_nivacs_pgs`
 --
 ALTER TABLE `adms_nivacs_pgs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=310;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=326;
 
 --
 -- AUTO_INCREMENT for table `adms_niveis_acessos`
@@ -997,7 +1044,7 @@ ALTER TABLE `adms_niveis_acessos`
 -- AUTO_INCREMENT for table `adms_paginas`
 --
 ALTER TABLE `adms_paginas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `adms_robots`
@@ -1015,7 +1062,7 @@ ALTER TABLE `adms_sits`
 -- AUTO_INCREMENT for table `adms_sits_artigos`
 --
 ALTER TABLE `adms_sits_artigos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `adms_sits_pgs`

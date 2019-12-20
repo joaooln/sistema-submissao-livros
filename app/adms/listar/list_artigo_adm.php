@@ -16,7 +16,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Meus Artigos</h2>
+                        <h2 class="display-4 titulo">Artigos Recebidos</h2>
                     </div>
                     <div class="p-2">
                         <?php
@@ -43,12 +43,11 @@ include_once 'app/adms/include/head.php';
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_sit_artigo_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id
                             FROM adms_artigos artigo
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            WHERE artigo.adms_usuario_id = '" . $_SESSION['id'] . "'
                             ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
 
 
@@ -80,6 +79,10 @@ include_once 'app/adms/include/head.php';
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
                                                 <?php
+                                                if (isset($row_artigo['motivo_rejeicao'])) {
+                                                    $row_artigo['motivo_rejeicao'] = "";
+                                                }
+                                                $row_artigo['motivo_rejeicao'] = "";
                                                 $btn_vis = carregar_btn('visualizar/vis_artigo', $conn);
                                                 if ($btn_vis) {
                                                     echo "<a href='" . pg . "/visualizar/vis_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
@@ -88,9 +91,17 @@ include_once 'app/adms/include/head.php';
                                                 if ($btn_edit) {
                                                     echo "<a href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
                                                 }
-                                                $btn_pagar = carregar_btn('pagseguro/checkout', $conn);
-                                                if (($btn_pagar) && ($row_artigo['adms_sit_artigo_id'] == 2)) {
-                                                    echo "<a href='" . pg . "/pagseguro/checkout?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
+                                                $btn_apagar = carregar_btn('processa/apagar_artigo', $conn);
+                                                if ($btn_apagar) {
+                                                    echo "<a href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm data-confirm'>Apagar</a> ";
+                                                }
+                                                $btn_aceite = carregar_btn('processa/proc_aceite', $conn);
+                                                if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
+                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                                }
+                                                $btn_rejeita = carregar_btn('processa/proc_rejeita', $conn);
+                                                if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
+                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
                                                 }
                                                 ?>
                                             </span>
@@ -107,7 +118,7 @@ include_once 'app/adms/include/head.php';
                                                         echo "<a class='dropdown-item' href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "'>Editar</a>";
                                                     }
                                                     if ($btn_apagar) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' data-confirm2='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
                                                     }
                                                     ?>
                                                 </div>
@@ -165,8 +176,85 @@ include_once 'app/adms/include/head.php';
         <?php
         include_once 'app/adms/include/rodape_lib.php';
         ?>
-
     </div>
+
+    // Janela Modal Confirma Aceite
+    <div class="modal fade" id="confirma_aceite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <?php
+                    echo "<a href='" . pg . "/processa/proc_aceite?id=" . $row_artigo['id'] . "' type='button' class='btn btn-primary'>Sim</a>";
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    // Janela Modal Rejeita Artigo
+    <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                    <form method="POST" action="<?php echo pg; ?>/processa/proc_rejeita">
+                        <input type="hidden" name="id" id="id" value="<?php
+                        echo $row_artigo['id'];
+                        ?>">
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Motivo da Rejeição:</label>
+                            <textarea id="motivo_rejeicao" name="motivo_rejeicao" type="text" class="form-control" required></textarea>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input name="SendRejeicao" id="SendRejeicao" type="submit" class="btn btn-success" value="Sim">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#confirma_aceite').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var pg = button.data('pg')
+            var modal = $(this)
+            modal.find('.modal-title').text('Confirmar Aceite')
+            modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
+            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_aceite?id=' + id)
+        })
+
+        $('#confirma_rejeita').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var pg = button.data('pg')
+            var modal = $(this)
+            modal.find('.modal-title').text('Confirmar Rejeição')
+            modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
+            modal.find('#id').val(id)
+            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
+        })
+    </script>
+
 </body>
+
+
 
 

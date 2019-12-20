@@ -14,6 +14,29 @@ if (!empty($SendCadArtigo)) {
     $dados_cpfCoautor = $dados['cpfCoautor'];
     unset($dados['cpfCoautor']);
 
+    $dados_cpf_nota = $dados['cpf_nota'];
+    unset($dados['cpf_nota']);
+    $dados_cnpj_nota = $dados['cnpj_nota'];
+    unset($dados['cnpj_nota']);
+    $dados_nome_nota_pf = $dados['nome_nota_pf'];
+    unset($dados['nome_nota_pf']);
+    $dados_email_nota_pf = $dados['email_nota_pf'];
+    unset($dados['email_nota_pf']);
+    $dados_nome_nota_pj = $dados['nome_nota_pj'];
+    unset($dados['nome_nota_pj']);
+    $dados_email_nota_pj = $dados['email_nota_pj'];
+    unset($dados['email_nota_pj']);
+    if (empty($dados_nome_nota_pf)) {
+        $dados_nome_nota = $dados_nome_nota_pj;
+    } else {
+        $dados_nome_nota = $dados_nome_nota_pf;
+    }
+    if (empty($dados_email_nota_pf)) {
+        $dados_email_nota = $dados_email_nota_pj;
+    } else {
+        $dados_email_nota = $dados_email_nota_pf;
+    }
+
     //Grava dados nome e cpf coautores para vetor
     for ($index = 4; $index > 0; $index--) {
         if (empty($dados_nomeCoautor[$index])) {
@@ -51,11 +74,11 @@ if (!empty($SendCadArtigo)) {
     $erro = false;
     include_once 'lib/lib_vazio.php';
     $dados_validos = vazio($dados);
-    if (!$dados_validos) {
-        $erro = true;
-        $_SESSION['msg'] = "<div class='alert alert-danger'>Necessário preencher todos os campos para cadastrar o usuário!</div>";
-    }
-
+    var_dump($dados_validos);
+    //if (!$dados_validos) {
+    //$erro = true;
+    // $_SESSION['msg'] = "<div class='alert alert-danger'>Necessário preencher todos os campos para cadastrar o artigo!</div>";
+    // }
     // Faz a verificação da extensão do arquivo
     if (array_search($extensao, $_UP['extensoes']) == false) {
         $erro = true;
@@ -87,7 +110,7 @@ if (!empty($SendCadArtigo)) {
         $nome_final = $dados_validos['tituloArtigo'] . "." . $extensao;
 
         $result_cad_artigo = "INSERT INTO adms_artigos (tituloLivro, tituloArtigo, nomeCoautor1, cpfCoautor1, nomeCoautor2, cpfCoautor2, nomeCoautor3, cpfCoautor3, nomeCoautor4, cpfCoautor4,
-      nomeCoautor5, cpfCoautor5, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
+      nomeCoautor5, cpfCoautor5, normas, nota_outro_nome, nome_nota, cpf_nota, cnpj_nota, email_nota, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
       '" . $dados_validos['tituloLivro'] . "',
       '" . $dados_validos['tituloArtigo'] . "',
       '" . $dados_nomeCoautor[0] . "',
@@ -100,6 +123,12 @@ if (!empty($SendCadArtigo)) {
       '" . $dados_cpfCoautor[3] . "',
       '" . $dados_nomeCoautor[4] . "',
       '" . $dados_cpfCoautor[4] . "',
+      '" . $dados_validos['normas'] . "',
+      '" . $dados_validos['nota_outro_nome'] . "',
+      '" . $dados_nome_nota . "',
+      '" . $dados_cpf_nota . "',
+      '" . $dados_cnpj_nota . "',
+      '" . $dados_email_nota . "',    
       $valor_arquivo
       '" . 1 . "',
       '" . $_SESSION['id'] . "',
@@ -154,6 +183,30 @@ if (!empty($SendCadArtigo)) {
                     $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_cpfCoautor[$index] . "'<br>";
                 }
             }
+            $mensagem .= "Trabalho está nas Normas?: ";
+            if ($dados_validos['normas'] == 1) {
+                $normas_texto = "Sim <br>";
+            } else {
+                $normas_texto = "Não. A empresa irá realizar a normatização <br>";
+            }
+            $mensagem .= $normas_texto;
+            $mensagem .= "Nota Fiscal será emitida em seu nome?: ";
+            if ($dados_validos['nota_outro_nome'] == 1) {
+                $nota_outro_nome_texto = "Sim <br>";
+            } elseif ($dados_validos['nota_outro_nome'] == 2) {
+                $nota_outro_nome_texto = "Não. A Nota Fiscal deverá ser no nome de outra pessoa. <br>";
+            } else {
+                $nota_outro_nome_texto = "Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa. <br>";
+            }
+            $mensagem .= $nota_outro_nome_texto;
+            if (!empty($dados_nome_nota)) {
+                $mensagem .= "Nome para emissão da nota fiscal: '" . $dados_nome_nota . "' - ";
+            }
+            if (!empty($dados_cpf_nota)) {
+                $mensagem .= "CPF: '" . $dados_cpf_nota . "' <br>";
+            } else {
+                $mensagem .= "CNPJ: '" . $dados_cnpj_nota . "' <br>";
+            }
             $mensagem .= "Data da Submissão: '" . date('d/m/y') . "'<br>";
             $mensagem .= "Situação: Em Avaliação <br>";
             $mensagem .= "Arquivo: ";
@@ -178,13 +231,15 @@ if (!empty($SendCadArtigo)) {
             $mensagem_texto .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
             $mensagem_texto .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
 
-            if (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_user['email'], $conn)) {
-                echo "Email Enviado";
-//$_SESSION['msgcad'] = "<div class='alert alert-success'>Email Enviado</div>";
-            } else {
-                echo "Erro";
-//$_SESSION['msgcad'] = "<div class='alert alert-danger'>Erro ao enviar o email</div>";
-            }
+            /* if (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_user['email'], $conn)) {
+              echo "Email Enviado";
+              //$_SESSION['msgcad'] = "<div class='alert alert-success'>Email Enviado</div>";
+              } else {
+              echo "Erro";
+              //$_SESSION['msgcad'] = "<div class='alert alert-danger'>Erro ao enviar o email</div>";
+              }
+             * 
+             */
         } else {
             $erro = true;
             //$dados['apelido'] = $dados_apelido;

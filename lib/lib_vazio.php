@@ -9,6 +9,7 @@ function vazio($dados) {
     $dados_tr = array_map('trim', $dados_st);
     if (in_array('', $dados_tr)) {
         return false;
+        var_dump($dados_tr);
     }
     return $dados_tr;
 }
