@@ -3,10 +3,17 @@
 session_start();
 ob_start();
 $seg = true;
-include_once '/config/config.php';
-include_once '/config/conexao.php';
-include_once '/lib/lib_valida.php';
-include_once '/lib/lib_permissao.php';
+$url_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
+define('pg', "http://$url_host/sistema-submissao-livros");
+
+$servidor = "localhost";
+$usuario = "root";
+$senha = "";
+$dbname = "ssl";
+
+//Criar a conexao
+$conn = mysqli_connect($servidor, $usuario, $senha, $dbname);
+
 
 header("access-control-allow-origin: https://pagseguro.uol.com.br");
 header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");

@@ -103,7 +103,12 @@ include_once 'app/adms/include/head.php';
                                                 if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
                                                     echo "<a href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
                                                 }
+                                                $btn_publicado = carregar_btn('processa/proc_publicado', $conn);
+                                                if ($btn_publicado && $row_artigo['adms_sit_artigo_id'] == 3) {
+                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite2' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Publicado</a> ";
+                                                }
                                                 ?>
+
                                             </span>
                                             <div class="dropdown d-block d-md-none">
                                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -231,6 +236,17 @@ include_once 'app/adms/include/head.php';
     </div>
 
     <script>
+
+        $('#confirma_publicacao').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var pg = button.data('pg')
+            var modal = $(this)
+            modal.find('.modal-title').text('Confirmar Publicação')
+            modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
+            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
+        })
+
         $('#confirma_aceite').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var id = button.data('id')
@@ -251,6 +267,22 @@ include_once 'app/adms/include/head.php';
             modal.find('#id').val(id)
             modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
         })
+
+    </script>
+
+    <script>
+
+        $('#confirma_publicacao').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var pg = button.data('pg')
+            var modal = $(this)
+            modal.find('.modal-title').text('Confirmar Publicação')
+            modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
+            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
+        })
+
+
     </script>
 
 </body>

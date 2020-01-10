@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 21-Dez-2019 às 00:03
+-- Generation Time: 11-Jan-2020 às 00:01
 -- Versão do servidor: 10.1.36-MariaDB
 -- versão do PHP: 5.6.38
 
@@ -100,7 +100,7 @@ INSERT INTO `adms_artigos` (`id`, `tituloLivro`, `tituloArtigo`, `nomeCoautor1`,
 (136, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', NULL, NULL, 2, 3, '2019-12-10 17:32:32', '2019-12-12 17:05:47'),
 (137, 'Teste 10124', 'Teste 10124', 'JoÃ£o', '12345687987987', '', '', '', '', '', '', '', '', 1, 2, 'JoÃ£o', '123.132.132-13', '', 'joaoln@gmail.com', 'Teste 10124.docx', NULL, NULL, 2, 3, '2019-12-10 17:32:57', '2019-12-12 17:04:44'),
 (138, 'Teste JoÃ£o 5', 'Teste JoÃ£o 5', 'Neto', '123456', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', 'Teste JoÃ£o 5.docx', NULL, NULL, 2, 14, '2019-12-11 17:19:54', '2019-12-12 15:39:48'),
-(139, 'Teste 6', 'Teste 6', 'Neto', '123456789', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', 'Teste 6.docx', NULL, NULL, 2, 14, '2019-12-19 15:46:46', '2019-12-20 14:25:37');
+(139, 'Teste 6', 'Teste 6', 'Neto', '123456789', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', 'Teste 6.docx', NULL, NULL, 3, 14, '2019-12-19 15:46:46', '2020-01-09 17:30:10');
 
 -- --------------------------------------------------------
 
@@ -577,7 +577,15 @@ INSERT INTO `adms_nivacs_pgs` (`id`, `permissao`, `ordem`, `dropdown`, `lib_menu
 (322, 1, 69, 1, 2, 3, 1, 71, '2019-12-19 15:34:53', NULL),
 (323, 2, 69, 1, 2, 3, 2, 71, '2019-12-19 15:34:53', NULL),
 (324, 2, 69, 1, 2, 3, 3, 71, '2019-12-19 15:34:53', NULL),
-(325, 1, 69, 1, 2, 3, 4, 71, '2019-12-19 15:34:53', '2019-12-19 15:41:38');
+(325, 1, 69, 1, 2, 3, 4, 71, '2019-12-19 15:34:53', '2019-12-19 15:41:38'),
+(326, 1, 70, 1, 2, 3, 1, 72, '2020-01-09 17:26:33', NULL),
+(327, 2, 70, 1, 2, 3, 2, 72, '2020-01-09 17:26:33', NULL),
+(328, 2, 70, 1, 2, 3, 3, 72, '2020-01-09 17:26:33', NULL),
+(329, 2, 70, 1, 2, 3, 4, 72, '2020-01-09 17:26:33', NULL),
+(330, 1, 71, 1, 2, 3, 1, 73, '2020-01-10 15:02:33', NULL),
+(331, 2, 71, 1, 2, 3, 2, 73, '2020-01-10 15:02:33', NULL),
+(332, 2, 71, 1, 2, 3, 3, 73, '2020-01-10 15:02:33', NULL),
+(333, 2, 71, 1, 2, 3, 4, 73, '2020-01-10 15:02:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -701,7 +709,9 @@ INSERT INTO `adms_paginas` (`id`, `nome_pagina`, `endereco`, `obs`, `keywords`, 
 (68, 'Artigos Recebidos', 'listar/list_artigo_adm', 'PÃ¡gina para visualizar todos os artigos recebidos', 'Visualizar Artigos Recebidos', 'Visualizar Artigos Recebidos', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 1, 1, 4, 1, '2019-12-11 16:59:03', '2019-12-11 17:00:02'),
 (69, 'Processa Aceite Artigo', 'processa/proc_aceite', 'PÃ¡gina para processar o aceite do artigo', 'Processa Aceite Artigo', 'Processa Aceite Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-12 15:16:52', NULL),
 (70, 'Processa Rejeita Artigo', 'processa/proc_rejeita', 'PÃ¡gina para Rejeitar Artigo Enviado', 'Rejeita Artigo', 'Rejeita Artigo', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-12 17:45:18', NULL),
-(71, 'Checkout PagSeguro', 'pagseguro/checkout', 'PÃ¡gina para processar pagamento do artigo', 'Processa pagamento pagseguro', 'Processa pagamento pagseguro', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-19 15:34:53', '2019-12-19 15:40:24');
+(71, 'Checkout PagSeguro', 'pagseguro/checkout', 'PÃ¡gina para processar pagamento do artigo', 'Processa pagamento pagseguro', 'Processa pagamento pagseguro', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2019-12-19 15:34:53', '2019-12-19 15:40:24'),
+(72, 'NotificaÃ§Ã£o PagSeguro', 'pagseguro/notificacao', 'PÃ¡gina para receber notificaÃ§Ã£o do PagSeguro', 'notificacao', 'NotificaÃ§Ã£o PagSeguro', 'JoÃ£o de Oliveira Lima Neto', 1, '', 0, 6, 1, 4, 1, '2020-01-09 17:26:33', NULL),
+(73, 'Processa PublicaÃ§Ã£o Artigo', 'processa/proc_publicado', 'PÃ¡gina para atualizar o status do artigo para publicado', 'Processa status para publicado', 'Processa status para publicado', 'JoÃ£o de Oliveira Lima Neto', 2, '', 0, 6, 1, 4, 1, '2020-01-10 15:02:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -770,9 +780,9 @@ CREATE TABLE `adms_sits_artigos` (
 --
 
 INSERT INTO `adms_sits_artigos` (`id`, `nome`, `adms_cor_id`, `created`, `modified`) VALUES
-(1, 'Em avaliacao', 1, '2019-12-02 00:00:00', NULL),
+(1, 'Em avaliaÃ§Ã£o', 1, '2019-12-02 00:00:00', NULL),
 (2, 'Aceito. Aguardando pagamento', 3, '2019-12-02 00:00:00', NULL),
-(3, 'Aguardando publicação', 5, '2019-12-02 00:00:00', NULL),
+(3, 'Aguardando publicaÃ§Ã£o', 5, '2019-12-02 00:00:00', NULL),
 (4, 'Rejeitado', 4, '2019-12-02 00:00:00', NULL),
 (5, 'Publicado', 6, '2019-12-02 00:00:00', NULL);
 
@@ -1032,7 +1042,7 @@ ALTER TABLE `adms_menus`
 -- AUTO_INCREMENT for table `adms_nivacs_pgs`
 --
 ALTER TABLE `adms_nivacs_pgs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=326;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
 -- AUTO_INCREMENT for table `adms_niveis_acessos`
@@ -1044,7 +1054,7 @@ ALTER TABLE `adms_niveis_acessos`
 -- AUTO_INCREMENT for table `adms_paginas`
 --
 ALTER TABLE `adms_paginas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `adms_robots`
