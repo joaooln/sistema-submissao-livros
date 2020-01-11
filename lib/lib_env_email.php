@@ -21,7 +21,8 @@ function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = nu
 
     if ($row_conf_email['usuario'] != "") {
         $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
-        try {
+        $mail->CharSet = "UTF-8";
+      try {
             //Server settings 
             //$mail->SMTPDebug = 2;                                 // Enable verbose debug output
             $mail->isSMTP();                                      // Set mailer to use SMTP
