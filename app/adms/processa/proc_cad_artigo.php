@@ -204,7 +204,8 @@ if (!empty($SendCadArtigo)) {
             }
             if (!empty($dados_cpf_nota)) {
                 $mensagem .= "CPF: '" . $dados_cpf_nota . "' <br>";
-            } else {
+            }
+            if (!empty($dados_cnpj_nota)) {
                 $mensagem .= "CNPJ: '" . $dados_cnpj_nota . "' <br>";
             }
             $mensagem .= "Data da Submissão: '" . date('d/m/y') . "'<br>";
