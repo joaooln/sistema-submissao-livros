@@ -4,10 +4,14 @@ if (!isset($seg)) {
     exit;
 }
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-if ($id) {
+$SendPublicado = filter_input(INPUT_POST, 'SendPublicado', FILTER_SANITIZE_STRING);
+if ($SendPublicado) {
+
+    $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
     $result_artigo_aceite = "SELECT artigo.id, artigo.adms_sit_artigo_id
             FROM adms_artigos artigo
-            WHERE artigo.id='$id' LIMIT 1";
+            WHERE artigo.id='" . $dados['id'] . "' LIMIT 1";
     $resultado_artigo_aceite = mysqli_query($conn, $result_artigo_aceite);
 
     //Retornou algum valor do banco de dados e acesso o IF, senão acessa o ELSe
@@ -19,7 +23,7 @@ if ($id) {
         $result_artigo_aceite_up = "UPDATE adms_artigos SET
                 adms_sit_artigo_id='$status',
                 modified=NOW()
-                WHERE id='$id'";
+                WHERE id='" . $dados['id'] . "'";
         $resultado_artigo_aceite_up = mysqli_query($conn, $result_artigo_aceite_up);
         if (mysqli_affected_rows($conn)) {
             $alteracao = true;
@@ -44,6 +48,6 @@ if ($id) {
     }
 } else {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Página não encontrada!</div>";
-    $url_destino = pg . '/listar/list_artigo_adm';
+    $url_destino = pg . '/acesso/login';
     header("Location: $url_destino");
 }

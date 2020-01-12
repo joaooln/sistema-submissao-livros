@@ -105,7 +105,7 @@ include_once 'app/adms/include/head.php';
                                                 }
                                                 $btn_publicado = carregar_btn('processa/proc_publicado', $conn);
                                                 if ($btn_publicado && $row_artigo['adms_sit_artigo_id'] == 3) {
-                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite2' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Publicado</a> ";
+                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
                                                 }
                                                 ?>
 
@@ -235,6 +235,36 @@ include_once 'app/adms/include/head.php';
         </div>
     </div>
 
+    // Janela Modal Publicacao
+    <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                    <form method="POST" action="<?php echo pg; ?>/processa/proc_publicado">
+                        <input type="hidden" name="id" id="id" value="<?php
+                        echo $row_artigo['id'];
+                        ?>">
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Link do livro:</label>
+                            <textarea id="link_livro" name="link_livro" type="text" class="form-control" required></textarea>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input name="SendPublicado" id="SendPublicado" type="submit" class="btn btn-success" value="Sim">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
 
         $('#confirma_publicacao').on('show.bs.modal', function (event) {
@@ -244,6 +274,7 @@ include_once 'app/adms/include/head.php';
             var modal = $(this)
             modal.find('.modal-title').text('Confirmar Publicação')
             modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
+            modal.find('#id').val(id)
             modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
         })
 
@@ -267,21 +298,6 @@ include_once 'app/adms/include/head.php';
             modal.find('#id').val(id)
             modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
         })
-
-    </script>
-
-    <script>
-
-        $('#confirma_publicacao').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var pg = button.data('pg')
-            var modal = $(this)
-            modal.find('.modal-title').text('Confirmar Publicação')
-            modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
-            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
-        })
-
 
     </script>
 
