@@ -74,7 +74,6 @@ if (!empty($SendCadArtigo)) {
     $erro = false;
     include_once 'lib/lib_vazio.php';
     $dados_validos = vazio($dados);
-    var_dump($dados_validos);
     //if (!$dados_validos) {
     //$erro = true;
     // $_SESSION['msg'] = "<div class='alert alert-danger'>Necessário preencher todos os campos para cadastrar o artigo!</div>";
@@ -175,8 +174,8 @@ if (!empty($SendCadArtigo)) {
 
             $mensagem = "Caro(a) $prim_nome,<br><br>";
             $mensagem .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
-            $mensagem .= "Titulo do Artigo: '" . $dados_validos['tituloArtigo'] . "'<br>";
-            $mensagem .= "Titulo do Livro: '" . $dados_validos['tituloLivro'] . "'<br>";
+            $mensagem .= "Título do Artigo: '" . $dados_validos['tituloArtigo'] . "'<br>";
+            $mensagem .= "Tútulo do Livro: '" . $dados_validos['tituloLivro'] . "'<br>";
             $mensagem .= "Coautores: <br>";
             for ($index = 0; $index < 4; $index++) {
                 if ($dados_nomeCoautor[$index] != "") {
@@ -215,8 +214,6 @@ if (!empty($SendCadArtigo)) {
             $mensagem .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
             $mensagem .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
 
-            echo $mensagem;
-
             $mensagem_texto = "Caro(a) $prim_nome ,<br><br>";
             $mensagem_texto .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
             $mensagem_texto .= "Titulo do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
@@ -232,15 +229,11 @@ if (!empty($SendCadArtigo)) {
             $mensagem_texto .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
             $mensagem_texto .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
 
-            /* if (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_user['email'], $conn)) {
-              echo "Email Enviado";
-              //$_SESSION['msgcad'] = "<div class='alert alert-success'>Email Enviado</div>";
-              } else {
-              echo "Erro";
-              //$_SESSION['msgcad'] = "<div class='alert alert-danger'>Erro ao enviar o email</div>";
-              }
-             * 
-             */
+            if (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_user['email'], $conn)) {
+                $_SESSION['msgcad'] = "<div class='alert alert-success'>Email Enviado</div>";
+            } else {
+                $_SESSION['msgcad'] = "<div class='alert alert-danger'>Erro ao enviar o email</div>";
+            }
         } else {
             $erro = true;
             //$dados['apelido'] = $dados_apelido;
