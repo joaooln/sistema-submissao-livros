@@ -85,15 +85,7 @@ include_once 'app/adms/include/head.php';
                                                 $row_artigo['motivo_rejeicao'] = "";
                                                 $btn_vis = carregar_btn('visualizar/vis_artigo', $conn);
                                                 if ($btn_vis) {
-                                                    echo "<a href='" . pg . "/visualizar/vis_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
-                                                }
-                                                $btn_edit = carregar_btn('editar/edit_artigo', $conn);
-                                                if ($btn_edit) {
-                                                    echo "<a href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
-                                                }
-                                                $btn_apagar = carregar_btn('processa/apagar_artigo', $conn);
-                                                if ($btn_apagar) {
-                                                    echo "<a href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm data-confirm'>Apagar</a> ";
+                                                    echo "<a href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
                                                 }
                                                 $btn_aceite = carregar_btn('processa/proc_aceite', $conn);
                                                 if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
@@ -117,13 +109,16 @@ include_once 'app/adms/include/head.php';
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                                     <?php
                                                     if ($btn_vis) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_artigo?id=" . $row_artigo['id'] . "'>Visualizar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "'>Visualizar</a>";
                                                     }
-                                                    if ($btn_edit) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "'>Editar</a>";
+                                                    if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
+                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
                                                     }
-                                                    if ($btn_apagar) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' data-confirm2='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
+                                                    if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
+                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
+                                                    }
+                                                    if ($btn_publicado && $row_artigo['adms_sit_artigo_id'] == 3) {
+                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
                                                     }
                                                     ?>
                                                 </div>

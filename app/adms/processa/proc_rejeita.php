@@ -59,7 +59,7 @@ if ($SendRejeicao) {
                     . "<br>"
                     . "</span></span></p>"
                     . "<p style = 'text-align: justify; line-height: 1.5;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
-                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, informa que infelizmente o capítulo de livro intitulado"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, informa que infelizmente o capítulo de livro intitulado "
                     . "<strong>“"
                     . $row_artigo_aceite['tituloArtigo']
                     . "”</strong>"
@@ -68,8 +68,8 @@ if ($SendRejeicao) {
                     . ""
                     . "”</strong>"
                     . ", foi <strong>rejeitado</strong> pelo seguinte motivo: <strong>“"
-                    . $row_artigo_aceite['motivo_rejeicao ']
-                    . "”</strong>"
+                    . $row_artigo_aceite['motivo_rejeicao']
+                    . "”</strong>."
                     . "<br>"
                     . "</span></span></p>"
                     . "<p style = 'text-align: justify;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
@@ -86,22 +86,18 @@ if ($SendRejeicao) {
                     . "Stricto Sensu Editora - CNPJ: 32.249.055/0001-26<br>Avenida Recanto Verde, 213, Conjunto Mariana<br>Rio Branco – AC – CEP: 69919-182<br>Site: www.sseditora.com.br<br>E-mail: edgeral@sseditora.com.br<br>Prefixos Editoriais: ISBN 80261<br>DOI 10.35170"
                     . "</span></span></p >";
 
-            echo $mensagem;
+            $mensagem_texto = "AVALIAÇÃO DE ARTIGO<br><br>";
+            $mensagem_texto .= "Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, informa que infelizmente o capítulo de livro intitulado "
+                    . $row_artigo_aceite['tituloArtigo']
+                    . " de autoria de "
+                    . $row_artigo_aceite['nome'] . $autores
+                    . ", foi rejeitado pelo seguinte motivo: "
+                    . $row_artigo_aceite['motivo_rejeicao']
+                    . ".<br>"
+                    . "Agradeço a escolha pela Stricto Sensu Editora como meio de publicação.<br><br>"
+                    . "Prof.ª Msc.ª Naila Fernanda S. P. Meneguetti<br>"
+                    . "Editora Geral Stricto Sensu Editora<br>";
 
-            $mensagem_texto = "Caro(a) $prim_nome, <br><br>";
-            $mensagem_texto .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
-            $mensagem_texto .= "Titulo do Artigo: " . $row_artigo_aceite['tituloArtigo'] . "<br>";
-            $mensagem_texto .= "Titulo do Livro: " . $row_artigo_aceite['tituloLivro'] . "<br>";
-            $mensagem_texto .= "Coautores: <br>";
-            for ($index = 0; $index < 4; $index++) {
-                if (!empty($dados['nomeCoautor'][$index])) {
-                    $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_cpfCoautor[$index] . "'<br>";
-                }
-            }
-            $mensagem_texto .= "Data da Submissão: '" . date('d/m/y') . "'<br>";
-            $mensagem_texto .= "Situação: Em Avaliação <br>";
-            $mensagem_texto .= "Em breve entraremos em contato para dar continuidade aos termos editoriais.<br><br>";
-            $mensagem_texto .= "At.te<br>Prof. Dr. Dionatas Meneguetti";
 
             (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_aceite['email'], $conn));
         } else {

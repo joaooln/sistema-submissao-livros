@@ -88,8 +88,6 @@ if ($id) {
                     . "Stricto Sensu Editora - CNPJ: 32.249.055/0001-26<br>Avenida Recanto Verde, 213, Conjunto Mariana<br>Rio Branco – AC – CEP: 69919-182<br>Site: www.sseditora.com.br<br>E-mail: edgeral@sseditora.com.br<br>Prefixos Editoriais: ISBN 80261<br>DOI 10.35170"
                     . "</span></span></p >";
 
-            echo $mensagem;
-
             $mensagem_texto = "CARTA ACEITE<br><br>";
             $mensagem_texto .= "Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, tem a honra de informar que o capítulo de livro intitulado "
                     . "'" . $row_artigo_aceite['tituloArtigo'] . "'"
@@ -102,17 +100,15 @@ if ($id) {
                     . "Prof.ª Msc.ª Naila Fernanda S. P. Meneguetti<br>"
                     . "Editora Geral Stricto Sensu Editora<br>";
 
-            echo $mensagem_texto;
-
             (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_aceite['email'], $conn));
 
-            //$_SESSION['msg'] = "<div class='alert alert-success'>Aceite efetuado em sucesso!</div>";
-            //$url_destino = pg . "/listar/list_artigo_adm";
-            //header("Location: $url_destino");
+            $_SESSION['msg'] = "<div class='alert alert-success'>Aceite efetuado em sucesso!</div>";
+            $url_destino = pg . "/listar/list_artigo_adm";
+            header("Location: $url_destino");
         } else {
-            //$_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao efetuar o Aceite!</div>";
-            //$url_destino = pg . "/listar/list_artigo_adm";
-            //header("Location: $url_destino");
+            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao efetuar o Aceite!</div>";
+            $url_destino = pg . "/listar/list_artigo_adm";
+            header("Location: $url_destino");
         }
     } else {
         $_SESSION['msg'] = "<div class='alert alert-danger'>Artigo não encontrado</div>";

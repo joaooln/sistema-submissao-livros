@@ -106,8 +106,8 @@ include_once 'app/adms/include/head.php';
                                                     if ($btn_edit) {
                                                         echo "<a class='dropdown-item' href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "'>Editar</a>";
                                                     }
-                                                    if ($btn_apagar) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/processa/apagar_artigo?id=" . $row_artigo['id'] . "' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a>";
+                                                    if (($btn_pagar) && ($row_artigo['adms_sit_artigo_id'] == 2)) {
+                                                        echo "<a class='dropdown-item' href='" . pg . "/pagseguro/checkout?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
                                                     }
                                                     ?>
                                                 </div>
