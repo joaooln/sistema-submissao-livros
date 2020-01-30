@@ -1,5 +1,7 @@
 <?php
 
+include_once 'lib/lib_env_email.php';
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 if (!isset($seg)) {
     exit;
 }

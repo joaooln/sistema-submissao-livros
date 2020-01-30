@@ -6,7 +6,7 @@ if (!isset($seg)) {
 $SendEditPerfil = filter_input(INPUT_POST, 'SendEditPerfil', FILTER_SANITIZE_STRING);
 if ($SendEditPerfil) {
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-//var_dump($dados);
+var_dump($dados);
 //Retirar campo da validação vazio
     $dados_complemento = $dados['complemento'];
     $dados_imagem_antiga = $dados['imagem_antiga'];
