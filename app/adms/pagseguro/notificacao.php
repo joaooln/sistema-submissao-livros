@@ -1,12 +1,17 @@
 <?php
 
-include_once 'lib/lib_env_email.php';
+$pg_notificacao = "http://localhost/sistema-submissao-livros";
+
+//Criar a conexao
+//$conn = mysqli_connect($servidor, $usuario, $senha, $dbname);
+
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 $url_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
 
 header("access-control-allow-origin: https://pagseguro.uol.com.br");
 header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
 require_once("PagSeguro.class.php");
+include_once $pg_notificacao . '/config/conexao.php';
 
 if (isset($_POST['notificationType']) && $_POST['notificationType'] == 'transaction') {
     $PagSeguro = new PagSeguro();

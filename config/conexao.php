@@ -1,5 +1,7 @@
 <?php
-if(!isset($seg)){
+
+header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
+if (!isset($seg)) {
     exit;
 }
 $servidor = "localhost";
@@ -10,7 +12,7 @@ $dbname = "ssl";
 //Criar a conexao
 $conn = mysqli_connect($servidor, $usuario, $senha, $dbname);
 
-if(!$conn){
+if (!$conn) {
     die("Falha na conexao: " . mysqli_connect_error());
 }/*else{
     echo "Conexao realizada com sucesso";

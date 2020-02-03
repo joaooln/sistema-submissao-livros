@@ -12,40 +12,36 @@ if ($SendCadSuporte) {
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
     //Redirecionar o usuário
-    if ($alteracao) {
+    $nome = explode(" ", $dados['nome']);
+    $prim_nome = $nome[0];
 
-        $nome = explode(" ", $dados['nome']);
-        $prim_nome = $nome[0];
+    $assunto = "Solicitação de suporte";
 
-        $assunto = "Solicitação de suporte";
+    $mensagem = "Solicitação de suporte<br><br>"
+            . "Nome: " . $dados['nome'] . "<br>"
+            . "E-mail: " . $dados['email'] . "<br>"
+            . "Telefone: " . $dados['fone'] . "<br>"
+            . "Mensagem: <br>"
+            . $dados['mensagem'];
 
-        $mensagem = "Solicitação de suporte<br><br>"
-                . "Nome: " . $dados['nome'] . "<br>"
-                . "E-mail: " . $dados['email'] . "<br>"
-                . "Telefone: " . $dados['fone'] . "<br>"
-                . "Mensagem: <br>"
-                . $dados['mensagem'];
+    $mensagem_texto = "Solicitação de suporte "
+            . "Nome: " . $dados['nome'] . " "
+            . "E-mail: " . $dados['email'] . " "
+            . "Telefone: " . $dados['fone'] . " "
+            . "Mensagem: "
+            . $dados['mensagem'];
 
-        $mensagem_texto = "Solicitação de suporte "
-                . "Nome: " . $dados['nome'] . " "
-                . "E-mail: " . $dados['email'] . " "
-                . "Telefone: " . $dados['fone'] . " "
-                . "Mensagem: "
-                . $dados['mensagem'];
-
-
-        email_phpmailer_contato($assunto, $mensagem, $mensagem_texto, $prim_nome, $dados['email'], $conn);
-
+    if (email_phpmailer_contato($assunto, $mensagem, $mensagem_texto, $prim_nome, $dados['email'], $conn)) {
         $_SESSION['msg'] = "<div class='alert alert-success'>Mensagem enviada com sucesso. Em breve retornaremos o contato!</div>";
-        $url_destino = pg . "/listar/list_artigo_adm";
+        $url_destino = pg . "/cadastrar/cad_suporte_email";
         header("Location: $url_destino");
     } else {
         $_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao enviar a mensagem!</div>";
-        $url_destino = pg . "/listar/list_artigo_adm";
+        $url_destino = pg . "/cadastrar/cad_suporte_email";
         header("Location: $url_destino");
     }
 } else {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Página não encontrada!</div>";
-    $url_destino = pg . '/listar/list_artigo_adm';
+    $url_destino = pg . '/acesso/login';
     header("Location: $url_destino");
 }

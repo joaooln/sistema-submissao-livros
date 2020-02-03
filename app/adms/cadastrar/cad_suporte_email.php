@@ -2,6 +2,13 @@
 if (!isset($seg)) {
     exit;
 }
+
+$result_suporte = "SELECT * FROM adms_usuarios WHERE id='" . $_SESSION['id'] . "' LIMIT 1";
+
+$resultado_suporte = mysqli_query($conn, $result_suporte);
+
+$row_suporte = mysqli_fetch_assoc($resultado_suporte);
+
 include_once 'app/adms/include/head.php';
 ?>
 <body>    
@@ -33,17 +40,21 @@ include_once 'app/adms/include/head.php';
                                 <span class="text-danger">*</span> Nome
                                 </span>
                             </label>
-                            <input name="nome_pagina" type="text" class="form-control" id="nome" placeholder="Nome Completo" required="true" value="<?php
+                            <input name="nome" type="text" class="form-control" id="nome" placeholder="Nome Completo" required="true" value="<?php
                             if (isset($_SESSION['dados']['nome'])) {
                                 echo $_SESSION['dados']['nome'];
+                            } elseif (isset($row_suporte['nome'])) {
+                                echo $row_suporte['nome'];
                             }
                             ?>">
                         </div>
                         <div class="form-group col-md-4">
                             <label><span class="text-danger">*</span> E-mail</label>
                             <input name="email" type="email" class="form-control" id="email" required="true" placeholder="Seu E-mail" value="<?php
-                            if (isset($_SESSION['dados']['endereco'])) {
-                                echo $_SESSION['dados']['endereco'];
+                            if (isset($_SESSION['dados']['email'])) {
+                                echo $_SESSION['dados']['email'];
+                            } elseif (isset($row_suporte['email'])) {
+                                echo $row_suporte['email'];
                             }
                             ?>">
                         </div>
@@ -54,9 +65,11 @@ include_once 'app/adms/include/head.php';
                                 <span class="text-danger">*</span> Telefone
                                 </span>
                             </label>
-                            <input name="nome_pagina" type="text" class="form-control phone_with_ddd" id="nome" placeholder="Telefone com DDD" required="true" value="<?php
+                            <input name="fone" type="text" class="form-control phone_with_ddd" id="fone" placeholder="Telefone com DDD" required="true" value="<?php
                             if (isset($_SESSION['dados']['fone'])) {
                                 echo $_SESSION['dados']['fone'];
+                            } elseif (isset($row_suporte['telefone'])) {
+                                echo $row_suporte['telefone'];
                             }
                             ?>">
                         </div>

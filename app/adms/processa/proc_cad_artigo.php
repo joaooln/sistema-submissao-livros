@@ -151,15 +151,15 @@ if (!empty($SendCadArtigo)) {
 //echo '<br /><a href="' . $_UP['pasta'] . $nome_final . '">Clique aqui para acessar o arquivo</a>';
             } else {
 //echo $nome_final;
-//$_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Falha no Upload!</div>";
-//$url_destino = pg . '/listar/list_artigo';
+                $_SESSION['msg'] = "<div class='alert alert-danger'>Erro: Falha no Upload!</div>";
+                $url_destino = pg . '/listar/list_artigo';
                 header("Location: $url_destino");
 // Não foi possível fazer o upload, provavelmente a pasta está incorreta
             }
 
-//$_SESSION['msg'] = "<div class='alert alert-success'>Artigo cadastrado com sucesso!</div>";
-//$url_destino = pg . '/listar/list_artigo';
-//header("Location: $url_destino");
+            $_SESSION['msg'] = "<div class='alert alert-success'>Artigo cadastrado com sucesso!</div>";
+            $url_destino = pg . '/listar/list_artigo';
+            header("Location: $url_destino");
 
             $result_user = "SELECT user.*
             FROM adms_usuarios user
@@ -219,8 +219,8 @@ if (!empty($SendCadArtigo)) {
             $mensagem .= "At.te<br>Prof. Dr. Dionatas Meneguetti<br><br>";
             $mensagem .= "<img src='https://i1.wp.com/sseditora.com.br/wp-content/uploads/sseditora-1.png' width='290' height='112' />";
 
-            echo $mensagem;
-            
+            //echo $mensagem;
+
             $mensagem_texto = "Caro(a) $prim_nome, <br><br>";
             $mensagem_texto .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
             $mensagem_texto .= "Titulo do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";

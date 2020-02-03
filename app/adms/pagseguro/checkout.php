@@ -48,7 +48,16 @@ if (!empty($id)) {
             "cep" => $row_checkout_artigo['cep'],
             "codigo_pagseguro" => "");
 
+        $result_artigo_pag_status = "UPDATE adms_artigos SET
+                adms_sit_artigo_id=6,
+                modified=NOW()
+                WHERE id='$id'";
+        $resultado_artigo_pag_status = mysqli_query($conn, $result_artigo_pag_status);
+
         $PagSeguro->executeCheckout($venda, "https://localhost/sistema-submissao-livros/app/adms/listar/list_artigo.php");
+
+
+
 
         //----------------------------------------------------------------------------
         //RECEBER RETORNO
@@ -65,6 +74,11 @@ if (!empty($id)) {
                 $resultado_artigo_pag_up = mysqli_query($conn, $result_artigo_pag_up);
             } else {
                 //ATUALIZAR NA BASE DE DADOS
+                $result_artigo_pag_up = "UPDATE adms_artigos SET
+                transaction_id='" . $pagamento->codigo_pagseguro . "',
+                modified=NOW()
+                WHERE id='" . $row_checkout_artigo['id'] . "'";
+                $resultado_artigo_pag_up = mysqli_query($conn, $result_artigo_pag_up);
             }
         }
     } else {

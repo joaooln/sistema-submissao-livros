@@ -79,7 +79,7 @@ class PagSeguro {
         $data['shippingAddressCity'] = $dados['cidade'];
         $data['shippingAddressState'] = strtoupper($dados['estado']);
         $data['shippingAddressCountry'] = 'BRA';
-        $data['redirectURL'] = $retorno;
+        $data['redirectURL'] = pg . '/listar/list_artigo';
 
         return http_build_query($data);
     }

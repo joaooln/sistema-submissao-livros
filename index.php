@@ -1,4 +1,5 @@
 <?php
+header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
 session_start();
 ob_start();
 $seg = true;
