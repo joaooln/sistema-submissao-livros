@@ -18,7 +18,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Dashboard</h2>
+                        <h2 class="display-4 titulo">Página Inicial</h2>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -26,7 +26,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-success text-white">
                             <div class="card-body">
                                 <i class="fas fa-calendar-day fa-3x"></i>
-                                <h6 class="card-title">Artigos Recebidos Hoje</h6>
+                                <h6 class="card-title">Submissões Recebidas Hoje</h6>
                                 <?php
                                 $result_artigos_hoje = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE DATE_FORMAT(created,'%Y-%m-%d') = CURDATE( )";
                                 $resultado_artigos_hoje = mysqli_query($conn, $result_artigos_hoje);
@@ -41,7 +41,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-danger text-white">
                             <div class="card-body">
                                 <i class="fas fa-file fa-3x"></i>
-                                <h6 class="card-title">Artigos Recebidos no mês</h6>
+                                <h6 class="card-title">Submissões Recebidas no mês</h6>
                                 <?php
                                 $result_artigos_mes = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE MONTH(created) = MONTH(CURDATE()) AND YEAR(created) = YEAR(CURDATE())";
                                 $resultado_artigos_mes = mysqli_query($conn, $result_artigos_mes);
@@ -69,7 +69,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-info text-white">
                             <div class="card-body">
                                 <i class="fas fa-newspaper fa-3x"></i>
-                                <h6 class="card-title">Artigos Publicados</h6>
+                                <h6 class="card-title">Capitulos de Livros Publicados</h6>
                                 <?php
                                 $result_artigos_publi = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_sit_artigo_id = 5";
                                 $resultado_artigos_publi = mysqli_query($conn, $result_artigos_publi);
@@ -93,7 +93,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-info text-white">
                             <div class="card-body">
                                 <i class="fas fa-thumbs-up fa-3x"></i>
-                                <h6 class="card-title">Artigos em Avaliação. Aguardando Aceite</h6>
+                                <h6 class="card-title">Submissões em Avaliação. Aguardando Aceite</h6>
                                 <?php
                                 $result_artigos_av = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_sit_artigo_id = 1";
                                 $resultado_artigos_av = mysqli_query($conn, $result_artigos_av);
@@ -107,7 +107,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-success text-white">
                             <div class="card-body">
                                 <i class="fas fa-money-bill-alt fa-3x"></i>
-                                <h6 class="card-title">Artigos Aceitos. Aguardando pagamento</h6>
+                                <h6 class="card-title">Submissões Aceitas. Aguardando pagamento</h6>
                                 <?php
                                 $result_artigos_aceito = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_sit_artigo_id = 2";
                                 $resultado_artigos_aceito = mysqli_query($conn, $result_artigos_aceito);
@@ -121,7 +121,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-warning text-white">
                             <div class="card-body">
                                 <i class="fas fa-hourglass-start fa-3x"></i>
-                                <h6 class="card-title">Artigos Aguardando publicação</h6>
+                                <h6 class="card-title">Submissões Aguardandano publicação</h6>
                                 <?php
                                 $result_artigos_pg = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_sit_artigo_id = 3";
                                 $resultado_artigos_pg = mysqli_query($conn, $result_artigos_pg);
@@ -135,7 +135,7 @@ include_once 'app/adms/include/head.php';
                         <div class="card bg-danger text-white">
                             <div class="card-body">
                                 <i class="fas fa-times-circle fa-3x"></i>
-                                <h6 class="card-title">Artigos Rejeitados</h6>
+                                <h6 class="card-title">Submissões Rejeitadas</h6>
                                 <?php
                                 $result_artigos_reg = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_sit_artigo_id = 4";
                                 $resultado_artigos_reg = mysqli_query($conn, $result_artigos_reg);

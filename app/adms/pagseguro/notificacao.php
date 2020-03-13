@@ -1,7 +1,5 @@
 <?php
 
-$pg_notificacao = "http://localhost/sistema-submissao-livros";
-
 //Criar a conexao
 //$conn = mysqli_connect($servidor, $usuario, $senha, $dbname);
 
@@ -11,11 +9,11 @@ $url_host = filter_input(INPUT_SERVER, 'HTTP_HOST');
 header("access-control-allow-origin: https://pagseguro.uol.com.br");
 header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
 require_once("PagSeguro.class.php");
-include_once $pg_notificacao . '/config/conexao.php';
 
 if (isset($_POST['notificationType']) && $_POST['notificationType'] == 'transaction') {
     $PagSeguro = new PagSeguro();
     $response = $PagSeguro->executeNotification($_POST);
+    $conn_not = $PagSeguro->getConn();
     if ($response->status == 3 || $response->status == 4) {
         //PAGAMENTO CONFIRMADO
         //ATUALIZAR O STATUS NO BANCO DE DADOS
@@ -23,13 +21,13 @@ if (isset($_POST['notificationType']) && $_POST['notificationType'] == 'transact
                 adms_sit_artigo_id=3,
                 modified=NOW()
                 WHERE id='" . $response->reference . "'";
-        $resultado_artigo_pag_not = mysqli_query($conn, $result_artigo_pag_not);
+        $resultado_artigo_pag_not = mysqli_query($conn_not, $result_artigo_pag_not);
 
         $result_artigo_pag = "SELECT artigo.id, artigo.tituloLivro ,artigo.tituloArtigo, artigo.nomeCoautor1, artigo.nomeCoautor2, artigo.nomeCoautor3, artigo.nomeCoautor4, artigo.nomeCoautor5, artigo.adms_sit_artigo_id, artigo.adms_usuario_id, user.nome, user.email
                              FROM adms_artigos artigo
                              INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id            
                              WHERE artigo.id='" . $response->reference . "' LIMIT 1";
-        $resultado_artigo_pag = mysqli_query($conn, $result_artigo_pag);
+        $resultado_artigo_pag = mysqli_query($conn_not, $result_artigo_pag);
 
 
         $row_artigo_pag = mysqli_fetch_assoc($resultado_artigo_pag);
@@ -93,7 +91,7 @@ if (isset($_POST['notificationType']) && $_POST['notificationType'] == 'transact
                 . "Prof.ª Msc.ª Naila Fernanda S. P. Meneguetti<br>"
                 . "Editora Geral Stricto Sensu Editora<br>";
 
-        (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_pag['email'], $conn));
+        $PagSeguro->enviaEmail($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_pag['email'], $conn_not);
 
         //echo $PagSeguro->getStatusText($PagSeguro->status);
     } else {

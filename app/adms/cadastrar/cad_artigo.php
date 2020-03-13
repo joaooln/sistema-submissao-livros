@@ -16,7 +16,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Cadastrar Novo Artigo</h2>
+                        <h2 class="display-4 titulo">Cadastrar Novo Capítulo de Livro</h2>
                     </div>
                     <div class="p-2">
                         <?php
@@ -47,7 +47,7 @@ include_once 'app/adms/include/head.php';
                         </div>
                         <div class="form-group col-md-6">
                             <label>
-                                <span class="text-danger">*</span> Título do Artigo
+                                <span class="text-danger">*</span> Título do Capítulo
                             </label>
                             <input name="tituloArtigo" type="text" class="form-control" id="tituloArtigo" maxlength="220" placeholder="Título do Artigo" required value="<?php
                             if (isset($_SESSION['dados']['tituloArtigo'])) {
@@ -57,33 +57,7 @@ include_once 'app/adms/include/head.php';
                         </div>
                     </div>
 
-                    <div class="form-row" id="co-autores">
-                        <div class="form-group col-md-5">
-                            <label>                                
-                                Coautores
-                            </label>
-                            <input name="nomeCoautor[]" type="text" class="form-control" id="nomeCoautor[]" maxlength="220" placeholder="Nome" value="<?php
-                            if (isset($_SESSION['dados']['nomeCoautor[]'])) {
-                                echo $_SESSION['dados']['nomeCoautor[]'];
-                            }
-                            ?>">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label>
-                                CPFs
-                            </label>
-                            <input name="cpfCoautor[]" type="text" class="form-control" placeholder="CPF" id="cpfCoautor[]"  maxlength="14"  value="<?php
-                            if (isset($_SESSION['dados']['cpfCoautor[]'])) {
-                                echo $_SESSION['dados']['cpfCoautor[]'];
-                            }
-                            ?>">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label> Opções </label>
-                            <br/>
-                            <button id="add_field" type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i></button>
-                        </div>
-                    </div>
+
 
                     <div class="form-row">
                         <div class="form-group col-sm-5">
@@ -147,7 +121,7 @@ include_once 'app/adms/include/head.php';
                         </div>
                     </div>
 
-                    <div class="form-row" id="2" style="display:none">
+                    <div class="form-row" id="2" name="2" style="display:none">
                         <div class="form-group col-md-5">
                             <label>                                
                                 Nome
@@ -210,6 +184,34 @@ include_once 'app/adms/include/head.php';
                                 echo $_SESSION['dados']['email_nota_pj'];
                             }
                             ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="co-autores" name="co-autores">
+                        <div class="form-group col-md-5">
+                            <label>                                
+                                Coautores
+                            </label>
+                            <input name="nomeCoautor[]" type="text" class="form-control" id="nomeCoautor[]" maxlength="220" placeholder="Nome" value="<?php
+                            if (isset($_SESSION['dados']['nomeCoautor[]'])) {
+                                echo $_SESSION['dados']['nomeCoautor[]'];
+                            }
+                            ?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                E-mails
+                            </label>
+                            <input name="emailCoautor[]" type="email" class="form-control" placeholder="E-mail" id="emailCoautor[]"  maxlength="100"  value="<?php
+                            if (isset($_SESSION['dados']['emailCoautor[]'])) {
+                                echo $_SESSION['dados']['emailCoautor[]'];
+                            }
+                            ?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label> Opções </label>
+                            <br/>
+                            <button id="add_field" type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i></button>
                         </div>
                     </div>
 
@@ -278,7 +280,7 @@ include_once 'app/adms/include/head.php';
             }
 
             $(document).ready(function () {
-                var campos_max = 5;   //max de 5 campos
+                var campos_max = 10;   //max de 5 campos
                 var x = 1; // campos iniciais
                 var cont = 1;
                 $('#add_field').click(function (e) {
@@ -287,7 +289,7 @@ include_once 'app/adms/include/head.php';
                     if (x < campos_max) {
                         $('#co-autores').append('\
                                 <div id="campo_nome' + cont + '" class="form-group col-md-5"><input name="nomeCoautor[]" type="text" class="form-control" maxlength="220" id="nomeCoautor[]" placeholder="Nome" value=""></div>\
-                                <div id="campo_cpf' + cont + '" class="form-group col-md-4"><input name="cpfCoautor[]" type="text" class="form-control" id="cpfCoautor[]" maxlength="14" placeholder="CPF" value=""></div>\
+                                <div id="campo_email' + cont + '" class="form-group col-md-4"><input name="emailCoautor[]" type="text" class="form-control" id="emailCoautor[]" maxlength="14" placeholder="E-mail" value=""></div>\
                                 <div id="campo_botao' + cont + '" class="form-group col-md-3"><button id="' + cont + '" type="button" class="btn btn-danger btn-remover_campo"><i class="fas fa-minus-circle"></i></button></div>\
                                 ');
                         x++;
@@ -298,7 +300,7 @@ include_once 'app/adms/include/head.php';
                 $('form').on('click', '.btn-remover_campo', function () {
                     var button_id = $(this).attr("id");
                     $('#campo_nome' + button_id + '').remove();
-                    $('#campo_cpf' + button_id + '').remove();
+                    $('#campo_email' + button_id + '').remove();
                     $('#campo_botao' + button_id + '').remove();
                     x--;
                 });

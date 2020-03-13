@@ -18,7 +18,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Dashboard</h2>
+                        <h2 class="display-4 titulo">Página Inicial</h2>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -41,7 +41,7 @@ include_once 'app/adms/include/head.php';
                                 echo "<a href='" . pg . "/listar/list_artigo' style='color:white'>";
                                 ?>
                                 <i class="fas fa-file-alt fa-3x"></i>
-                                <h6 class="card-title">Meus artigos</h6>
+                                <h6 class="card-title">Minhas submissões</h6>
                                 </a>
                             </div>
                         </div>

@@ -14,8 +14,8 @@ if (!empty($SendCadArtigo)) {
 //Retirar campo da validação vazio
     $dados_nomeCoautor = $dados['nomeCoautor'];
     unset($dados['nomeCoautor']);
-    $dados_cpfCoautor = $dados['cpfCoautor'];
-    unset($dados['cpfCoautor']);
+    $dados_emailCoautor = $dados['emailCoautor'];
+    unset($dados['emailCoautor']);
 
     $dados_cpf_nota = $dados['cpf_nota'];
     unset($dados['cpf_nota']);
@@ -41,12 +41,12 @@ if (!empty($SendCadArtigo)) {
     }
 
 //Grava dados nome e cpf coautores para vetor
-    for ($index = 4; $index > 0; $index--) {
+    for ($index = 9; $index > 0; $index--) {
         if (empty($dados_nomeCoautor[$index])) {
             $dados_nomeCoautor[$index] = "";
         }
-        if (empty($dados_cpfCoautor[$index])) {
-            $dados_cpfCoautor[$index] = "";
+        if (empty($dados_emailCoautor[$index])) {
+            $dados_emailCoautor[$index] = "";
         }
     }
 
@@ -102,7 +102,7 @@ if (!empty($SendCadArtigo)) {
 //Houve erro em algum campo será redirecionado para o formulário, não há erro no formulário tenta cadastrar no banco
     if ($erro) {
         $dados['nomeCoautor'] = $dados_nomeCoautor;
-        $dados['cpfCoautor'] = $dados_cpfCoautor;
+        $dados['emailCoautor'] = $dados_emailCoautor;
         $_SESSION['dados'] = $dados;
         $url_destino = pg . '/cadastrar/cad_artigo';
         header("Location: $url_destino");
@@ -111,20 +111,31 @@ if (!empty($SendCadArtigo)) {
         $valor_arquivo = "'" . $dados_validos['tituloArtigo'] . "." . $extensao . "',";
         $nome_final = $dados_validos['tituloArtigo'] . "." . $extensao;
 
-        $result_cad_artigo = "INSERT INTO adms_artigos (tituloLivro, tituloArtigo, nomeCoautor1, cpfCoautor1, nomeCoautor2, cpfCoautor2, nomeCoautor3, cpfCoautor3, nomeCoautor4, cpfCoautor4,
-      nomeCoautor5, cpfCoautor5, normas, nota_outro_nome, nome_nota, cpf_nota, cnpj_nota, email_nota, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
+        $result_cad_artigo = "INSERT INTO adms_artigos (tituloLivro, tituloArtigo, nomeCoautor1, emailCoautor1, nomeCoautor2, emailCoautor2, nomeCoautor3, emailCoautor3, nomeCoautor4, emailCoautor4,
+      nomeCoautor5, emailCoautor5, nomeCoautor6, emailCoautor6, nomeCoautor7, emailCoautor7, nomeCoautor8, emailCoautor8, nomeCoautor9, emailCoautor9, nomeCoautor10, emailCoautor10, normas,
+      nota_outro_nome, nome_nota, cpf_nota, cnpj_nota, email_nota, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
       '" . $dados_validos['tituloLivro'] . "',
       '" . $dados_validos['tituloArtigo'] . "',
       '" . $dados_nomeCoautor[0] . "',
-      '" . $dados_cpfCoautor[0] . "',
+      '" . $dados_emailCoautor[0] . "',
       '" . $dados_nomeCoautor[1] . "',
-      '" . $dados_cpfCoautor[1] . "',
+      '" . $dados_emailCoautor[1] . "',
       '" . $dados_nomeCoautor[2] . "',
-      '" . $dados_cpfCoautor[2] . "',
+      '" . $dados_emailCoautor[2] . "',
       '" . $dados_nomeCoautor[3] . "',
-      '" . $dados_cpfCoautor[3] . "',
+      '" . $dados_emailCoautor[3] . "',
       '" . $dados_nomeCoautor[4] . "',
-      '" . $dados_cpfCoautor[4] . "',
+      '" . $dados_emailCoautor[4] . "',
+      '" . $dados_nomeCoautor[5] . "',
+      '" . $dados_emailCoautor[5] . "',
+      '" . $dados_nomeCoautor[6] . "',
+      '" . $dados_emailCoautor[6] . "',
+      '" . $dados_nomeCoautor[7] . "',
+      '" . $dados_emailCoautor[7] . "',
+      '" . $dados_nomeCoautor[8] . "',
+      '" . $dados_emailCoautor[8] . "',
+      '" . $dados_nomeCoautor[9] . "',
+      '" . $dados_emailCoautor[9] . "',
       '" . $dados_validos['normas'] . "',
       '" . $dados_validos['nota_outro_nome'] . "',
       '" . $dados_nome_nota . "',
@@ -181,9 +192,9 @@ if (!empty($SendCadArtigo)) {
             $mensagem .= "Título do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
             $mensagem .= "Tútulo do Livro: " . $dados_validos['tituloLivro'] . "<br>";
             $mensagem .= "Coautores: <br>";
-            for ($index = 0; $index < 4; $index++) {
+            for ($index = 0; $index < 9; $index++) {
                 if ($dados_nomeCoautor[$index] != "") {
-                    $mensagem .= "Nome: " . $dados_nomeCoautor[$index] . " - CPF: " . dados_cpfCoautor[$index] . "<br>";
+                    $mensagem .= "Nome: " . $dados_nomeCoautor[$index] . " - E-mail: " . dados_emailCoautor[$index] . "<br>";
                 }
             }
             $mensagem .= "Trabalho está nas Normas?: ";
@@ -226,9 +237,9 @@ if (!empty($SendCadArtigo)) {
             $mensagem_texto .= "Titulo do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
             $mensagem_texto .= "Titulo do Livro: " . $dados_validos['tituloLivro'] . "<br>";
             $mensagem_texto .= "Coautores: <br>";
-            for ($index = 0; $index < 4; $index++) {
+            for ($index = 0; $index < 9; $index++) {
                 if (!empty($dados['nomeCoautor'][$index])) {
-                    $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_cpfCoautor[$index] . "'<br>";
+                    $mensagem .= "Nome: '" . $dados_nomeCoautor[$index] . "' - CPF: '" . dados_emailCoautor[$index] . "'<br>";
                 }
             }
             $mensagem_texto .= "Data da Submissão: '" . date('d/m/y') . "'<br>";

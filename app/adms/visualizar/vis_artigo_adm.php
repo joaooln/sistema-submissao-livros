@@ -30,7 +30,7 @@ if (!empty($id)) {
                     <div class="list-group-item">
                         <div class="d-flex">
                             <div class="mr-auto p-2">
-                                <h2 class="display-4 titulo">Detalhes do Artigo</h2>
+                                <h2 class="display-4 titulo">Detalhes da Submissão</h2>
                             </div>
                             <div class="p-2">
                                 <span class = "d-none d-md-block">
@@ -81,20 +81,16 @@ if (!empty($id)) {
                             <dt class="col-sm-3">Nome do Autor</dt>
                             <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
 
-                            <dt class="col-sm-3">Nome Coautores:</dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor1']; ?></dd>
-
-                            <dt class="col-sm-3"></dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor2']; ?></dd>
-
-                            <dt class="col-sm-3"></dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor3']; ?></dd>
-
-                            <dt class="col-sm-3"></dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor4']; ?></dd>
-
-                            <dt class="col-sm-3"></dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nomeCoautor5']; ?></dd>
+                            <dt class="col-sm-3">Nome do Autor</dt>
+                            
+                            <?php
+                            for ($index = 1; $index < 10; $index++) {
+                                if (!empty($row_artigo_vis['nomeCoautor' . $index . ''])) {
+                                    echo "<dt class='col-sm-3'>Nome Coautor $index</dt>";
+                                    echo "<dd class='col-sm-9'>" . $row_artigo_vis['nomeCoautor' . $index . ''] . "</dd>";
+                                }
+                            }
+                            ?>
 
                             <dt class="col-sm-3">Trabalho está nas Normas?</dt>
                             <?php

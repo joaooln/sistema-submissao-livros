@@ -1,5 +1,7 @@
 <?php
 
+header("access-control-allow-origin: https://pagseguro.uol.com.br");
+header("access-control-allow-origin: https://sandbox.pagseguro.uol.com.br");
 /* if(!isset($seg)){
   exit;
   } */
@@ -12,8 +14,7 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'lib/vendor/autoload.php';
 
-function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = null, $email_destino, $conn)
-{
+function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = null, $email_destino, $conn) {
     //Pesquisar as credenciais do e-mail
     $result_conf_email = "SELECT * FROM adms_confs_emails WHERE id=1 LIMIT 1";
     $resultado_conf_email = mysqli_query($conn, $result_conf_email);
@@ -22,7 +23,7 @@ function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = nu
     if ($row_conf_email['usuario'] != "") {
         $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
         $mail->CharSet = "UTF-8";
-      try {
+        try {
             //Server settings 
             //$mail->SMTPDebug = 2;                                 // Enable verbose debug output
             $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -56,13 +57,12 @@ function email_phpmailer($assunto, $mensagem, $mensagem_texo, $nome_destino = nu
             echo $e;
             return false;
         }
-    }else{
+    } else {
         $_SESSION['msgcad'] = "<div class='alert alert-danger'>Para enviar e-mail necessário inserir os dados do e-mail: Configurações -> E-mail</div>";
     }
 }
 
-function email_phpmailer_contato($assunto, $mensagem, $mensagem_texo, $nome, $email, $conn)
-{
+function email_phpmailer_contato($assunto, $mensagem, $mensagem_texo, $nome, $email, $conn) {
     //Pesquisar as credenciais do e-mail
     $result_conf_email = "SELECT * FROM adms_confs_emails WHERE id=1 LIMIT 1";
     $resultado_conf_email = mysqli_query($conn, $result_conf_email);
@@ -71,7 +71,7 @@ function email_phpmailer_contato($assunto, $mensagem, $mensagem_texo, $nome, $em
     if ($row_conf_email['usuario'] != "") {
         $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
         $mail->CharSet = "UTF-8";
-      try {
+        try {
             //Server settings 
             //$mail->SMTPDebug = 2;                                 // Enable verbose debug output
             $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -105,7 +105,7 @@ function email_phpmailer_contato($assunto, $mensagem, $mensagem_texo, $nome, $em
             echo $e;
             return false;
         }
-    }else{
+    } else {
         $_SESSION['msgcad'] = "<div class='alert alert-danger'>Para enviar e-mail necessário inserir os dados do e-mail: Configurações -> E-mail</div>";
     }
 }
