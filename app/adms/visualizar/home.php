@@ -23,19 +23,19 @@ include_once 'app/adms/include/head.php';
                 </div>
                 <div class="row mb-3">
                     <div class="col-lg-3 col-sm-6">
-                        <div class="card bg-info text-white">
+                        <div class="card bg-info text-white text-center">
                             <div class="card-body">
                                 <?php
-                                echo "<a href='" . pg . "/cadastrar/cad_artigo' style='color:white'>";
+                                echo "<a href='" . pg . "/visualizar/escolhe_tp_subm' style='color:white'>";
                                 ?>
                                 <i class="fas fa-plus-circle fa-3x"></i><br/>
-                                <h6 class="card-title">Cadastrar Artigo</h6>
+                                <h6 class="card-title">Nova submissão</h6>
                                 </a>
                             </div>
                         </div>
                     </div>                    
                     <div class="col-lg-3 col-sm-6">
-                        <div class="card bg-success text-white">
+                        <div class="card bg-success text-white text-center">
                             <div class="card-body">
                                 <?php
                                 echo "<a href='" . pg . "/listar/list_artigo' style='color:white'>";
@@ -47,7 +47,7 @@ include_once 'app/adms/include/head.php';
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <div class="card bg-danger text-white">
+                        <div class="card bg-danger text-white text-center">
                             <div class="card-body">
                                 <?php
                                 echo "<a href='" . pg . "/visualizar/vis_perfil' style='color:white'>";
@@ -59,7 +59,7 @@ include_once 'app/adms/include/head.php';
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <div class="card bg-warning text-white">
+                        <div class="card bg-warning text-white text-center">
                             <div class="card-body">
                                 <?php
                                 echo "<a href='" . pg . "/acesso/sair' style='color:white'>";

@@ -16,15 +16,9 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Artigos Recebidos</h2>
+                        <h2 class="display-4 titulo">Submissões Recebidas</h2>
                     </div>
                     <div class="p-2">
-                        <?php
-                        $btn_cad = carregar_btn('cadastrar/cad_artigo', $conn);
-                        if ($btn_cad) {
-                            echo "<a href='" . pg . "/cadastrar/cad_artigo' class='btn btn-outline-success btn-sm'>Novo Artigo</a>";
-                        }
-                        ?>
                     </div>
                 </div>
                 <?php
@@ -43,11 +37,13 @@ include_once 'app/adms/include/head.php';
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro, artigo.adms_tp_subms_id
                             FROM adms_artigos artigo
+                            LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
+                            WHERE artigo.adms_sit_artigo_id != 4 AND artigo.adms_sit_artigo_id != 5
                             ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
 
 
@@ -59,6 +55,7 @@ include_once 'app/adms/include/head.php';
                             <thead>
                                 <tr>
                                     <th>Código</th>
+                                    <th>Tipo</th>
                                     <th>Título do Artigo</th>
                                     <th class="d-none d-sm-table-cell">Título do Livro</th>
                                     <th class="d-none d-sm-table-cell">Status</th>
@@ -71,8 +68,27 @@ include_once 'app/adms/include/head.php';
                                     ?>
                                     <tr>
                                         <th><?php echo $row_artigo['id']; ?></th>
+                                        <td>
+                                            <?php
+                                            $resul_tipo = "SELECT tipo.nome
+                                                           FROM adms_tps_subms tipo
+                                                           WHERE tipo.id = '" . $row_artigo['adms_tp_subms_id'] . "'
+                                                           LIMIT 1";
+                                            $resultado_tipo = mysqli_query($conn, $resul_tipo);
+                                            $row_tipo = mysqli_fetch_assoc($resultado_tipo);
+                                            echo $row_tipo['nome'];
+                                            ?>
+                                        </td>
                                         <td><?php echo $row_artigo['tituloArtigo']; ?></td>
-                                        <td class="d-none d-sm-table-cell"><?php echo $row_artigo['tituloLivro']; ?></td>
+                                        <td class="d-none d-sm-table-cell">
+                                            <?php
+                                            if (($row_artigo['adms_livro_id'] == 1) OR ($row_artigo['adms_livro_id'] == 0)) {
+                                                echo $row_artigo['tituloLivro'];
+                                            } else {
+                                                echo $row_artigo['nome_livro'];
+                                            }
+                                            ?>
+                                        </td>
                                         <td class="d-none d-sm-table-cell"><?php
                                             echo "<span class='badge badge-" . $row_artigo['cor_cors'] . "'>" . $row_artigo['nome_sitartigo'] . "</span>";
                                             ?></td>
@@ -89,7 +105,11 @@ include_once 'app/adms/include/head.php';
                                                 }
                                                 $btn_aceite = carregar_btn('processa/proc_aceite', $conn);
                                                 if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
-                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                                    if ($row_artigo['adms_tp_subms_id'] == 1) {
+                                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                                    } else {
+                                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite_livro' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                                    }
                                                 }
                                                 $btn_rejeita = carregar_btn('processa/proc_rejeita', $conn);
                                                 if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
@@ -178,7 +198,41 @@ include_once 'app/adms/include/head.php';
         ?>
     </div>
 
-    // Janela Modal Confirma Aceite
+    <!--Janela Modal Confirma Aceite Livro-->
+    <div class="modal fade" id="confirma_aceite_livro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                    <form method="POST" action="<?php echo pg; ?>/processa/proc_aceite">
+                        <input type="hidden" name="id" id="id" value="<?php
+                        echo $row_artigo['id'];
+                        ?>">
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Valor da pubicação do livro:</label>
+                            <input id="valor_livro" name="valor_livro" type="text" class="form-control money" required>
+                            <label for="message-text" class="col-form-label">Descriminação do valor:</label>
+                            <textarea id="descri_valor_livro" name="descri_valor_livro" type="text" class="form-control" required></textarea>
+                            <label for="message-text" class="col-form-label">Data de pubicação:</label>
+                            <input id="data_publicacao_livro" name="data_publicacao_livro" type="date" class="form-control" required>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <input name = "SendAceite" id = "SendAceite" type = "submit" class = "btn btn-success" value = "Sim">
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Janela Modal Confirma Aceite-->
     <div class="modal fade" id="confirma_aceite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -200,7 +254,7 @@ include_once 'app/adms/include/head.php';
         </div>
     </div>
 
-    // Janela Modal Rejeita Artigo
+    <!--Janela Modal Rejeita Artigo-->
     <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -230,7 +284,7 @@ include_once 'app/adms/include/head.php';
         </div>
     </div>
 
-    // Janela Modal Publicacao
+    <!--Janela Modal Publicacao-->
     <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -249,6 +303,8 @@ include_once 'app/adms/include/head.php';
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Link do livro:</label>
                             <textarea id="link_livro" name="link_livro" type="text" class="form-control" required></textarea>
+                            <label for="message-text" class="col-form-label">Data da publicação:</label>
+                            <input type="date" id="data_publicacao" name="data_publicacao" class="form-control" required>
                         </div>
 
                 </div>
@@ -292,6 +348,17 @@ include_once 'app/adms/include/head.php';
             modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
             modal.find('#id').val(id)
             modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
+        })
+
+        $('#confirma_aceite_livro').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var pg = button.data('pg')
+            var modal = $(this)
+            modal.find('.modal-title').text('Confirmar Aceite')
+            modal.find('.modal-body p').text('Confirmar aceite do livro número: ' + id + ' ?')
+            modal.find('#id').val(id)
+            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_aceite?id=' + id)
         })
 
     </script>

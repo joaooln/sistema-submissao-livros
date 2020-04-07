@@ -36,14 +36,25 @@ include_once 'app/adms/include/head.php';
                 <form id="formCadArtigo" method="POST" action="<?php echo pg; ?>/processa/proc_cad_artigo" enctype="multipart/form-data">  
                     <div class="form-row">
                         <div class="form-group col-md-6">
+                            <?php
+                            $result_livros = "SELECT id, nome, adms_sit_id FROM adms_livros WHERE adms_sit_id = 1 ORDER BY nome ASC";
+                            $resultado_livros = mysqli_query($conn, $result_livros);
+                            ?>
                             <label>                                
                                 <span class="text-danger">*</span> Título do Livro
                             </label>
-                            <input name="tituloLivro" type="text" class="form-control" id="tituloLivro" maxlength="220" placeholder="Título do Livro" required value="<?php
-                            if (isset($_SESSION['dados']['tituloLivro'])) {
-                                echo $_SESSION['dados']['tituloLivro'];
-                            }
-                            ?>">
+                            <select name="adms_livro_id" id="adms_livro_id" class="custom-select" onchange="mostradivtitulolivro(this.value)" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                while ($row_livros = mysqli_fetch_assoc($resultado_livros)) {
+                                    if (isset($_SESSION['dados']['adms_livro_id']) AND ( $_SESSION['dados']['adms_livro_id'] == $row_livros['id'])) {
+                                        echo " <option selected value=" . $row_livros['id'] . ">" . $row_livros['nome'] . "</option>";
+                                    } else {
+                                        echo " <option value=" . $row_livros['id'] . ">" . $row_livros['nome'] . "</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label>
@@ -57,7 +68,15 @@ include_once 'app/adms/include/head.php';
                         </div>
                     </div>
 
-
+                    <div class="form-row" id="1" name="1" style="display:none">
+                        <div class="form-group col-sm-6">
+                            <input name="tituloLivro" type="text" class="form-control" id="tituloLivro" maxlength="220" placeholder="Informe o título do livro que deseja" value="<?php
+                            if (isset($_SESSION['dados']['tituloLivro'])) {
+                                echo $_SESSION['dados']['tituloLivro'];
+                            }
+                            ?>">
+                        </div>
+                    </div>
 
                     <div class="form-row">
                         <div class="form-group col-sm-5">
@@ -107,12 +126,12 @@ include_once 'app/adms/include/head.php';
                                     } elseif (isset($_SESSION['dados']['nota_outro_nome']) AND ( $_SESSION['dados']['nota_outro_nome'] == 2)) {
                                         echo "<option value=''>Selecione</option>";
                                         echo "<option value='1'>Sim</option>";
-                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoao</option>";
+                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoa</option>";
                                         echo "<option value='3' onclick='cadastrarInstituicao();'  selected>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
                                     } else {
                                         echo "<option value='' selected>Selecione</option>";
                                         echo "<option value='1'>Sim</option>";
-                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoao</option>";
+                                        echo "<option value='2'>Não. A Nota Fiscal deverá ser no nome de outra pessoa</option>";
                                         echo "<option value='3' onclick='cadastrarInstituicao();'>Não. A Nota Fiscal deverá ser no nome de uma instituição ou empresa</option>";
                                     }
                                     ?>
@@ -120,11 +139,11 @@ include_once 'app/adms/include/head.php';
                             </div>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="form-row" id="2" name="2" style="display:none">
                         <div class="form-group col-md-5">
                             <label>                                
-                                Nome
+                                Nome p/ Nota Fiscal
                             </label>
                             <input name="nome_nota_pf" type="text" class="form-control" id="nome_nota_pf" maxlength="220" placeholder="Nome para ser emitido a Nota Fiscal" value="<?php
                             if (isset($_SESSION['dados']['nome_nota_pf'])) {
@@ -132,11 +151,11 @@ include_once 'app/adms/include/head.php';
                             }
                             ?>">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label>                                
-                                CPF
+                                CPF p/ Nota Fiscal
                             </label>
-                            <input name="cpf_nota" type="text" class="form-control cpf" id="cpf_nota" maxlength="14" placeholder="CPF para ser emitido a Nota Fiscal" value="<?php
+                            <input name="cpf_nota" type="text" class="form-control cpf" id="cpf_nota" maxlength="14" placeholder="CPF p/ Nota Fiscal" value="<?php
                             if (isset($_SESSION['dados']['cpf_nota'])) {
                                 echo $_SESSION['dados']['cpf_nota'];
                             }
@@ -144,7 +163,29 @@ include_once 'app/adms/include/head.php';
                         </div>
                         <div class="form-group col-md-3">
                             <label>
-                                E-mail
+                                Telefone p/ Nota Fiscal
+                            </label>
+                            <input name="telefone_nota_pf" type="text" class="form-control phone_with_ddd" placeholder="Telefone p/ Nota Fiscal" id="telefone_nota_pf" value="<?php
+                            if (isset($_SESSION['dados']['telefone_nota_pf'])) {
+                                echo $_SESSION['dados']['telefone_nota_pf'];
+                            }
+                            ?>">
+                        </div>
+                    </div>
+                    <div class="form-row" id="4" name="4" style="display:none">
+                        <div class="form-group col-md-5">
+                            <label>                                
+                                Endereço p/ Nota Fiscal
+                            </label>
+                            <textarea name="endereco_nota_pf" type="text" class="form-control" id="endereco_nota_pf" placeholder="Endereço Completo para emissão da nota fiscal: Rua, Bairro, CEP, Cidade, Estado"><?php
+                                if (isset($_SESSION['dados']['endereco_nota_pf'])) {
+                                    echo $_SESSION['dados']['endereco_nota_pf'];
+                                }
+                                ?></textarea>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                E-mail p/ Nota Fiscal
                             </label>
                             <input name="email_nota_pf" type="email" class="form-control email" maxlength="220" placeholder="E-mail para ser emitido a Nota Fiscal" id="email_nota_pf" value="<?php
                             if (isset($_SESSION['dados']['email_nota_pf'])) {
@@ -165,7 +206,7 @@ include_once 'app/adms/include/head.php';
                             }
                             ?>">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
                             <label>                                
                                 CNPJ
                             </label>
@@ -177,7 +218,30 @@ include_once 'app/adms/include/head.php';
                         </div>
                         <div class="form-group col-md-3">
                             <label>
-                                E-mail
+                                Telefone p/ Nota Fiscal
+                            </label>
+                            <input name="telefone_nota_pj" type="text" class="form-control phone_with_ddd" placeholder="Telefone p/ Nota Fiscal" id="telefone_nota_pj" value="<?php
+                            if (isset($_SESSION['dados']['telefone_nota_pj'])) {
+                                echo $_SESSION['dados']['telefone_nota_pj'];
+                            }
+                            ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="5" name="5" style="display:none">
+                        <div class="form-group col-md-5">
+                            <label>                                
+                                Endereço p/ Nota Fiscal
+                            </label>
+                            <textarea name="endereco_nota_pj" type="text" class="form-control" id="endereco_nota_pj" placeholder="Endereço Completo para emissão da nota fiscal: Rua, Bairro, CEP, Cidade, Estado"><?php
+                                if (isset($_SESSION['dados']['endereco_nota_pj'])) {
+                                    echo $_SESSION['dados']['endereco_nota_pj'];
+                                }
+                                ?></textarea>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                E-mail p/ Nota Fiscal
                             </label>
                             <input name="email_nota_pj" type="email" class="form-control email" maxlength="220" placeholder="E-mail para ser emitido a Nota Fiscal" id="email_nota_pj" value="<?php
                             if (isset($_SESSION['dados']['email_nota_pj'])) {
@@ -186,11 +250,11 @@ include_once 'app/adms/include/head.php';
                             ?>">
                         </div>
                     </div>
-
+                    <hr>
                     <div class="form-row" id="co-autores" name="co-autores">
                         <div class="form-group col-md-5">
                             <label>                                
-                                Coautores
+                                Coautores (limite 10)
                             </label>
                             <input name="nomeCoautor[]" type="text" class="form-control" id="nomeCoautor[]" maxlength="220" placeholder="Nome" value="<?php
                             if (isset($_SESSION['dados']['nomeCoautor[]'])) {
@@ -239,21 +303,63 @@ include_once 'app/adms/include/head.php';
         include_once 'app/adms/include/rodape_lib.php';
         ?>
         <script>
+            function mostradivtitulolivro2() {
+                var select = $("#adms_livro_id").val();
+                if (select == "1") {
+                    document.getElementById('1').style = '';
+
+                } else {
+                    document.getElementById('1').style.display = 'none';
+                }
+            }
+            function mostradiv2() {
+                var select = $("#nota_outro_nome").val();
+                if (select == "2") {
+                    document.getElementById('2').style = '';
+                    document.getElementById('4').style = '';
+                    document.getElementById('3').style.display = 'none';
+                    document.getElementById('5').style.display = 'none';
+                } if (select == "3") {
+                    document.getElementById('2').style.display = 'none';
+                    document.getElementById('4').style.display = 'none';
+                    document.getElementById('3').style = '';
+                    document.getElementById('5').style = '';
+                } else {
+                    document.getElementById('1').style.display = 'none';
+                }
+            }
+            mostradivtitulolivro2();
+            mostradiv2();
+
+            function mostradivtitulolivro(div) {
+                if (div == '1') {
+                    document.getElementById('1').style = '';
+
+                } else {
+                    document.getElementById('1').style.display = 'none';
+                }
+            }
 
             function mostradiv(div) {
                 if (div == '1') {
                     document.getElementById('2').style.display = 'none';
                     document.getElementById('3').style.display = 'none';
+                    document.getElementById('4').style.display = 'none';
+                    document.getElementById('5').style.display = 'none';
 
                 }
                 if (div == '2') {
                     document.getElementById('2').style = '';
+                    document.getElementById('4').style = '';
                     document.getElementById('3').style.display = 'none';
+                    document.getElementById('5').style.display = 'none';
 
                 }
                 if (div == '3') {
                     document.getElementById('2').style.display = 'none';
+                    document.getElementById('4').style.display = 'none';
                     document.getElementById('3').style = '';
+                    document.getElementById('5').style = '';
 
                 }
             }

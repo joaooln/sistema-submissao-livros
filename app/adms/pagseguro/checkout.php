@@ -26,10 +26,10 @@ if (!empty($id)) {
 
         if ($row_checkout_artigo['normas'] == 1) {
             $descricao = "PUBLICAÇÃO DE ARTIGO CIENTIFICO FORMATADO PELO AUTOR";
-            $valor = 300.00;
+            $valor = 320.00;
         } else {
             $descricao = "PUBLICAÇÃO DE ARTIGO CIENTIFICO, COM FORMATAÇÃO";
-            $valor = 350.00;
+            $valor = 450.00;
         }
 
         //EFETUAR PAGAMENTO	

@@ -6,7 +6,7 @@ if (!isset($seg)) {
 $SendEditPerfil = filter_input(INPUT_POST, 'SendEditPerfil', FILTER_SANITIZE_STRING);
 if ($SendEditPerfil) {
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-var_dump($dados);
+    var_dump($dados);
 //Retirar campo da validação vazio
     $dados_complemento = $dados['complemento'];
     $dados_imagem_antiga = $dados['imagem_antiga'];
@@ -102,6 +102,12 @@ var_dump($dados);
         }
     }
 
+    if (isset($dados_validos['recebe_email'])) {
+        $dados_validos['recebe_email'] = 1;
+    } else {
+        $dados_validos['recebe_email'] = 2;
+    }
+
     //Houve erro em algum campo será redirecionado para o login, não há erro no formulário tenta editar no banco
     if ($erro) {
         $dados['senha'] = $dados_senha;
@@ -125,6 +131,7 @@ var_dump($dados);
                 cep='" . $dados_validos['cep'] . "',  
                 pais='" . $dados_validos['pais'] . "',  
                 $campo_foto $valor_foto
+                recebe_email='" . $dados_validos['recebe_email'] . "',                
                 modified=NOW() 
                 WHERE id='" . $_SESSION['id'] . "'";
 

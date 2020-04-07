@@ -71,6 +71,12 @@ if (!empty($SendCadLogin)) {
         }
     }
 
+    if (isset($dados_validos['recebe_email'])) {
+        $dados_validos['recebe_email'] = 1;
+    } else {
+        $dados_validos['recebe_email'] = 2;
+    }
+
     if (!$erro) {
         $dados['complemento'] = $dados_complemento;
         //Criptografar a senha
@@ -82,7 +88,7 @@ if (!empty($SendCadLogin)) {
         $resultado_user_perm = mysqli_query($conn, $result_user_perm);
         $row_user_perm = mysqli_fetch_assoc($resultado_user_perm);
 
-        $result_cad_user = "INSERT INTO adms_usuarios (nome, cpf, telefone, email, senha, rua, num_end, complemento, bairro, cidade, estado, cep, pais ,conf_email, adms_niveis_acesso_id, adms_sits_usuario_id, created) VALUES (
+        $result_cad_user = "INSERT INTO adms_usuarios (nome, cpf, telefone, email, senha, rua, num_end, complemento, bairro, cidade, estado, cep, pais ,conf_email, recebe_email, adms_titulacao_id, adms_area_id, adms_niveis_acesso_id, adms_sits_usuario_id, created) VALUES (
         '" . $dados_validos['nome'] . "',
         '" . $dados_validos['cpf'] . "',
         '" . $dados_validos['telefone'] . "',
@@ -97,6 +103,9 @@ if (!empty($SendCadLogin)) {
         '" . $dados_validos['cep'] . "',
         '" . $dados_validos['pais'] . "',
         '$conf_email',
+        '" . $dados_validos['recebe_email'] . "',
+        '" . $dados_validos['adms_titulacao_id'] . "',
+        '" . $dados_validos['adms_area_id'] . "',
         '" . $row_user_perm['adms_niveis_acesso_id'] . "',
         '" . $row_user_perm['adms_sits_usuario_id'] . "',
         NOW())";
@@ -165,6 +174,50 @@ include_once 'app/adms/include/head.php';
                                 echo $_SESSION['dados']['nome'];
                             }
                             ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <?php
+                            $result_titulacoes = "SELECT id, nome FROM adms_titulacoes";
+                            $resultado_titulacoes = mysqli_query($conn, $result_titulacoes);
+                            ?>
+                            <label><span class="text-danger">*</span> Maior Títulação</label>
+                            <select name="adms_titulacao_id" id="adms_titulacao_id" class="custom-select" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                while ($row_titulacoes = mysqli_fetch_assoc($resultado_titulacoes)) {
+                                    if (isset($_SESSION['dados']['adms_titulacao_id']) AND ( $_SESSION['dados']['adms_titulacao_id'] == $row_titulacoes['id'])) {
+                                        echo " <option selected value=" . $row_titulacoes['id'] . ">" . $row_titulacoes['nome'] . "</option>";
+                                    } else {
+                                        echo " <option value=" . $row_titulacoes['id'] . ">" . $row_titulacoes['nome'] . "</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <?php
+                            $result_areas = "SELECT id, nome FROM adms_areas";
+                            $resultado_areas = mysqli_query($conn, $result_areas);
+                            ?>
+                            <label><span class="text-danger">*</span> Área de Conhecimento</label>
+                            <select name="adms_area_id" id="adms_area_id" class="custom-select" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                while ($row_areas = mysqli_fetch_assoc($resultado_areas)) {
+                                    if (isset($_SESSION['dados']['adms_area_id']) AND ( $_SESSION['dados']['adms_area_id'] == $row_areas['id'])) {
+                                        echo " <option selected value=" . $row_areas['id'] . ">" . $row_areas['nome'] . "</option>";
+                                    } else {
+                                        echo " <option value=" . $row_areas['id'] . ">" . $row_areas['nome'] . "</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
 
@@ -321,6 +374,18 @@ include_once 'app/adms/include/head.php';
                             ?>">
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input name="recebe_email" id="recebe_email" type="checkbox" checked>
+                                    <label>&nbsp; Desejo receber e-mails da editora com chamadas para públicação de novos livros</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
 
 

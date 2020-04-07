@@ -12,10 +12,15 @@ if ($SendRejeicao) {
 
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-    $result_artigo_aceite = "SELECT artigo.id, artigo.tituloLivro ,artigo.tituloArtigo, artigo.nomeCoautor1, artigo.nomeCoautor2, artigo.nomeCoautor3, artigo.nomeCoautor4, artigo.nomeCoautor5, motivo_rejeicao, artigo.adms_sit_artigo_id, artigo.adms_usuario_id, user.nome, user.email
+    $result_artigo_aceite = "SELECT artigo.id, artigo.tituloArtigo,
+            artigo.nomeCoautor1, artigo.nomeCoautor2, artigo.nomeCoautor3, artigo.nomeCoautor4,
+            artigo.nomeCoautor5,  artigo.nomeCoautor6,  artigo.nomeCoautor7,  artigo.nomeCoautor8,
+            artigo.nomeCoautor9,  artigo.nomeCoautor10, artigo.motivo_rejeicao,
+            artigo.adms_sit_artigo_id, artigo.adms_usuario_id,
+            user.nome nome_user, user.email
             FROM adms_artigos artigo
-            INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id            
-            WHERE artigo.id='" . $dados['id'] . "' LIMIT 1";
+            INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
+            WHERE artigo.id=" . $dados['id'] . " LIMIT 1";
     $resultado_artigo_aceite = mysqli_query($conn, $result_artigo_aceite);
 
     //Retornou algum valor do banco de dados e acesso o IF, senão acessa o ELSe
@@ -34,17 +39,17 @@ if ($SendRejeicao) {
         if (mysqli_affected_rows($conn)) {
             $alteracao = true;
 
-            $autores = 0;
-            for ($index = 1; $index <= 5; $index++) {
+            $nome = explode(" ", $row_artigo_aceite['nome_user']);
+            $prim_nome = $nome[0];
+
+            $autores = $prim_nome;
+            for ($index = 1; $index <= 10; $index++) {
                 if ($row_artigo_aceite['nomeCoautor' . $index] != "") {
                     $autores .= ", " . $row_artigo_aceite['nomeCoautor' . $index];
                 }
             }
 
-            $nome = explode(" ", $row_artigo_aceite['nome']);
-            $prim_nome = $nome[0];
-
-            $assunto = "Carta Aceite";
+            $assunto = "Artigo Rejeitado";
 
             $mensagem = "<p><strong><img style='display: block; margin-left: auto; margin-right: auto;' src='https://i1.wp.com/sseditora.com.br/wp-content/uploads/sseditora-1.png' width='290' height='112' /></strong></p>"
                     . "<br>"
@@ -66,7 +71,7 @@ if ($SendRejeicao) {
                     . $row_artigo_aceite['tituloArtigo']
                     . "”</strong>"
                     . " de autoria de <strong> “"
-                    . $row_artigo_aceite['nome'] . $autores
+                    . $autores
                     . ""
                     . "”</strong>"
                     . ", foi <strong>rejeitado</strong> pelo seguinte motivo: <strong>“"
@@ -84,7 +89,7 @@ if ($SendRejeicao) {
                     . "<p><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
                     . "<br>"
                     . "</span></span></p>"
-                    . "<p style = 'line-height: 0.5;'><span style = 'font-size: 10px;'><span style = 'font-family: Arial, Helvetica, sans-serif;'>"
+                    . "<p style = 'line-height: 1;'><span style = 'font-size: 10px;'><span style = 'font-family: Arial, Helvetica, sans-serif;'>"
                     . "Stricto Sensu Editora - CNPJ: 32.249.055/0001-26<br>Avenida Recanto Verde, 213, Conjunto Mariana<br>Rio Branco – AC – CEP: 69919-182<br>Site: www.sseditora.com.br<br>E-mail: edgeral@sseditora.com.br<br>Prefixos Editoriais: ISBN 80261<br>DOI 10.35170"
                     . "</span></span></p >";
 
@@ -92,7 +97,7 @@ if ($SendRejeicao) {
             $mensagem_texto .= "Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, informa que infelizmente o capítulo de livro intitulado "
                     . $row_artigo_aceite['tituloArtigo']
                     . " de autoria de "
-                    . $row_artigo_aceite['nome'] . $autores
+                    . $autores
                     . ", foi rejeitado pelo seguinte motivo: "
                     . $row_artigo_aceite['motivo_rejeicao']
                     . ".<br>"
@@ -100,8 +105,7 @@ if ($SendRejeicao) {
                     . "Prof.ª Msc.ª Naila Fernanda S. P. Meneguetti<br>"
                     . "Editora Geral Stricto Sensu Editora<br>";
 
-
-            (email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_aceite['email'], $conn));
+            email_phpmailer($assunto, $mensagem, $mensagem_texto, $prim_nome, $row_artigo_aceite['email'], $conn);
         } else {
             $alteracao = false;
         }

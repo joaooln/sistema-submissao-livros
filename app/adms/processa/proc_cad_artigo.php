@@ -17,6 +17,9 @@ if (!empty($SendCadArtigo)) {
     $dados_emailCoautor = $dados['emailCoautor'];
     unset($dados['emailCoautor']);
 
+    $dados_tituloLivro = $dados['tituloLivro'];
+    unset($dados['tituloLivro']);
+
     $dados_cpf_nota = $dados['cpf_nota'];
     unset($dados['cpf_nota']);
     $dados_cnpj_nota = $dados['cnpj_nota'];
@@ -29,6 +32,14 @@ if (!empty($SendCadArtigo)) {
     unset($dados['nome_nota_pj']);
     $dados_email_nota_pj = $dados['email_nota_pj'];
     unset($dados['email_nota_pj']);
+    $dados_endereco_nota_pj = $dados['endereco_nota_pj'];
+    unset($dados['endereco_nota_pj']);
+    $dados_endereco_nota_pf = $dados['endereco_nota_pf'];
+    unset($dados['endereco_nota_pf']);
+    $dados_telefone_nota_pj = $dados['telefone_nota_pj'];
+    unset($dados['telefone_nota_pj']);
+    $dados_telefone_nota_pf = $dados['telefone_nota_pf'];
+    unset($dados['telefone_nota_pf']);
     if (empty($dados_nome_nota_pf)) {
         $dados_nome_nota = $dados_nome_nota_pj;
     } else {
@@ -38,6 +49,16 @@ if (!empty($SendCadArtigo)) {
         $dados_email_nota = $dados_email_nota_pj;
     } else {
         $dados_email_nota = $dados_email_nota_pf;
+    }
+    if (empty($dados_endereco_nota_pf)) {
+        $dados_endereco_nota = $dados_endereco_nota_pj;
+    } else {
+        $dados_endereco_nota = $dados_endereco_nota_pf;
+    }
+    if (empty($dados_telefone_nota_pf)) {
+        $dados_telefone_nota = $dados_telefone_nota_pj;
+    } else {
+        $dados_telefone_nota = $dados_telefone_nota_pf;
     }
 
 //Grava dados nome e cpf coautores para vetor
@@ -51,7 +72,8 @@ if (!empty($SendCadArtigo)) {
     }
 
 // Array com as extensões permitidas
-    $_UP['extensoes'] = array('doc', 'docx');
+
+    $tiposPermitidos = array('doc', 'docx', 'odt');
 
 // Array com os tipos de erros de upload do PHP
     $_UP['erros'][0] = 'Não houve erro';
@@ -70,7 +92,8 @@ if (!empty($SendCadArtigo)) {
     include_once 'lib/lib_email.php';
     include_once 'lib/lib_env_email.php';
     $arquivo['name'] = caracterEspecial($_FILES['arquivo']['name']);
-    $extensao = strtolower(end(explode('.', $_FILES['arquivo']['name'])));
+    $infos = pathinfo($_FILES['arquivo']['name']);
+    $extensao = $infos['extension'];
 
 //var_dump($dados);
 //validar nenhum campo vazio
@@ -82,7 +105,7 @@ if (!empty($SendCadArtigo)) {
 // $_SESSION['msg'] = "<div class='alert alert-danger'>Necessário preencher todos os campos para cadastrar o artigo!</div>";
 // }
 // Faz a verificação da extensão do arquivo
-    if (array_search($extensao, $_UP['extensoes']) == false) {
+    if (in_array($extensao, $tiposPermitidos) == false) {
         $erro = true;
         $_SESSION['msg'] = "<div class='alert alert-danger'>Por favor, envie arquivos com as seguintes extensões: doc ou docx</div>";
     }
@@ -101,8 +124,20 @@ if (!empty($SendCadArtigo)) {
 
 //Houve erro em algum campo será redirecionado para o formulário, não há erro no formulário tenta cadastrar no banco
     if ($erro) {
+
         $dados['nomeCoautor'] = $dados_nomeCoautor;
         $dados['emailCoautor'] = $dados_emailCoautor;
+        $dados['tituloLivro'] = $dados_tituloLivro;
+        $dados['cpf_nota'] = $dados_cpf_nota;
+        $dados['cnpj_nota'] = $dados_cnpj_nota;
+        $dados['nome_nota_pf'] = $dados_nome_nota_pf;
+        $dados['email_nota_pf'] = $dados_email_nota_pf;
+        $dados['nome_nota_pj'] = $dados_nome_nota_pj;
+        $dados['email_nota_pj'] = $dados_email_nota_pj;
+        $dados['endereco_nota_pj'] = $dados_endereco_nota_pj;
+        $dados['endereco_nota_pf'] = $dados_endereco_nota_pf;
+        $dados['telefone_nota_pj'] = $dados_telefone_nota_pj;
+        $dados['telefone_nota_pf'] = $dados_telefone_nota_pf;
         $_SESSION['dados'] = $dados;
         $url_destino = pg . '/cadastrar/cad_artigo';
         header("Location: $url_destino");
@@ -113,8 +148,8 @@ if (!empty($SendCadArtigo)) {
 
         $result_cad_artigo = "INSERT INTO adms_artigos (tituloLivro, tituloArtigo, nomeCoautor1, emailCoautor1, nomeCoautor2, emailCoautor2, nomeCoautor3, emailCoautor3, nomeCoautor4, emailCoautor4,
       nomeCoautor5, emailCoautor5, nomeCoautor6, emailCoautor6, nomeCoautor7, emailCoautor7, nomeCoautor8, emailCoautor8, nomeCoautor9, emailCoautor9, nomeCoautor10, emailCoautor10, normas,
-      nota_outro_nome, nome_nota, cpf_nota, cnpj_nota, email_nota, arquivo, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
-      '" . $dados_validos['tituloLivro'] . "',
+      nota_outro_nome, nome_nota, cpf_nota, cnpj_nota, email_nota, endereco_nota, telefone_nota, arquivo, adms_tp_subms_id, adms_livro_id, adms_sit_artigo_id ,adms_usuario_id, created) VALUES (
+      '" . $dados_tituloLivro . "',
       '" . $dados_validos['tituloArtigo'] . "',
       '" . $dados_nomeCoautor[0] . "',
       '" . $dados_emailCoautor[0] . "',
@@ -141,8 +176,12 @@ if (!empty($SendCadArtigo)) {
       '" . $dados_nome_nota . "',
       '" . $dados_cpf_nota . "',
       '" . $dados_cnpj_nota . "',
-      '" . $dados_email_nota . "',    
+      '" . $dados_email_nota . "',
+      '" . $dados_endereco_nota . "',
+      '" . $dados_telefone_nota . "',    
       $valor_arquivo
+      '" . 1 . "',
+      '" . $dados_validos['adms_livro_id'] . "',
       '" . 1 . "',
       '" . $_SESSION['id'] . "',
       NOW())";
@@ -168,7 +207,7 @@ if (!empty($SendCadArtigo)) {
 // Não foi possível fazer o upload, provavelmente a pasta está incorreta
             }
 
-            $_SESSION['msg'] = "<div class='alert alert-success'>Artigo cadastrado com sucesso!</div>";
+            $_SESSION['msg'] = "<div class='alert alert-success'>Trabalho cadastrado com sucesso!</div>";
             $url_destino = pg . '/listar/list_artigo';
             header("Location: $url_destino");
 
@@ -189,14 +228,25 @@ if (!empty($SendCadArtigo)) {
 
             $mensagem = "Caro(a) $prim_nome, <br><br>";
             $mensagem .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
-            $mensagem .= "Título do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
-            $mensagem .= "Tútulo do Livro: " . $dados_validos['tituloLivro'] . "<br>";
+
+            $mensagem .= "Título do Capítulo: " . $dados_validos['tituloArtigo'] . "<br>";
+
+            $result_livros = "SELECT id, nome FROM adms_livros WHERE id=" . $dados_validos['adms_livro_id'] . " LIMIT 1";
+            $resultado_livros = mysqli_query($conn, $result_livros);
+            $row_livros = mysqli_fetch_assoc($resultado_livros);
+            if ($dados_validos['adms_livro_id'] == 1) {
+                $mensagem .= "Título do Livro: " . $dados_tituloLivro . "<br>";
+            } else {
+                $mensagem .= "Título do Livro: " . $row_livros['nome'] . "<br>";
+            }
+
             $mensagem .= "Coautores: <br>";
             for ($index = 0; $index < 9; $index++) {
                 if ($dados_nomeCoautor[$index] != "") {
                     $mensagem .= "Nome: " . $dados_nomeCoautor[$index] . " - E-mail: " . dados_emailCoautor[$index] . "<br>";
                 }
             }
+
             $mensagem .= "Trabalho está nas Normas?: ";
             if ($dados_validos['normas'] == 1) {
                 $normas_texto = "Sim <br>";
@@ -222,6 +272,25 @@ if (!empty($SendCadArtigo)) {
             if (!empty($dados_cnpj_nota)) {
                 $mensagem .= "CNPJ: '" . $dados_cnpj_nota . "' <br>";
             }
+            if (!empty($dados_email_nota_pf)) {
+                $mensagem .= "E-mail para emissão da nota fiscal: '" . $dados_email_nota_pf . "' <br>";
+            }
+            if (!empty($dados_email_nota_pj)) {
+                $mensagem .= "E-mail para emissão da nota fiscal: '" . $dados_email_nota_pj . "' <br>";
+            }
+            if (!empty($dados_telefone_nota_pj)) {
+                $mensagem .= "Telefone para nota fiscal: '" . $dados_telefone_nota_pj . "' <br>";
+            }
+            if (!empty($dados_telefone_nota_pf)) {
+                $mensagem .= "Telefone para nota fiscal: '" . $dados_telefone_nota_pf . "' <br>";
+            }
+            if (!empty($dados_endereco_nota_pj)) {
+                $mensagem .= "Endereço para emissão da nota fiscal: '" . $dados_endereco_nota_pj . "' <br>";
+            }
+            if (!empty($dados_endereco_nota_pf)) {
+                $mensagem .= "Endereço para emissão da nota fiscal: '" . $dados_endereco_nota_pf . "' <br>";
+            }
+
             $mensagem .= "Data da Submissão: " . date('d/m/y') . "<br>";
             $mensagem .= "Situação: Em Avaliação <br>";
             $mensagem .= "Arquivo: ";
@@ -234,8 +303,14 @@ if (!empty($SendCadArtigo)) {
 
             $mensagem_texto = "Caro(a) $prim_nome, <br><br>";
             $mensagem_texto .= "Confirmamos o recebimento do seu trabalho conforme especificações abaixo:<br><br>";
-            $mensagem_texto .= "Titulo do Artigo: " . $dados_validos['tituloArtigo'] . "<br>";
-            $mensagem_texto .= "Titulo do Livro: " . $dados_validos['tituloLivro'] . "<br>";
+            $mensagem_texto .= "Título do Capítulo: " . $dados_validos['tituloArtigo'] . "<br>";
+
+            if ($dados_validos['adms_livro_id'] == 1) {
+                $mensagem_texto .= "Título do Livro: " . $dados_tituloLivro . "<br>";
+            } else {
+                $mensagem_texto .= "Título do Livro: " . $row_livros['nome'] . "<br>";
+            }
+
             $mensagem_texto .= "Coautores: <br>";
             for ($index = 0; $index < 9; $index++) {
                 if (!empty($dados['nomeCoautor'][$index])) {
@@ -256,7 +331,7 @@ if (!empty($SendCadArtigo)) {
             $erro = true;
 //$dados['apelido'] = $dados_apelido;
             $_SESSION['dados'] = $dados;
-            $_SESSION['msg'] = "<div class = 'alert alert-danger'>Erro: O artigo não foi cadastrado com sucesso!</div>";
+            $_SESSION['msg'] = "<div class = 'alert alert-danger'>Erro: O trabalho não foi cadastrado com sucesso!</div>";
             $url_destino = pg . '/cadastrar/cad_artigo';
             $_SESSION['dados'] = $dados;
             header("Location: $url_destino");

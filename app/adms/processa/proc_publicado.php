@@ -21,6 +21,8 @@ if ($SendPublicado) {
         $status = 5;
         //Atualiza o Status
         $result_artigo_aceite_up = "UPDATE adms_artigos SET
+                data_publicacao = '" . $dados['data_publicacao'] . "',
+                url_livro = '" . $dados['link_livro'] . "',
                 adms_sit_artigo_id='$status',
                 modified=NOW()
                 WHERE id='" . $dados['id'] . "'";
@@ -30,16 +32,18 @@ if ($SendPublicado) {
         } else {
             $alteracao = false;
         }
-
+        
+        echo $result_artigo_aceite_up;
+        
         //Redirecionar o usuário
         if ($alteracao) {
-            $_SESSION['msg'] = "<div class='alert alert-success'>Publicação efetuada em sucesso!</div>";
-            $url_destino = pg . "/listar/list_artigo_adm";
-            header("Location: $url_destino");
+            //$_SESSION['msg'] = "<div class='alert alert-success'>Publicação efetuada em sucesso!</div>";
+            //$url_destino = pg . "/listar/list_artigo_adm";
+            //header("Location: $url_destino");
         } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao efetuar a Publicação!</div>";
-            $url_destino = pg . "/listar/list_artigo_adm";
-            header("Location: $url_destino");
+            //$_SESSION['msg'] = "<div class='alert alert-danger'>Erro ao efetuar a Publicação!</div>";
+            //$url_destino = pg . "/listar/list_artigo_adm";
+            //header("Location: $url_destino");
         }
     } else {
         $_SESSION['msg'] = "<div class='alert alert-danger'>Artigo não encontrado</div>";

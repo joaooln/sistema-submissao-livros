@@ -259,6 +259,23 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
                             </div>                       
                         </div>
 
+                        <div class="form-row">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input name="recebe_email" id="recebe_email" type="checkbox" <?php
+                                        if (isset($_SESSION['dados']['recebe_email']) AND ($_SESSION['dados']['recebe_email'] == 1)) {
+                                            echo 'checked';
+                                        } elseif ($row_edit_user['recebe_email'] == 1) {
+                                            echo 'checked';
+                                        }
+                                        ?>>
+                                        <label>&nbsp; Desejo receber e-mails da editora com chamadas para públicação de novos livros</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <p>
                             <span class="text-danger">* </span>Campo obrigatório
                         </p>
@@ -296,4 +313,4 @@ if (($resultado_edit_user) AND ( $resultado_edit_user->num_rows != 0)) {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Usuário não encontrada!</div>";
     $url_destino = pg . '/listar/list_usuario';
     header("Location: $url_destino");
-}
+}    

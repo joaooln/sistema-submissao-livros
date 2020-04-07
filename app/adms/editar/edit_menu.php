@@ -122,7 +122,7 @@ if ($id) {
                                             <i class="fas fa-question-circle"></i>
                                         </span>
                                     </label>
-                                    <select name="adms_sits_pg_id" id="adms_sits_pg_id" class="custom-select" required>
+                                    <select name="adms_sits_id" id="adms_sits_id" class="custom-select" required>
                                         <option value="">Selecione</option>
                                         <?php
                                         while ($row_sits = mysqli_fetch_assoc($resultado_sits)) {

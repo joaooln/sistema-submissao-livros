@@ -5,11 +5,15 @@ if (!isset($seg)) {
 $result_user_vis = "SELECT user.*,
             sit.nome nome_sit,
             cors.cor cor_cors,
-            niv_ac.nome nome_niv_ac
+            niv_ac.nome nome_niv_ac,
+            area.nome nome_area,
+            titu.nome nome_titulo
             FROM adms_usuarios user
             INNER JOIN adms_sits_usuarios sit ON sit.id=user.adms_sits_usuario_id
             INNER JOIN adms_cors cors ON cors.id=sit.adms_cor_id
             INNER JOIN adms_niveis_acessos niv_ac ON niv_ac.id=user.adms_niveis_acesso_id
+            INNER JOIN adms_areas area ON area.id=user.adms_area_id
+            INNER JOIN adms_titulacoes titu ON titu.id=user.adms_titulacao_id
             WHERE user.id=" . $_SESSION['id'] . " LIMIT 1";
 
 $resultado_user_vis = mysqli_query($conn, $result_user_vis);
@@ -64,6 +68,12 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                         <dt class="col-sm-3">Nome</dt>
                         <dd class="col-sm-9"><?php echo $row_user_vis['nome']; ?></dd>
 
+                        <dt class="col-sm-3">Titulação</dt>
+                        <dd class="col-sm-9"><?php echo $row_user_vis['nome_titulo']; ?></dd>
+
+                        <dt class="col-sm-3">Área de Conhecimento</dt>
+                        <dd class="col-sm-9"><?php echo $row_user_vis['nome_area']; ?></dd>
+
                         <dt class="col-sm-3">CPF</dt>
                         <dd class="col-sm-9"><?php echo $row_user_vis['cpf']; ?></dd>
 
@@ -85,7 +95,19 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                         <dd class="col-sm-4">Cidade: <?php echo $row_user_vis['cidade']; ?></dd>
                         <dd class="col-sm-2">Estado: <?php echo $row_user_vis['estado']; ?></dd>
                         <dd class="col-sm-3">CEP: <?php echo $row_user_vis['cep']; ?></dd>
-                        
+
+                        <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
+                        <?php
+                        if ($row_user_vis['recebe_email'] == 1) {
+                            ?>
+                            <dd class = "col-sm-9">Sim</dd>
+                            <?php
+                        }else {
+                            ?>
+                            <dd class = "col-sm-9">Não</dd>
+                            <?php
+                        }
+                        ?>
                     </dl>
                 </div>
             </div>
@@ -100,4 +122,4 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Usuário não encontrado!</div>";
     $url_destino = pg . '/listar/list_usuario';
     header("Location: $url_destino");
-}
+}    

@@ -16,7 +16,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Meus Artigos</h2>
+                        <h2 class="display-4 titulo">Minhas Submissões</h2>
                     </div>
                     <div class="p-2">
                         <?php
@@ -43,12 +43,12 @@ include_once 'app/adms/include/head.php';
                 //Calcular o inicio visualização
                 $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_sit_artigo_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro
                             FROM adms_artigos artigo
+                            LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            WHERE artigo.adms_usuario_id = '" . $_SESSION['id'] . "'
                             ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
 
 
@@ -60,7 +60,7 @@ include_once 'app/adms/include/head.php';
                             <thead>
                                 <tr>
                                     <th>Código</th>
-                                    <th>Título do Artigo</th>
+                                    <th>Título do Capítulo</th>
                                     <th class="d-none d-sm-table-cell">Título do Livro</th>
                                     <th class="d-none d-sm-table-cell">Status</th>
                                     <th class="text-center">Ações</th>
@@ -73,7 +73,15 @@ include_once 'app/adms/include/head.php';
                                     <tr>
                                         <th><?php echo $row_artigo['id']; ?></th>
                                         <td><?php echo $row_artigo['tituloArtigo']; ?></td>
-                                        <td class="d-none d-sm-table-cell"><?php echo $row_artigo['tituloLivro']; ?></td>
+                                        <td class="d-none d-sm-table-cell">
+                                            <?php
+                                            if (($row_artigo['adms_livro_id'] == 1) OR ($row_artigo['adms_livro_id'] == 0)) {
+                                                echo $row_artigo['tituloLivro'];
+                                            } else {
+                                                echo $row_artigo['nome_livro'];
+                                            }
+                                            ?>
+                                        </td>
                                         <td class="d-none d-sm-table-cell"><?php
                                             echo "<span class='badge badge-" . $row_artigo['cor_cors'] . "'>" . $row_artigo['nome_sitartigo'] . "</span>";
                                             ?></td>

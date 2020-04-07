@@ -5,10 +5,14 @@ if (!isset($seg)) {
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 if (!empty($id)) {
     $result_artigo_vis = "SELECT artigo.*,
+            livro.nome nome_livro,  
+            area.nome nome_area,
             sitartigo.nome nome_sitartigo,
             cors.cor cor_cors,
-            user.nome
+            user.*, user.id id_user
             FROM adms_artigos artigo
+            LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
+            LEFT JOIN adms_areas area ON (area.id=livro.adms_area_id) OR (area.id=artigo.adms_area_id)
             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
@@ -35,7 +39,7 @@ if (!empty($id)) {
                             <div class="p-2">
                                 <span class = "d-none d-md-block">
                                     <?php
-                                    $btn_list = carregar_btn('listar/list_artigo', $conn);
+                                    $btn_list = carregar_btn('listar/list_artigo_adm', $conn);
                                     if ($btn_list) {
                                         echo "<a href='" . pg . "/listar/list_artigo_adm' class='btn btn-outline-info btn-sm'>Listar</a> ";
                                     }
@@ -69,20 +73,59 @@ if (!empty($id)) {
                         </div><hr>
                         <dl class="row">                            
 
-                            <dt class="col-sm-3">Código do Artigo</dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['id']; ?></dd>
+                            <?php
+                            if ($row_artigo_vis['adms_tp_subms_id'] == 1) {
+                                echo "<dt class = 'col-sm-3'>Código do Capítulo</dt>";
+                            } else {
+                                echo "<dt class = 'col-sm-3'>Código do Livro</dt>";
+                            }
+                            ?>
+                            <dd class = "col-sm-9"><?php echo $row_artigo_vis['id'];
+                            ?></dd>
 
-                            <dt class="col-sm-3">Titulo do Artigo</dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['tituloArtigo']; ?></dd>
+                            <?php
+                            if ($row_artigo_vis['adms_tp_subms_id'] == 1) {
+                                echo "<dt class = 'col-sm-3'>Título do Capítulo</dt>";
+                            } else {
+                                echo "<dt class = 'col-sm-3'>Título do Livro</dt>";
+                            }
+                            ?>
+                            <dd class="col-sm-9"><?php
+                                if ($row_artigo_vis['adms_tp_subms_id'] == 1) {
+                                    echo $row_artigo_vis['tituloArtigo'];
+                                } else {
+                                    echo $row_artigo_vis['tituloLivro'];
+                                }
+                                ?></dd>
+                            <?php
+                            if ($row_artigo_vis['adms_livro_id'] != 0) {
+                                echo "<dt class = 'col-sm-3'>Titulo do Livro</dt>";
+                                echo "<dd class = 'col-sm-9'>";
+                                if ($row_artigo_vis['adms_livro_id'] == 1) {
+                                    echo $row_artigo_vis['tituloLivro'];
+                                } else {
+                                    echo $row_artigo_vis['nome_livro'];
+                                }
+                                echo "</dd>";
+                            }
+                            ?>
 
-                            <dt class="col-sm-3">Titulo do Livro</dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['tituloLivro']; ?></dd>
+                            <dt class="col-sm-3">Área de Conhecimento</dt>
+                            <dd class="col-sm-9">
+                                <?php
+                                if ($row_artigo_vis['areaLivro'] != null) {
+                                    echo $row_artigo_vis['areaLivro'];
+                                } else {
+                                    echo $row_artigo_vis['nome_area'];
+                                }
+                                ?>
+                            </dd>
 
                             <dt class="col-sm-3">Nome do Autor</dt>
-                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
-
-                            <dt class="col-sm-3">Nome do Autor</dt>
-                            
+                            <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?>
+                                <span data-placement="top" tabindex="0" data-toggle='modal' data-target='#info_autor' title="Dados do Autor">
+                                    <i class="fas fa-question-circle"></i>
+                                </span></dd>
                             <?php
                             for ($index = 1; $index < 10; $index++) {
                                 if (!empty($row_artigo_vis['nomeCoautor' . $index . ''])) {
@@ -128,6 +171,16 @@ if (!empty($id)) {
                                     if (!empty($row_artigo_vis['email_nota'])) {
                                         echo " - E-mail: " . $row_artigo_vis['email_nota'] . "";
                                     }
+
+                                    if (!empty($row_artigo_vis['telefone_nota'])) {
+                                        echo " - Telefone: " . $row_artigo_vis['telefone_nota'] . "";
+                                    }
+                                    ?>
+                                    <br/>
+                                    <?php
+                                    if (!empty($row_artigo_vis['endereco_nota'])) {
+                                        echo "Endereço: " . $row_artigo_vis['endereco_nota'] . "";
+                                    }
                                     ?>
                                 </dd>
                                 <?php
@@ -137,13 +190,17 @@ if (!empty($id)) {
                             <dt class="col-sm-3">Data do Envio</dt>
                             <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['created'])); ?></dd>
 
-                            <dt class="col-sm-3 text-truncate">Data de Edição</dt>
-                            <dd class="col-sm-9"><?php
-                                if (!empty($row_artigo_vis['modified'])) {
-                                    echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['modified']));
-                                }
-                                ?>
-                            </dd>
+                            <?php if (!empty($row_artigo_vis['modified'])) { ?>
+                                <dt class="col-sm-3 text-truncate">Data de Edição</dt>
+                                <dd class="col-sm-9"><?php
+                                    if (!empty($row_artigo_vis['modified'])) {
+                                        echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['modified']));
+                                    }
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
 
                             <dt class="col-sm-3">Situação</dt>
                             <dd class="col-sm-9"><?php
@@ -155,6 +212,28 @@ if (!empty($id)) {
                                 <dd class="col-sm-9">
                                     <?php
                                     echo $row_artigo_vis['motivo_rejeicao'];
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
+
+                            <?php if (!empty($row_artigo_vis['data_publicacao'])) { ?>
+                                <dt class="col-sm-3">Data da Publicação:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    echo $row_artigo_vis['data_publicacao'];
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
+
+                            <?php if (!empty($row_artigo_vis['url_livro'])) { ?>
+                                <dt class="col-sm-3">Link do livro:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    echo $row_artigo_vis['url_livro'];
                                     ?>
                                 </dd>
                                 <?php
@@ -177,7 +256,7 @@ if (!empty($id)) {
 
             </div>
 
-            // Janela Modal Confirma Aceite
+            <!-- Janela Modal Confirma Aceite -->
             <div class="modal fade" id="confirma_aceite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -199,7 +278,7 @@ if (!empty($id)) {
                 </div>
             </div>
 
-            // Janela Modal Rejeita Artigo
+            <!-- Janela Modal Rejeita Artigo -->
             <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -229,7 +308,7 @@ if (!empty($id)) {
                 </div>
             </div>
 
-            // Janela Modal Publicacao
+            <!-- Janela Modal Publicacao -->
             <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -255,6 +334,93 @@ if (!empty($id)) {
                             <input name="SendPublicado" id="SendPublicado" type="submit" class="btn btn-success" value="Sim">
                         </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="info_autor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <?php
+                $result_autor_vis = "SELECT 
+                                    area.nome nome_area,
+                                    titu.nome nome_titulo
+                                    FROM adms_usuarios user
+                                    INNER JOIN adms_areas area ON area.id=user.adms_area_id
+                                    INNER JOIN adms_titulacoes titu ON titu.id=user.adms_titulacao_id
+                                    WHERE user.id=" . $row_artigo_vis['id_user'] . " LIMIT 1";
+                $resultado_autor_vis = mysqli_query($conn, $result_autor_vis);
+                $row_autor_vis = mysqli_fetch_assoc($resultado_autor_vis);
+                ?>
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Infomações do Autor</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p></p>
+                            <dl class="row">
+                                <dt class="col-sm-3">Imagem</dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    if (!empty($row_artigo_vis['imagem'])) {
+                                        echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_artigo_vis['user_id'] . "/" . $row_artigo_vis['imagem'] . "' width='200' height='200'>";
+                                    } else {
+                                        echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
+                                    }
+                                    ?>
+                                </dd>
+
+                                <dt class="col-sm-3">Nome</dt>
+                                <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
+
+                                <dt class="col-sm-3">Titulação</dt>
+                                <dd class="col-sm-9"><?php echo $row_autor_vis['nome_titulo']; ?></dd>
+
+                                <dt class="col-sm-3">Área de Conhecimento</dt>
+                                <dd class="col-sm-9"><?php echo $row_autor_vis['nome_area']; ?></dd>
+
+                                <dt class="col-sm-3">CPF</dt>
+                                <dd class="col-sm-9"><?php echo $row_artigo_vis['cpf']; ?></dd>
+
+                                <dt class="col-sm-3">Telefone</dt>
+                                <dd class="col-sm-9"><?php echo $row_artigo_vis['telefone']; ?></dd>
+
+                                <dt class="col-sm-3">E-mail</dt>
+                                <dd class="col-sm-9"><?php echo $row_artigo_vis['email']; ?></dd>
+
+                                <dt class="col-sm-3">Endereço</dt>
+                                <dd class="col-sm-6"><?php echo $row_artigo_vis['rua']; ?></dd>
+                                <dd class="col-sm-3">Nº <?php echo $row_artigo_vis['num_end']; ?></dd>
+
+                                <dt class="col-sm-3"></dt>
+                                <dd class="col-sm-4">Bairro: <?php echo $row_artigo_vis['bairro']; ?></dd>
+                                <dd class="col-sm-4">Complemento: <?php echo $row_artigo_vis['complemento']; ?></dd>
+
+                                <dt class="col-sm-3"></dt>
+                                <dd class="col-sm-4">Cidade: <?php echo $row_artigo_vis['cidade']; ?></dd>
+                                <dd class="col-sm-2">Estado: <?php echo $row_artigo_vis['estado']; ?></dd>
+                                <dd class="col-sm-3">CEP: <?php echo $row_artigo_vis['cep']; ?></dd>
+
+                                <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
+                                <?php
+                                if ($row_artigo_vis['recebe_email'] == 1) {
+                                    ?>
+                                    <dd class = "col-sm-9">Sim</dd>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <dd class = "col-sm-9">Não</dd>
+                                    <?php
+                                }
+                                ?>
+                            </dl>
+                            </dl>
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
                     </div>
                 </div>
             </div>
