@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 07-Abr-2020 às 21:43
+-- Generation Time: 18-Abr-2020 às 00:05
 -- Versão do servidor: 10.1.36-MariaDB
 -- versão do PHP: 5.6.38
 
@@ -95,7 +95,7 @@ CREATE TABLE `adms_artigos` (
   `motivo_rejeicao` varchar(520) DEFAULT NULL,
   `data_publicacao` datetime DEFAULT NULL,
   `url_livro` varchar(220) DEFAULT NULL,
-  `valor_livro` varchar(20) DEFAULT NULL,
+  `valor_livro` float DEFAULT NULL,
   `descri_valor_livro` varchar(400) DEFAULT NULL,
   `data_publicacao_livro` datetime DEFAULT NULL,
   `transaction_id` int(11) DEFAULT NULL,
@@ -118,14 +118,14 @@ INSERT INTO `adms_artigos` (`id`, `tituloLivro`, `tituloArtigo`, `areaLivro`, `n
 (161, 'Teste 102', 'Teste 102', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Teste 102.docx', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 1, 3, '2020-03-28 18:46:27', NULL),
 (162, 'Teste 103', 'Teste 103', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Teste 103.docx', 'Feio', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 4, 3, '2020-03-28 18:58:31', '2020-03-31 11:38:43'),
 (163, '', 'Teste1', NULL, 'Oliveira', 'joao@joao.com', 'Neto', 'joao@joao.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Teste1.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, 1, 14, '2020-03-30 16:22:01', '2020-03-30 17:27:21'),
-(164, 'Astrologia 2020', '-', 'Astrologia', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2020.doc', NULL, NULL, NULL, '1.000,00', 'joajojoajsofja~sifna~ifn', '2020-04-07 00:00:00', NULL, 2, 0, 1000, 1, 14, '2020-04-03 13:59:04', '2020-04-06 11:19:50'),
+(164, 'Astrologia 2020', '-', 'Astrologia', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2020.doc', NULL, NULL, NULL, 1, 'joajojoajsofja~sifna~ifn', '2020-04-07 00:00:00', NULL, 2, 0, 1000, 1, 14, '2020-04-03 13:59:04', '2020-04-06 11:19:50'),
 (165, '', 'Astrologia sem segredos 5', NULL, 'Eu', 'joao@joao.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2, 'Sara', '111.111.111-11', '', 'sara@sara.com', 'Cidade Nova', '(11) 11111-1111', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, 1, 14, '2020-04-07 10:47:42', NULL),
-(166, '', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, 1, 14, '2020-04-07 10:59:19', NULL),
-(167, '', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.docx', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, 1, 14, '2020-04-07 11:02:07', NULL),
-(168, 'Astrologia 2020', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 1, 14, '2020-04-07 11:04:15', NULL),
-(169, 'Astrologia 2020', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 1, 14, '2020-04-07 11:07:41', NULL),
-(175, 'Astrologia 2021', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2021.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 1, 1, 14, '2020-04-07 12:15:09', NULL),
-(176, 'Astrologia 2021', '', 'Astrologia', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2021.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 1000, 1, 14, '2020-04-07 12:20:58', NULL),
+(166, '', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', 'Feio', NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, 4, 14, '2020-04-07 10:59:19', '2020-04-14 11:45:17'),
+(167, '', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.docx', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, 2, 14, '2020-04-07 11:02:07', '2020-04-14 11:44:28'),
+(168, 'Astrologia 2020', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 2, 14, '2020-04-07 11:04:15', '2020-04-14 11:27:46'),
+(169, 'Astrologia 2020', 'Astrologia sem segredos 5', NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia sem segredos 5.doc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 2, 14, '2020-04-07 11:07:41', '2020-04-14 11:06:58'),
+(175, 'Astrologia 2021', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2021.doc', NULL, NULL, NULL, 1000, 'Livro', '2020-05-01 00:00:00', NULL, 2, 0, 1, 6, 14, '2020-04-07 12:15:09', '2020-04-17 11:06:21'),
+(176, 'Astrologia 2021', '', 'Astrologia', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2021.doc', NULL, NULL, NULL, 2000, 'Livro 2', '2020-06-01 00:00:00', NULL, 2, 0, 1000, 2, 14, '2020-04-07 12:20:58', '2020-04-17 11:05:36'),
 (177, 'Astrologia 2022', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'Astrologia 2022.docx', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 1, 1, 14, '2020-04-07 12:22:16', NULL);
 
 -- --------------------------------------------------------
@@ -1245,7 +1245,7 @@ ALTER TABLE `adms_usuarios`
 -- AUTO_INCREMENT for table `adms_areas`
 --
 ALTER TABLE `adms_areas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
 
 --
 -- AUTO_INCREMENT for table `adms_artigos`

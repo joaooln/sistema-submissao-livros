@@ -223,6 +223,29 @@ if (!empty($id)) {
                             }
                             ?>
 
+                            <?php if (!empty($row_artigo_vis['valor_livro'])) { ?>
+                                <dt class="col-sm-3">Valor do livro:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    //echo number_format($row_artigo_vis['valor_livro'], 2, '.', '');
+                                    echo $row_artigo_vis['valor_livro'];
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
+
+                            <?php if (!empty($row_artigo_vis['descri_valor_livro'])) { ?>
+                                <dt class="col-sm-3">Descriminação do valor do livro:<dt>
+                                <dd class="col-sm-9">
+                                    <?php
+                                    echo $row_artigo_vis['descri_valor_livro'];
+                                    ?>
+                                </dd>
+                                <?php
+                            }
+                            ?>
+
                             <?php if (!empty($row_artigo_vis['url_livro'])) { ?>
                                 <dt class="col-sm-3">Link do livro:<dt>
                                 <dd class="col-sm-9">

@@ -33,21 +33,11 @@ include_once 'app/adms/include/head.php';
                     unset($_SESSION['msg']);
                 }
 
-                //Receber o número da página
-                $pagina_atual = filter_input(INPUT_GET, 'pagina', FILTER_SANITIZE_NUMBER_INT);
-                $pagina = (!empty($pagina_atual)) ? $pagina_atual : 1;
-
-                //Setar a quantidade de itens por pagina
-                $qnt_result_pg = 40;
-
-                //Calcular o inicio visualização
-                $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
                 if ($_SESSION['adms_niveis_acesso_id'] == 1) {
                     $resul_pg = "SELECT pg.id, pg.nome_pagina, pg.endereco, 
                             tpg.tipo
                             FROM adms_paginas pg
-                            INNER JOIN adms_tps_pgs tpg ON tpg.id=pg.adms_tps_pg_id
-                            ORDER BY id ASC LIMIT $inicio, $qnt_result_pg";
+                            INNER JOIN adms_tps_pgs tpg ON tpg.id=pg.adms_tps_pg_id";
                 } else {
                     /* $resul_niv_aces = "SELECT * FROM adms_niveis_acessos WHERE ordem > '" . $_SESSION['ordem'] . "' ORDER BY ordem ASC LIMIT $inicio, $qnt_result_pg"; */
                 }
@@ -55,7 +45,7 @@ include_once 'app/adms/include/head.php';
                 if (($resultado_pg) AND ( $resultado_pg->num_rows != 0)) {
                     ?>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered">
+                        <table class="table table-striped table-hover table-bordered" id="tablePages" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -77,18 +67,17 @@ include_once 'app/adms/include/head.php';
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
                                                 <?php
-
                                                 $btn_vis = carregar_btn('visualizar/vis_pagina', $conn);
                                                 if ($btn_vis) {
-                                                    echo "<a href='" . pg . "/visualizar/vis_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                                    echo "<a href='" . pg . "/visualizar/vis_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-primary btn-sm' data-toggle='tooltip' data-placement='top' title='Visualizar'><i class='fas fa-eye'></i></a> ";
                                                 }
                                                 $btn_edit = carregar_btn('editar/edit_pagina', $conn);
                                                 if ($btn_edit) {
-                                                    echo "<a href='" . pg . "/editar/edit_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
+                                                    echo "<a href='" . pg . "/editar/edit_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-warning btn-sm'data-toggle='tooltip' data-placement='top' title='Editar Página'><i class='fas fa-edit'></i></a> ";
                                                 }
                                                 $btn_apagar = carregar_btn('processa/apagar_pagina', $conn);
                                                 if ($btn_apagar) {
-                                                    echo "<a href='" . pg . "/processa/apagar_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?'>Apagar</a> ";
+                                                    echo "<a href='" . pg . "/processa/apagar_pagina?id=" . $row_pg['id'] . "' class='btn btn-outline-danger btn-sm' data-confirm='Tem certeza de que deseja excluir o item selecionado?' data-toggle='tooltip' data-placement='top' title='Apagar Página'><i class='fas fa-trash'></i></a> ";
                                                 }
                                                 ?>
                                             </span>
@@ -118,43 +107,6 @@ include_once 'app/adms/include/head.php';
 
                             </tbody>
                         </table>
-                        <?php
-                        $result_pg = "SELECT COUNT(id) AS num_result FROM adms_paginas";
-                        $resultado_pg = mysqli_query($conn, $result_pg);
-                        $row_pg = mysqli_fetch_assoc($resultado_pg);
-                        //echo $row_pg['num_result'];
-                        //Quantidade de pagina 
-                        $quantidade_pg = ceil($row_pg['num_result'] / $qnt_result_pg);
-                        //Limitar os link antes depois
-                        $max_links = 2;
-                        echo "<nav aria-label='paginacao-blog'>";
-                        echo "<ul class='pagination pagination-sm justify-content-center'>";
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_pagina?pagina=1' tabindex='-1'>Primeira</a>";
-                        echo "</li>";
-
-                        for ($pag_ant = $pagina - $max_links; $pag_ant <= $pagina - 1; $pag_ant++) {
-                            if ($pag_ant >= 1) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_pagina?pagina=$pag_ant'>$pag_ant</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item active'>";
-                        echo "<a class='page-link' href='#'>$pagina</a>";
-                        echo "</li>";
-
-                        for ($pag_dep = $pagina + 1; $pag_dep <= $pagina + $max_links; $pag_dep++) {
-                            if ($pag_dep <= $quantidade_pg) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_pagina?pagina=$pag_dep'>$pag_dep</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_pagina?pagina=$quantidade_pg'>Última</a>";
-                        echo "</li>";
-                        echo "</ul>";
-                        echo "</nav>";
-                        ?>
                     </div>
                     <?php
                 }
@@ -164,8 +116,44 @@ include_once 'app/adms/include/head.php';
         <?php
         include_once 'app/adms/include/rodape_lib.php';
         ?>
-
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#tablePages').DataTable({
+                "order": [[1, "asc"]],
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "Selecionado %d linhas",
+                            "0": "Nenhuma linha selecionada",
+                            "1": "Selecionado 1 linha"
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 

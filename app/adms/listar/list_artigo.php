@@ -22,7 +22,7 @@ include_once 'app/adms/include/head.php';
                         <?php
                         $btn_cad = carregar_btn('cadastrar/cad_artigo', $conn);
                         if ($btn_cad) {
-                            echo "<a href='" . pg . "/cadastrar/cad_artigo' class='btn btn-outline-success btn-sm'>Novo Artigo</a>";
+                            echo "<a href='" . pg . "/visualizar/escolhe_tp_subm' class='btn btn-outline-success btn-sm'>Nova Submissão</a>";
                         }
                         ?>
                     </div>
@@ -33,30 +33,18 @@ include_once 'app/adms/include/head.php';
                     unset($_SESSION['msg']);
                 }
 
-                //Receber o número da página
-                $pagina_atual = filter_input(INPUT_GET, 'pagina', FILTER_SANITIZE_NUMBER_INT);
-                $pagina = (!empty($pagina_atual)) ? $pagina_atual : 1;
-
-                //Setar a quantidade de itens por pagina
-                $qnt_result_pg = 10;
-
-                //Calcular o inicio visualização
-                $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
-
                 $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro
                             FROM adms_artigos artigo
                             LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
-                            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
-
+                            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id";
 
                 $resultado_artigo = mysqli_query($conn, $resul_artigo);
                 if (($resultado_artigo) AND ( $resultado_artigo->num_rows != 0)) {
                     ?>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered">
+                        <table class="table table-striped table-hover table-bordered" id="tableArtigos" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Código</th>
@@ -127,43 +115,7 @@ include_once 'app/adms/include/head.php';
                                 ?>
                             </tbody>
                         </table>
-                        <?php
-                        $result_pg = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_usuario_id = '" . $_SESSION['id'] . "'";
-                        $resultado_pg = mysqli_query($conn, $result_pg);
-                        $row_pg = mysqli_fetch_assoc($resultado_pg);
-                        //echo $row_pg['num_result'];
-                        //Quantidade de pagina 
-                        $quantidade_pg = ceil($row_pg['num_result'] / $qnt_result_pg);
-                        //Limitar os link antes depois
-                        $max_links = 2;
-                        echo "<nav aria-label='paginacao-blog'>";
-                        echo "<ul class='pagination pagination-sm justify-content-center'>";
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_artigo?pagina=1' tabindex='-1'>Primeira</a>";
-                        echo "</li>";
 
-                        for ($pag_ant = $pagina - $max_links; $pag_ant <= $pagina - 1; $pag_ant++) {
-                            if ($pag_ant >= 1) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$pag_ant'>$pag_ant</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item active'>";
-                        echo "<a class='page-link' href='#'>$pagina</a>";
-                        echo "</li>";
-
-                        for ($pag_dep = $pagina + 1; $pag_dep <= $pagina + $max_links; $pag_dep++) {
-                            if ($pag_dep <= $quantidade_pg) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$pag_dep'>$pag_dep</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$quantidade_pg'>Última</a>";
-                        echo "</li>";
-                        echo "</ul>";
-                        echo "</nav>";
-                        ?>
                     </div>
                     <?php
                 }
@@ -173,8 +125,44 @@ include_once 'app/adms/include/head.php';
         <?php
         include_once 'app/adms/include/rodape_lib.php';
         ?>
-
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#tableArtigos').DataTable({
+                "order": [[0, "desc"]],
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "Selecionado %d linhas",
+                            "0": "Nenhuma linha selecionada",
+                            "1": "Selecionado 1 linha"
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 

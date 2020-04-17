@@ -4,7 +4,7 @@ if (!isset($seg)) {
 }
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 if (!empty($id)) {
-    $result_artigo_vis = "SELECT artigo.*,
+    $result_artigo_vis = "SELECT artigo.*, artigo.id id_artigo,
             livro.nome nome_livro,  
             area.nome nome_area,
             sitartigo.nome nome_sitartigo,
@@ -45,15 +45,19 @@ if (!empty($id)) {
                                     }
                                     $btn_aceite = carregar_btn('processa/proc_aceite', $conn);
                                     if ($btn_aceite && $row_artigo_vis['adms_sit_artigo_id'] == 1) {
-                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                        if ($row_artigo_vis['adms_tp_subms_id'] == 1) {
+                                            echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                        } else {
+                                            echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite_livro' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
+                                        }
                                     }
                                     $btn_rejeita = carregar_btn('processa/proc_rejeita', $conn);
                                     if ($btn_rejeita && $row_artigo_vis['adms_sit_artigo_id'] == 1) {
-                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
+                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
                                     }
                                     $btn_publicado = carregar_btn('processa/proc_publicado', $conn);
                                     if ($btn_publicado && $row_artigo_vis['adms_sit_artigo_id'] == 3) {
-                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
+                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
                                     }
                                     ?>
                                 </span>
@@ -80,7 +84,7 @@ if (!empty($id)) {
                                 echo "<dt class = 'col-sm-3'>Código do Livro</dt>";
                             }
                             ?>
-                            <dd class = "col-sm-9"><?php echo $row_artigo_vis['id'];
+                            <dd class = "col-sm-9"><?php echo $row_artigo_vis['id_artigo'];
                             ?></dd>
 
                             <?php
@@ -243,7 +247,7 @@ if (!empty($id)) {
                             <dt class="col-sm-3">Arquivo</dt>
                             <dd class="col-sm-9">
                                 <?php
-                                echo "<a href = '" . pg . "/assets/artigosRecebidos/" . $row_artigo_vis['id'] . "/" . $row_artigo_vis['arquivo'] . "'>" . $row_artigo_vis["arquivo"] . "</a>";
+                                echo "<a href = '" . pg . "/assets/artigosRecebidos/" . $row_artigo_vis['id_artigo'] . "/" . $row_artigo_vis['arquivo'] . "'>" . $row_artigo_vis["arquivo"] . "</a>";
                                 ?>
                             </dd>
 
@@ -254,6 +258,40 @@ if (!empty($id)) {
                 include_once 'app/adms/include/rodape_lib.php';
                 ?>
 
+            </div>
+
+            <!--Janela Modal Confirma Aceite Livro-->
+            <div class="modal fade" id="confirma_aceite_livro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p></p>
+                            <form method="POST" action="<?php echo pg; ?>/processa/proc_aceite">
+                                <input type="hidden" name="id" id="id" value="<?php
+                                echo $row_artigo_vis['id_artigo'];
+                                ?>">
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Valor da pubicação do livro:</label>
+                                    <input id="valor_livro" name="valor_livro" type="text" class="form-control money" required>
+                                    <label for="message-text" class="col-form-label">Descriminação do valor:</label>
+                                    <textarea id="descri_valor_livro" name="descri_valor_livro" type="text" class="form-control" required></textarea>
+                                    <label for="message-text" class="col-form-label">Data de pubicação:</label>
+                                    <input id="data_publicacao_livro" name="data_publicacao_livro" type="date" class="form-control" required>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input name = "SendAceite" id = "SendAceite" type = "submit" class = "btn btn-success" value = "Sim">
+                        </div>
+                        </form>
+
+                    </div>
+                </div>
             </div>
 
             <!-- Janela Modal Confirma Aceite -->
@@ -268,198 +306,211 @@ if (!empty($id)) {
                         </div>
                         <div class="modal-body">
                             <p></p>
-                        </div>
-                        <div class="modal-footer">
-                            <?php
-                            echo "<a href='" . pg . "/processa/proc_aceite?id=" . $row_artigo_vis['id'] . "' type='button' class='btn btn-primary'>Sim</a>";
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Janela Modal Rejeita Artigo -->
-            <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p></p>
-                            <form method="POST" action="<?php echo pg; ?>/processa/proc_rejeita">
+                            <form method="POST" action="<?php echo pg; ?>/processa/proc_aceite">
                                 <input type="hidden" name="id" id="id" value="<?php
-                                echo $row_artigo_vis['id'];
+                                echo $row_artigo_vis['id_artigo'];
                                 ?>">
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Motivo da Rejeição:</label>
-                                    <textarea id="motivo_rejeicao" name="motivo_rejeicao" type="text" class="form-control" required></textarea>
                                 </div>
-
+                                <div class="modal-footer">
+                                    <input name = "SendAceite" id = "SendAceite" type = "submit" class = "btn btn-success" value = "Sim">
+                                </div>
+                            </form>
                         </div>
-                        <div class="modal-footer">
-                            <input name="SendRejeicao" id="SendRejeicao" type="submit" class="btn btn-success" value="Sim">
-                        </div>
-                        </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Janela Modal Publicacao -->
-            <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p></p>
-                            <form method="POST" action="<?php echo pg; ?>/processa/proc_publicado">
-                                <input type="hidden" name="id" id="id" value="<?php
-                                echo $row_artigo_vis['id'];
-                                ?>">
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Link do livro:</label>
-                                    <textarea id="link_livro" name="link_livro" type="text" class="form-control" required></textarea>
-                                </div>
+                <!-- Janela Modal Rejeita Artigo -->
+                <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p></p>
+                                <form method="POST" action="<?php echo pg; ?>/processa/proc_rejeita">
+                                    <input type="hidden" name="id" id="id" value="<?php
+                                    echo $row_artigo_vis['id_artigo'];
+                                    ?>">
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Motivo da Rejeição:</label>
+                                        <textarea id="motivo_rejeicao" name="motivo_rejeicao" type="text" class="form-control" required></textarea>
+                                    </div>
 
+                            </div>
+                            <div class="modal-footer">
+                                <input name="SendRejeicao" id="SendRejeicao" type="submit" class="btn btn-success" value="Sim">
+                            </div>
+                            </form>
                         </div>
-                        <div class="modal-footer">
-                            <input name="SendPublicado" id="SendPublicado" type="submit" class="btn btn-success" value="Sim">
-                        </div>
-                        </form>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal fade" id="info_autor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <?php
-                $result_autor_vis = "SELECT 
+                <!-- Janela Modal Publicacao -->
+                <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p></p>
+                                <form method="POST" action="<?php echo pg; ?>/processa/proc_publicado">
+                                    <input type="hidden" name="id" id="id" value="<?php
+                                    echo $row_artigo_vis['id_artigo'];
+                                    ?>">
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Link do livro:</label>
+                                        <textarea id="link_livro" name="link_livro" type="text" class="form-control" required></textarea>
+                                    </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <input name="SendPublicado" id="SendPublicado" type="submit" class="btn btn-success" value="Sim">
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="info_autor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <?php
+                    $result_autor_vis = "SELECT 
                                     area.nome nome_area,
                                     titu.nome nome_titulo
                                     FROM adms_usuarios user
                                     INNER JOIN adms_areas area ON area.id=user.adms_area_id
                                     INNER JOIN adms_titulacoes titu ON titu.id=user.adms_titulacao_id
                                     WHERE user.id=" . $row_artigo_vis['id_user'] . " LIMIT 1";
-                $resultado_autor_vis = mysqli_query($conn, $result_autor_vis);
-                $row_autor_vis = mysqli_fetch_assoc($resultado_autor_vis);
-                ?>
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Infomações do Autor</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p></p>
-                            <dl class="row">
-                                <dt class="col-sm-3">Imagem</dt>
-                                <dd class="col-sm-9">
+                    $resultado_autor_vis = mysqli_query($conn, $result_autor_vis);
+                    $row_autor_vis = mysqli_fetch_assoc($resultado_autor_vis);
+                    ?>
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Infomações do Autor</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p></p>
+                                <dl class="row">
+                                    <dt class="col-sm-3">Imagem</dt>
+                                    <dd class="col-sm-9">
+                                        <?php
+                                        if (!empty($row_artigo_vis['imagem'])) {
+                                            echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_artigo_vis['user_id'] . "/" . $row_artigo_vis['imagem'] . "' width='200' height='200'>";
+                                        } else {
+                                            echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
+                                        }
+                                        ?>
+                                    </dd>
+
+                                    <dt class="col-sm-3">Nome</dt>
+                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
+
+                                    <dt class="col-sm-3">Titulação</dt>
+                                    <dd class="col-sm-9"><?php echo $row_autor_vis['nome_titulo']; ?></dd>
+
+                                    <dt class="col-sm-3">Área de Conhecimento</dt>
+                                    <dd class="col-sm-9"><?php echo $row_autor_vis['nome_area']; ?></dd>
+
+                                    <dt class="col-sm-3">CPF</dt>
+                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['cpf']; ?></dd>
+
+                                    <dt class="col-sm-3">Telefone</dt>
+                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['telefone']; ?></dd>
+
+                                    <dt class="col-sm-3">E-mail</dt>
+                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['email']; ?></dd>
+
+                                    <dt class="col-sm-3">Endereço</dt>
+                                    <dd class="col-sm-6"><?php echo $row_artigo_vis['rua']; ?></dd>
+                                    <dd class="col-sm-3">Nº <?php echo $row_artigo_vis['num_end']; ?></dd>
+
+                                    <dt class="col-sm-3"></dt>
+                                    <dd class="col-sm-4">Bairro: <?php echo $row_artigo_vis['bairro']; ?></dd>
+                                    <dd class="col-sm-4">Complemento: <?php echo $row_artigo_vis['complemento']; ?></dd>
+
+                                    <dt class="col-sm-3"></dt>
+                                    <dd class="col-sm-4">Cidade: <?php echo $row_artigo_vis['cidade']; ?></dd>
+                                    <dd class="col-sm-2">Estado: <?php echo $row_artigo_vis['estado']; ?></dd>
+                                    <dd class="col-sm-3">CEP: <?php echo $row_artigo_vis['cep']; ?></dd>
+
+                                    <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
                                     <?php
-                                    if (!empty($row_artigo_vis['imagem'])) {
-                                        echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_artigo_vis['user_id'] . "/" . $row_artigo_vis['imagem'] . "' width='200' height='200'>";
+                                    if ($row_artigo_vis['recebe_email'] == 1) {
+                                        ?>
+                                        <dd class = "col-sm-9">Sim</dd>
+                                        <?php
                                     } else {
-                                        echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
+                                        ?>
+                                        <dd class = "col-sm-9">Não</dd>
+                                        <?php
                                     }
                                     ?>
-                                </dd>
+                                </dl>
+                                </dl>
+                            </div>
+                            <div class="modal-footer">
 
-                                <dt class="col-sm-3">Nome</dt>
-                                <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
-
-                                <dt class="col-sm-3">Titulação</dt>
-                                <dd class="col-sm-9"><?php echo $row_autor_vis['nome_titulo']; ?></dd>
-
-                                <dt class="col-sm-3">Área de Conhecimento</dt>
-                                <dd class="col-sm-9"><?php echo $row_autor_vis['nome_area']; ?></dd>
-
-                                <dt class="col-sm-3">CPF</dt>
-                                <dd class="col-sm-9"><?php echo $row_artigo_vis['cpf']; ?></dd>
-
-                                <dt class="col-sm-3">Telefone</dt>
-                                <dd class="col-sm-9"><?php echo $row_artigo_vis['telefone']; ?></dd>
-
-                                <dt class="col-sm-3">E-mail</dt>
-                                <dd class="col-sm-9"><?php echo $row_artigo_vis['email']; ?></dd>
-
-                                <dt class="col-sm-3">Endereço</dt>
-                                <dd class="col-sm-6"><?php echo $row_artigo_vis['rua']; ?></dd>
-                                <dd class="col-sm-3">Nº <?php echo $row_artigo_vis['num_end']; ?></dd>
-
-                                <dt class="col-sm-3"></dt>
-                                <dd class="col-sm-4">Bairro: <?php echo $row_artigo_vis['bairro']; ?></dd>
-                                <dd class="col-sm-4">Complemento: <?php echo $row_artigo_vis['complemento']; ?></dd>
-
-                                <dt class="col-sm-3"></dt>
-                                <dd class="col-sm-4">Cidade: <?php echo $row_artigo_vis['cidade']; ?></dd>
-                                <dd class="col-sm-2">Estado: <?php echo $row_artigo_vis['estado']; ?></dd>
-                                <dd class="col-sm-3">CEP: <?php echo $row_artigo_vis['cep']; ?></dd>
-
-                                <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
-                                <?php
-                                if ($row_artigo_vis['recebe_email'] == 1) {
-                                    ?>
-                                    <dd class = "col-sm-9">Sim</dd>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <dd class = "col-sm-9">Não</dd>
-                                    <?php
-                                }
-                                ?>
-                            </dl>
-                            </dl>
-                        </div>
-                        <div class="modal-footer">
-
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <script>
+                <script>
 
-                $('#confirma_publicacao').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget)
-                    var id = button.data('id')
-                    var pg = button.data('pg')
-                    var modal = $(this)
-                    modal.find('.modal-title').text('Confirmar Publicação')
-                    modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
-                    modal.find('#id').val(id)
-                    modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
-                })
+                    $('#confirma_publicacao').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget)
+                        var id = button.data('id')
+                        var pg = button.data('pg')
+                        var modal = $(this)
+                        modal.find('.modal-title').text('Confirmar Publicação')
+                        modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
+                        modal.find('#id').val(id)
+                        modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
+                    })
 
-                $('#confirma_aceite').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget)
-                    var id = button.data('id')
-                    var pg = button.data('pg')
-                    var modal = $(this)
-                    modal.find('.modal-title').text('Confirmar Aceite')
-                    modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
-                    modal.find('.modal-footer a').attr("href", pg + '/processa/proc_aceite?id=' + id)
-                })
+                    $('#confirma_aceite').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget)
+                        var id = button.data('id')
+                        var pg = button.data('pg')
+                        var modal = $(this)
+                        modal.find('.modal-title').text('Confirmar Aceite')
+                        modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
+                        modal.find('#id').val(id)
+                    })
 
-                $('#confirma_rejeita').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget)
-                    var id = button.data('id')
-                    var pg = button.data('pg')
-                    var modal = $(this)
-                    modal.find('.modal-title').text('Confirmar Rejeição')
-                    modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
-                    modal.find('#id').val(id)
-                    modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
-                })
+                    $('#confirma_rejeita').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget)
+                        var id = button.data('id')
+                        var pg = button.data('pg')
+                        var modal = $(this)
+                        modal.find('.modal-title').text('Confirmar Rejeição')
+                        modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
+                        modal.find('#id').val(id)
+                        modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
+                    })
 
-            </script>
+                    $('#confirma_aceite_livro').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget)
+                        var id = button.data('id')
+                        var pg = button.data('pg')
+                        var modal = $(this)
+                        modal.find('.modal-title').text('Confirmar Aceite')
+                        modal.find('.modal-body p').text('Confirmar aceite do livro número: ' + id + ' ?')
+                        modal.find('#id').val(id)
+                    })
+
+                </script>
         </body>
         <?php
     } else {

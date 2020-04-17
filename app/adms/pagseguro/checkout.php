@@ -7,7 +7,7 @@ if (!isset($seg)) {
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
 if (!empty($id)) {
-    $result_checkout_artigo = "SELECT artigo.id id_artigo, user.*, user.id id_user
+    $result_checkout_artigo = "SELECT artigo.id id_artigo, normas, valor_livro, adms_tp_subms_id, user.*, user.id id_user
                                FROM adms_artigos artigo 
                                INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                                WHERE artigo.id='$id' LIMIT 1";
@@ -24,13 +24,27 @@ if (!empty($id)) {
         require_once("PagSeguro.class.php");
         $PagSeguro = new PagSeguro();
 
-        if ($row_checkout_artigo['normas'] == 1) {
-            $descricao = "PUBLICAÇÃO DE ARTIGO CIENTIFICO FORMATADO PELO AUTOR";
-            $valor = 320.00;
+        if ($row_checkout_artigo['adms_tp_subms_id'] == 1) {
+            if ($row_checkout_artigo['normas'] == 1) {
+                $descricao = "PUBLICAÇÃO DE CAPÍTULO DE LIVRO CIENTIFICO FORMATADO PELO AUTOR";
+                $valor = 320.00;
+            } else {
+                $descricao = "PUBLICAÇÃO DE CAPÍTULO DE LIVRO CIENTIFICO, COM FORMATAÇÃO";
+                $valor = 450.00;
+            }
         } else {
-            $descricao = "PUBLICAÇÃO DE ARTIGO CIENTIFICO, COM FORMATAÇÃO";
-            $valor = 450.00;
+            if ($row_checkout_artigo['normas'] == 1) {
+                $descricao = "PUBLICAÇÃO DE LIVRO CIENTIFICO FORMATADO PELO AUTOR";
+                $valor = $row_checkout_artigo['valor_livro'];
+                //$valor = number_format($row_checkout_artigo['valor_livro']);
+            } else {
+                $descricao = "PUBLICAÇÃO DE LIVRO CIENTIFICO, COM FORMATAÇÃO";
+                $valor = $row_checkout_artigo['valor_livro'];
+                //$valor = number_format($row_checkout_artigo['valor_livro']);
+            }
         }
+
+
 
         //EFETUAR PAGAMENTO	
         $venda = array("codigo" => $row_checkout_artigo['id_artigo'],

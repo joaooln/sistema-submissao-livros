@@ -37,6 +37,7 @@ if (!isset($seg)) {
     <link href="<?php echo pg; ?>/assets/css/dashboard.css" rel="stylesheet">
     <link href="<?php echo pg; ?>/assets/css/all.min.css" rel="stylesheet">
     <link href="<?php echo pg; ?>/assets/css/form-validation.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
 
 </head>

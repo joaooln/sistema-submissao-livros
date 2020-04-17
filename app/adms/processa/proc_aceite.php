@@ -5,20 +5,16 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 if (!isset($seg)) {
     exit;
 }
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $SendAceite = filter_input(INPUT_POST, 'SendAceite', FILTER_SANITIZE_STRING);
+
 if ($SendAceite) {
 
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-    if ($id == NULL) {
-        $id = $dados['id'];
-    }
-
     $result_artigo_aceite = "SELECT artigo.id, artigo.tituloLivro ,artigo.tituloArtigo,
             artigo.nomeCoautor1, artigo.nomeCoautor2, artigo.nomeCoautor3, artigo.nomeCoautor4,
             artigo.nomeCoautor5,  artigo.nomeCoautor6,  artigo.nomeCoautor7,  artigo.nomeCoautor8,
-            artigo.nomeCoautor9,  artigo.nomeCoautor10,
+            artigo.nomeCoautor9,  artigo.nomeCoautor10, artigo.normas,
             artigo.valor_livro, artigo.descri_valor_livro, artigo.data_publicacao_livro,
             artigo.adms_tp_subms_id, artigo.adms_livro_id, artigo.adms_sit_artigo_id, artigo.adms_usuario_id,
             livro.nome livro_nome, livro.data_publicacao livro_data,            
@@ -36,12 +32,14 @@ if ($SendAceite) {
         if ($row_artigo_aceite['adms_sit_artigo_id'] == 1) {
             $status = 2;
         }
+        include_once 'lib/lib_valida.php';
+        $dados['valor_livro'] = Valor($dados['valor_livro']);
         //Atualiza o Status
         if ($row_artigo_aceite['adms_tp_subms_id'] == 1) {
             $result_artigo_aceite_up = "UPDATE adms_artigos SET
                 adms_sit_artigo_id='$status',
                 modified=NOW()
-                WHERE id='$id'";
+                WHERE id=" . $dados['id'] . "";
         } elseif ($row_artigo_aceite['adms_tp_subms_id'] == 2) {
             $result_artigo_aceite_up = "UPDATE adms_artigos SET
                 valor_livro = '" . $dados['valor_livro'] . "',
@@ -49,7 +47,7 @@ if ($SendAceite) {
                 data_publicacao_livro = '" . $dados['data_publicacao_livro'] . "',
                 adms_sit_artigo_id='$status',
                 modified=NOW()
-                WHERE id='$id'";
+                WHERE id=" . $dados['id'] . "";
         }
         $resultado_artigo_aceite_up = mysqli_query($conn, $result_artigo_aceite_up);
         if (mysqli_affected_rows($conn)) {
@@ -64,6 +62,12 @@ if ($SendAceite) {
                 $tituloLivro = $row_artigo_aceite['tituloLivro'];
             } else {
                 $tituloLivro = $row_artigo_aceite['livro_nome'];
+            }
+
+            if ($row_artigo_aceite['normas'] == 1) {
+                $valor_livro = "R$ 350,00";
+            } else {
+                $valor_livro = "R$ 420,00";
             }
 
             $nome = explode(" ", $row_artigo_aceite['nome_user']);
@@ -98,7 +102,7 @@ if ($SendAceite) {
                     . $row_artigo_aceite['tituloArtigo']
                     . "”</strong>"
                     . " de autoria de <strong> “"
-                    . $row_artigo_aceite['nome_user'] . $autores
+                    . $autores
                     . ""
                     . "”</strong>"
                     . ", foi <strong>aceito</strong> e encontra-se no prelo para publicação no livro eletrônico <strong>“"
@@ -140,7 +144,7 @@ if ($SendAceite) {
                     . $row_artigo_aceite['tituloLivro']
                     . "”</strong>"
                     . " de autoria de <strong> “"
-                    . $row_artigo_aceite['nome_user'] . $autores
+                    . $autores
                     . ""
                     . "”</strong>"
                     . ", foi <strong>aceito</strong> e encontra-se no prelo para publicação em nosso site"
@@ -165,7 +169,7 @@ if ($SendAceite) {
             $mensagem_texto .= "Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, tem a honra de informar que o capítulo de livro intitulado "
                     . "'" . $row_artigo_aceite['tituloArtigo'] . "'"
                     . " de autoria de "
-                    . "'" . $row_artigo_aceite['nome_user'] . $autores . "'"
+                    . "'" . $autores . "'"
                     . " foi aceito e encontra-se no prelo para publicação no livro eletrônico "
                     . "'" . $tituloLivro . "'"
                     . strftime('%d de %B de %Y', strtotime($row_artigo_aceite['livro_data']))
@@ -177,7 +181,7 @@ if ($SendAceite) {
             $mensagem_texto_livro .= "Após a avaliação técnico científica pelos pares, os membros do Conselho Editorial desta editora, tem a honra de informar que o livro intitulado "
                     . "'" . $row_artigo_aceite['tituloLivro'] . "'"
                     . " de autoria de "
-                    . "'" . $row_artigo_aceite['nome_user'] . $autores . "'"
+                    . "'" . $autores . "'"
                     . " foi aceito e encontra-se no prelo para publicação no nosso site "
                     . "em "
                     . strftime('%d de %B de %Y', strtotime($row_artigo_aceite['data_publicacao_livro']))
@@ -209,23 +213,35 @@ if ($SendAceite) {
                     . "<p><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
                     . "<br>"
                     . "</p>"
-                    . "<p style = 'text-align: justify; line-height: 1.5;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
-                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informamos que seu artigo intitulado:  "
+                    . "<p style = 'text-align: justify; line-height: 2;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezado(a): "
+                    . "<strong>" . $row_artigo_aceite['nome_user'] . "</strong><br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agradecemos a escolha pela <strong>Stricto Sensu Editora</strong> como meio de publicação de sua obra e parabenizamos os autores pelo aceite.<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Já encontra-se disponível na área do autor a opção para efetuar pagamento para a publicação do seu artigo.<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://areadoautor.sseditora.com.br/<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se preferir pode realizar a transferência bancária para:<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caixa Econômica Federal<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Naila Fernanda S. P. Meneguetti<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ag: 0534<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Op: 003<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C/C: 6285-3<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CNPJ: 32. 249. 055/0001-26<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E enviar o comprovante por e-mail.<br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descrição: Publicação de Capítulo de Livro intitulado: "
                     . "<strong>“"
                     . $row_artigo_aceite['tituloArtigo']
                     . "”</strong>"
                     . " de autoria de <strong> “"
-                    . $row_artigo_aceite['nome_user'] . $autores
+                    . $autores
                     . ""
                     . "”</strong>"
                     . ", do livro eletrônico <strong>“"
                     . $tituloLivro
                     . "”</strong>"
-                    . ". Já encontra-se disponível para pagamento na área do autor, segue link abaixo. Lembrando que seu artigo só será publicado mediante pagamento."
                     . "<br>"
+                    . "Valor: <strong>“" . $valor_livro . "”</strong><br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este documento tem validade até dia ../../../<br><br>"
                     . "</span></span></p>"
-                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    . "https://areadoautor.sseditora.com.br/"
                     . "</span></span>"
                     . "<p><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
                     . "<br>"
@@ -253,23 +269,33 @@ if ($SendAceite) {
                     . "<p><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
                     . "<br>"
                     . "</p>"
-                    . "<p style = 'text-align: justify; line-height: 1.5;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
-                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informamos que seu livro intitulado:  "
-                    . "<strong>“"
+                    . "<p style = 'text-align: justify; line-height: 2;'><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezado(a): "
+                    . "<strong>" . $row_artigo_aceite['nome_user'] . "</strong><br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agradecemos a escolha pela <strong>Stricto Sensu Editora</strong> como meio de publicação de sua obra e parabenizamos os autores pelo aceite.<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Já encontra-se disponível na área do autor a opção para efetuar pagamento para a publicação do seu livro.<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://areadoautor.sseditora.com.br/<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se preferir pode realizar a transferência bancária para:<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caixa Econômica Federal<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Naila Fernanda S. P. Meneguetti<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ag: 0534<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Op: 003<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C/C: 6285-3<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CNPJ: 32. 249. 055/0001-26<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E enviar o comprovante por e-mail.<br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descrição: "
+                    . $dados['descri_valor_livro']
+                    . " intitulado: <strong>“"
                     . $row_artigo_aceite['tituloLivro']
                     . "”</strong>"
-                    . " após analise técnica, chegamos ao valor de: R$: <strong> “"
-                    . $row_artigo_aceite['valor_livro']
+                    . " de autoria de <strong> “"
+                    . $autores
                     . ""
                     . "”</strong>"
-                    . ", sendo o valor descriminado com: <strong>“"
-                    . $row_artigo_aceite['descri_valor_livro']
-                    . "”</strong>"
-                    . ". Já encontra-se disponível para pagamento na área do autor, segue link abaixo. Lembrando que seu livro só será publicado mediante pagamento."
                     . "<br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Valor: <strong>“" . $dados['valor_livro'] . "”</strong><br><br>"
+                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este documento tem validade até dia ../../../<br><br>"
                     . "</span></span></p>"
-                    . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    . "https://areadoautor.sseditora.com.br/"
                     . "</span></span>"
                     . "<p><span style = 'font-size: 12px;'><span style = 'font-family: Arial,Helvetica,sans-serif;'>"
                     . "<br>"
@@ -282,7 +308,7 @@ if ($SendAceite) {
                     . "<p style = 'line-height: 1;'><span style = 'font-size: 10px;'><span style = 'font-family: Arial, Helvetica, sans-serif;'>"
                     . "Stricto Sensu Editora - CNPJ: 32.249.055/0001-26<br>Avenida Recanto Verde, 213, Conjunto Mariana<br>Rio Branco – AC – CEP: 69919-182<br>Site: www.sseditora.com.br<br>E-mail: edgeral@sseditora.com.br<br>Prefixos Editoriais: ISBN 80261<br>DOI 10.35170"
                     . "</span></span></p >";
-            
+
             if ($row_artigo_aceite['adms_tp_subms_id'] == 1) {
                 email_phpmailer($assunto_pg, $mensagem_pg, $mensagem_texto_pg, $prim_nome, $row_artigo_aceite['email'], $conn);
             } elseif ($row_artigo_aceite['adms_tp_subms_id'] == 2) {

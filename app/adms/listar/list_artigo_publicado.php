@@ -33,31 +33,20 @@ include_once 'app/adms/include/head.php';
                     unset($_SESSION['msg']);
                 }
 
-                //Receber o número da página
-                $pagina_atual = filter_input(INPUT_GET, 'pagina', FILTER_SANITIZE_NUMBER_INT);
-                $pagina = (!empty($pagina_atual)) ? $pagina_atual : 1;
-
-                //Setar a quantidade de itens por pagina
-                $qnt_result_pg = 10;
-
-                //Calcular o inicio visualização
-                $inicio = ($qnt_result_pg * $pagina) - $qnt_result_pg;
-
                 $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro
                             FROM adms_artigos artigo
                             LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            WHERE artigo.adms_sit_artigo_id = 5
-                            ORDER BY artigo.id DESC LIMIT $inicio, $qnt_result_pg";
+                            WHERE artigo.adms_sit_artigo_id = 5";
 
 
                 $resultado_artigo = mysqli_query($conn, $resul_artigo);
                 if (($resultado_artigo) AND ( $resultado_artigo->num_rows != 0)) {
                     ?>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered">
+                        <table class="table table-striped table-hover table-bordered" id="tableArtigos" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Código</th>
@@ -109,18 +98,6 @@ include_once 'app/adms/include/head.php';
                                                 if ($btn_vis) {
                                                     echo "<a href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
                                                 }
-                                                $btn_aceite = carregar_btn('processa/proc_aceite', $conn);
-                                                if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
-                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
-                                                }
-                                                $btn_rejeita = carregar_btn('processa/proc_rejeita', $conn);
-                                                if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
-                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
-                                                }
-                                                $btn_publicado = carregar_btn('processa/proc_publicado', $conn);
-                                                if ($btn_publicado && $row_artigo['adms_sit_artigo_id'] == 3) {
-                                                    echo "<a href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
-                                                }
                                                 ?>
 
                                             </span>
@@ -133,15 +110,6 @@ include_once 'app/adms/include/head.php';
                                                     if ($btn_vis) {
                                                         echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "'>Visualizar</a>";
                                                     }
-                                                    if ($btn_aceite && $row_artigo['adms_sit_artigo_id'] == 1) {
-                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_aceite' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-success btn-sm'>Aceitar</a> ";
-                                                    }
-                                                    if ($btn_rejeita && $row_artigo['adms_sit_artigo_id'] == 1) {
-                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_rejeita' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Rejeitar</a>";
-                                                    }
-                                                    if ($btn_publicado && $row_artigo['adms_sit_artigo_id'] == 3) {
-                                                        echo "<a class='dropdown-item' href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo['id'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
-                                                    }
                                                     ?>
                                                 </div>
                                             </div>
@@ -152,43 +120,6 @@ include_once 'app/adms/include/head.php';
                                 ?>
                             </tbody>
                         </table>
-                        <?php
-                        $result_pg = "SELECT COUNT(id) AS num_result FROM adms_artigos WHERE adms_usuario_id = '" . $_SESSION['id'] . "'";
-                        $resultado_pg = mysqli_query($conn, $result_pg);
-                        $row_pg = mysqli_fetch_assoc($resultado_pg);
-                        //echo $row_pg['num_result'];
-                        //Quantidade de pagina 
-                        $quantidade_pg = ceil($row_pg['num_result'] / $qnt_result_pg);
-                        //Limitar os link antes depois
-                        $max_links = 2;
-                        echo "<nav aria-label='paginacao-blog'>";
-                        echo "<ul class='pagination pagination-sm justify-content-center'>";
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_artigo?pagina=1' tabindex='-1'>Primeira</a>";
-                        echo "</li>";
-
-                        for ($pag_ant = $pagina - $max_links; $pag_ant <= $pagina - 1; $pag_ant++) {
-                            if ($pag_ant >= 1) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$pag_ant'>$pag_ant</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item active'>";
-                        echo "<a class='page-link' href='#'>$pagina</a>";
-                        echo "</li>";
-
-                        for ($pag_dep = $pagina + 1; $pag_dep <= $pagina + $max_links; $pag_dep++) {
-                            if ($pag_dep <= $quantidade_pg) {
-                                echo "<li class='page-item'><a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$pag_dep'>$pag_dep</a></li>";
-                            }
-                        }
-
-                        echo "<li class='page-item'>";
-                        echo "<a class='page-link' href='" . pg . "/listar/list_artigo?pagina=$quantidade_pg'>Última</a>";
-                        echo "</li>";
-                        echo "</ul>";
-                        echo "</nav>";
-                        ?>
                     </div>
                     <?php
                 }
@@ -316,6 +247,41 @@ include_once 'app/adms/include/head.php';
             modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
         })
 
+        $(document).ready(function () {
+            $('#tableArtigos').DataTable({
+                "order": [[0, "desc"]],
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "Selecionado %d linhas",
+                            "0": "Nenhuma linha selecionada",
+                            "1": "Selecionado 1 linha"
+                        }
+                    }
+                }
+            });
+        });
     </script>
 
 </body>
