@@ -37,6 +37,10 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                         </div>
                         <div class="p-2">
                             <?php
+                            $btn_troca_senha = carregar_btn('editar/troca_senha', $conn);
+                            if ($btn_troca_senha) {
+                                echo "<a href='#' data-toggle='modal' data-target='#confirma_senha' data-pg='" . pg . "' data-id='" . $row_user_vis['id'] . "' class='btn btn-outline-info btn-sm'>Trocar Senha </a> ";
+                            }
                             $btn_edit = carregar_btn('editar/edit_perfil', $conn);
                             if ($btn_edit) {
                                 echo "<a href='" . pg . "/editar/edit_perfil' class='btn btn-outline-warning btn-sm'>Editar </a> ";
@@ -102,7 +106,7 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
                             ?>
                             <dd class = "col-sm-9">Sim</dd>
                             <?php
-                        }else {
+                        } else {
                             ?>
                             <dd class = "col-sm-9">Não</dd>
                             <?php
@@ -114,12 +118,50 @@ if (($resultado_user_vis) AND ( $resultado_user_vis->num_rows != 0)) {
             <?php
             include_once 'app/adms/include/rodape_lib.php';
             ?>
-
         </div>
+        <!--Janela Modal Confirma Senha-->
+        <div class="modal fade" id="confirma_senha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p></p>
+                        <form method="POST" action="<?php echo pg; ?>/processa/proc_conf_senha">
+                            <input type="hidden" name="id" id="id" value="<?php
+                            echo $row_artigo['id'];
+                            ?>">
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Senha Atual:</label>
+                                <input id="senha_atual" name="senha_atual" type="password" class="form-control" required>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input name="SendSenhaAtual" id="SendSenhaAtual" type="submit" class="btn btn-success" value="Ok">
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            $('#confirma_senha').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var pg = button.data('pg')
+                var modal = $(this)
+                modal.find('.modal-title').text('Confirmar senha')
+                modal.find('#id').val(id)
+            })
+        </script>
     </body>
     <?php
 } else {
     $_SESSION['msg'] = "<div class='alert alert-danger'>Usuário não encontrado!</div>";
     $url_destino = pg . '/listar/list_usuario';
     header("Location: $url_destino");
-}    
+}

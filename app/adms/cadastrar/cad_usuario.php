@@ -56,29 +56,11 @@ include_once 'app/adms/include/head.php';
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-5">
-                            <label>                                
-                                <span class="text-danger">*</span> Usuário
-                            </label>
-                            <input name="usuario" type="text" class="form-control" id="nome" placeholder="Nome de usuário para login" value="<?php
-                            if (isset($_SESSION['dados']['usuario'])) {
-                                echo $_SESSION['dados']['usuario'];
-                            }
-                            ?>">
-                        </div>
                         <div class="form-group col-md-4">
                             <label><span class="text-danger">*</span> Senha</label>
                             <input name="senha" type="password" class="form-control" id="email" placeholder="A senha deve ter 6 caracteres" value="<?php
                             if (isset($_SESSION['dados']['senha'])) {
                                 echo $_SESSION['dados']['senha'];
-                            }
-                            ?>">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label> Apelido </label>
-                            <input name="apelido" type="text" class="form-control" id="email" placeholder="Apelido do usuário" value="<?php
-                            if (isset($_SESSION['dados']['apelido'])) {
-                                echo $_SESSION['dados']['apelido'];
                             }
                             ?>">
                         </div>

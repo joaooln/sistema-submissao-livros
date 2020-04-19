@@ -4,7 +4,7 @@ if (!isset($seg)) {
 }
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 if (!empty($id)) {
-    $result_artigo_vis = "SELECT artigo.*, artigo.id id_artigo,
+    $result_artigo_vis = "SELECT artigo.*, artigo.id id_artigo, artigo.created created_artigo, artigo.modified modified_artigo, 
             livro.nome nome_livro,  
             area.nome nome_area,
             sitartigo.nome nome_sitartigo,
@@ -192,13 +192,13 @@ if (!empty($id)) {
                             ?>
 
                             <dt class="col-sm-3">Data do Envio</dt>
-                            <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['created'])); ?></dd>
+                            <dd class="col-sm-9"><?php echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['created_artigo'])); ?></dd>
 
-                            <?php if (!empty($row_artigo_vis['modified'])) { ?>
+                            <?php if (!empty($row_artigo_vis['modified_artigo'])) { ?>
                                 <dt class="col-sm-3 text-truncate">Data de Edição</dt>
                                 <dd class="col-sm-9"><?php
-                                    if (!empty($row_artigo_vis['modified'])) {
-                                        echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['modified']));
+                                    if (!empty($row_artigo_vis['modified_artigo'])) {
+                                        echo date('d/m/Y H:i:s', strtotime($row_artigo_vis['modified_artigo']));
                                     }
                                     ?>
                                 </dd>

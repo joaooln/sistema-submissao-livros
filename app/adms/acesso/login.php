@@ -32,7 +32,7 @@ include_once 'app/adms/include/head_login.php';
         <a class="btn btn-secondary" href="<?php echo pg . '/cadastrar/cad_user_login'; ?>">Ainda não tem cadastro? Cadastre-se</a>
         <a class="dropdown-item" href="<?php echo pg . '/acesso/recuperar_login'; ?>">Esqueceu a senha?</a>
 
-        <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+        <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
     </form>
 
 

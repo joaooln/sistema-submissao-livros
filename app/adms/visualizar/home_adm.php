@@ -57,7 +57,7 @@ include_once 'app/adms/include/head.php';
                                 <i class="fas fa-users fa-3x"></i>
                                 <h6 class="card-title">Autores Cadastrados</h6>
                                 <?php
-                                $result_autores = "SELECT COUNT(id) AS num_result FROM adms_usuarios WHERE adms_niveis_acesso_id = 4 AND adms_sits_usuario_id = 1";
+                                $result_autores = "SELECT COUNT(id) AS num_result FROM adms_usuarios WHERE adms_niveis_acesso_id = 4";
                                 $resultado_autores = mysqli_query($conn, $result_autores);
                                 $row_autores = mysqli_fetch_assoc($resultado_autores);
                                 echo "<h2 class='lead-4'>" . $row_autores['num_result'] . "</h2>";
