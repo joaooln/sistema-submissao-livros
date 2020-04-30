@@ -27,27 +27,29 @@ include_once 'app/adms/include/head.php';
                     unset($_SESSION['msg']);
                 }
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro, artigo.adms_tp_subms_id
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro, artigo.adms_tp_subms_id,
+                            user.nome, sitartigo.icone
                             FROM adms_artigos artigo
                             LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            WHERE artigo.adms_sit_artigo_id != 4 AND artigo.adms_sit_artigo_id != 5";
+                            WHERE artigo.adms_sit_artigo_id != 4 AND artigo.adms_sit_artigo_id != 5 AND artigo.adms_sit_artigo_id != 7";
 
 
                 $resultado_artigo = mysqli_query($conn, $resul_artigo);
                 if (($resultado_artigo) AND ( $resultado_artigo->num_rows != 0)) {
                     ?>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="tableArtigos" style="width:100%">
+                        <table class="table table-striped table-hover table-bordered" id="tableArtigos" style="width:100%" style="font-size:5px">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>ID</th>
                                     <th>Tipo</th>
                                     <th>Título do Artigo</th>
                                     <th class="d-none d-sm-table-cell">Título do Livro</th>
-                                    <th class="d-none d-sm-table-cell">Status</th>
+                                    <th class="d-none d-sm-table-cell">Autor</th>
+                                    <th>Status</th>
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -78,9 +80,11 @@ include_once 'app/adms/include/head.php';
                                             }
                                             ?>
                                         </td>
-                                        <td class="d-none d-sm-table-cell"><?php
-                                            echo "<span class='badge badge-" . $row_artigo['cor_cors'] . "'>" . $row_artigo['nome_sitartigo'] . "</span>";
-                                            ?></td>
+                                        <td class="d-none d-sm-table-cell"><?php echo $row_artigo['nome']; ?></td>
+                                        <td class="text-center"><?php
+                                            echo "<button class='btn btn-" . $row_artigo['cor_cors'] . "' data-toggle='tooltip' title='" . $row_artigo['nome_sitartigo'] . "'><i class='" . $row_artigo['icone'] . "'></i></span>";
+                                            ?>
+                                        </td>
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
                                                 <?php

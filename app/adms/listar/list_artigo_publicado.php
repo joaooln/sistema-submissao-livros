@@ -19,12 +19,6 @@ include_once 'app/adms/include/head.php';
                         <h2 class="display-4 titulo">Capítulos Publicados</h2>
                     </div>
                     <div class="p-2">
-                        <?php
-                        $btn_cad = carregar_btn('cadastrar/cad_artigo', $conn);
-                        if ($btn_cad) {
-                            echo "<a href='" . pg . "/cadastrar/cad_artigo' class='btn btn-outline-success btn-sm'>Novo Artigo</a>";
-                        }
-                        ?>
                     </div>
                 </div>
                 <?php
@@ -33,7 +27,8 @@ include_once 'app/adms/include/head.php';
                     unset($_SESSION['msg']);
                 }
 
-                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro
+                $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro,
+                            user.nome, sitartigo.icone
                             FROM adms_artigos artigo
                             LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
@@ -49,11 +44,12 @@ include_once 'app/adms/include/head.php';
                         <table class="table table-striped table-hover table-bordered" id="tableArtigos" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>ID</th>
                                     <th>Tipo</th>
-                                    <th>Título do Capítulo</th>
+                                    <th>Título do Artigo</th>
                                     <th class="d-none d-sm-table-cell">Título do Livro</th>
-                                    <th class="d-none d-sm-table-cell">Status</th>
+                                    <th class="d-none d-sm-table-cell">Autor</th>
+                                    <th>Status</th>
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -84,9 +80,11 @@ include_once 'app/adms/include/head.php';
                                             }
                                             ?>
                                         </td>
-                                        <td class="d-none d-sm-table-cell"><?php
-                                            echo "<span class='badge badge-" . $row_artigo['cor_cors'] . "'>" . $row_artigo['nome_sitartigo'] . "</span>";
-                                            ?></td>
+                                        <td class="d-none d-sm-table-cell"><?php echo $row_artigo['nome']; ?></td>
+                                        <td class="text-center"><?php
+                                            echo "<button class='btn btn-" . $row_artigo['cor_cors'] . "' data-toggle='tooltip' title='" . $row_artigo['nome_sitartigo'] . "'><i class='" . $row_artigo['icone'] . "'></i></span>";
+                                            ?>
+                                        </td>
                                         <td class="text-center">
                                             <span class="d-none d-md-block">
                                                 <?php
@@ -96,7 +94,7 @@ include_once 'app/adms/include/head.php';
                                                 $row_artigo['motivo_rejeicao'] = "";
                                                 $btn_vis = carregar_btn('visualizar/vis_artigo', $conn);
                                                 if ($btn_vis) {
-                                                    echo "<a href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                                    echo "<a href='" . pg . "/visualizar/vis_artigo_adm?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm data-toggle='tooltip' data-placement='top' title='Visualizar'><i class='fas fa-eye'></i></a> ";
                                                 }
                                                 ?>
 
@@ -131,121 +129,7 @@ include_once 'app/adms/include/head.php';
         ?>
     </div>
 
-    <!--Janela Modal Confirma Aceite-->
-    <div class="modal fade" id="confirma_aceite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p></p>
-                </div>
-                <div class="modal-footer">
-                    <?php
-                    echo "<a href='" . pg . "/processa/proc_aceite?id=" . $row_artigo['id'] . "' type='button' class='btn btn-primary'>Sim</a>";
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Janela Modal Rejeita Artigo-->
-    <div class="modal fade" id="confirma_rejeita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p></p>
-                    <form method="POST" action="<?php echo pg; ?>/processa/proc_rejeita">
-                        <input type="hidden" name="id" id="id" value="<?php
-                        echo $row_artigo['id'];
-                        ?>">
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Motivo da Rejeição:</label>
-                            <textarea id="motivo_rejeicao" name="motivo_rejeicao" type="text" class="form-control" required></textarea>
-                        </div>
-
-                </div>
-                <div class="modal-footer">
-                    <input name="SendRejeicao" id="SendRejeicao" type="submit" class="btn btn-success" value="Sim">
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!--Janela Modal Publicacao-->
-    <div class="modal fade" id="confirma_publicacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p></p>
-                    <form method="POST" action="<?php echo pg; ?>/processa/proc_publicado">
-                        <input type="hidden" name="id" id="id" value="<?php
-                        echo $row_artigo['id'];
-                        ?>">
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Link do livro:</label>
-                            <textarea id="link_livro" name="link_livro" type="text" class="form-control" required></textarea>
-                        </div>
-
-                </div>
-                <div class="modal-footer">
-                    <input name="SendPublicado" id="SendPublicado" type="submit" class="btn btn-success" value="Sim">
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <script>
-
-        $('#confirma_publicacao').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var pg = button.data('pg')
-            var modal = $(this)
-            modal.find('.modal-title').text('Confirmar Publicação')
-            modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
-            modal.find('#id').val(id)
-            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
-        })
-
-        $('#confirma_aceite').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var pg = button.data('pg')
-            var modal = $(this)
-            modal.find('.modal-title').text('Confirmar Aceite')
-            modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
-            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_aceite?id=' + id)
-        })
-
-        $('#confirma_rejeita').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var pg = button.data('pg')
-            var modal = $(this)
-            modal.find('.modal-title').text('Confirmar Rejeição')
-            modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
-            modal.find('#id').val(id)
-            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
-        })
 
         $(document).ready(function () {
             $('#tableArtigos').DataTable({

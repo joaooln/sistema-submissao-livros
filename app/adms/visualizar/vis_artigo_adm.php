@@ -59,7 +59,12 @@ if (!empty($id)) {
                                     if ($btn_publicado && $row_artigo_vis['adms_sit_artigo_id'] == 3) {
                                         echo "<a href='#' data-toggle='modal' data-target='#confirma_publicacao' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-info btn-sm'>Publicado</a> ";
                                     }
+                                    $btn_arquivar = carregar_btn('processa/proc_arquivar', $conn);
+                                    if ($btn_arquivar && $row_artigo_vis['adms_sit_artigo_id'] == 2 OR 6) {
+                                        echo "<a href='#' data-toggle='modal' data-target='#confirma_arquivar' data-pg='" . pg . "' data-id='" . $row_artigo_vis['id_artigo'] . "' class='btn btn-dark btn-sm'>Arquivar</a> ";
+                                    }
                                     ?>
+
                                 </span>
                                 <div class="dropdown d-block d-md-none">
                                     <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -379,147 +384,182 @@ if (!empty($id)) {
                     </div>
                 </div>
 
-                <div class="modal fade" id="info_autor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <?php
-                    $result_autor_vis = "SELECT 
-                                    area.nome nome_area,
-                                    titu.nome nome_titulo
-                                    FROM adms_usuarios user
-                                    INNER JOIN adms_areas area ON area.id=user.adms_area_id
-                                    INNER JOIN adms_titulacoes titu ON titu.id=user.adms_titulacao_id
-                                    WHERE user.id=" . $row_artigo_vis['id_user'] . " LIMIT 1";
-                    $resultado_autor_vis = mysqli_query($conn, $result_autor_vis);
-                    $row_autor_vis = mysqli_fetch_assoc($resultado_autor_vis);
-                    ?>
-                    <div class="modal-dialog modal-lg" role="document">
+                <!-- Janela Modal Confirma Arquivar -->
+                <div class="modal fade" id="confirma_arquivar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Infomações do Autor</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <p></p>
-                                <dl class="row">
-                                    <dt class="col-sm-3">Imagem</dt>
-                                    <dd class="col-sm-9">
-                                        <?php
-                                        if (!empty($row_artigo_vis['imagem'])) {
-                                            echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_artigo_vis['user_id'] . "/" . $row_artigo_vis['imagem'] . "' width='200' height='200'>";
-                                        } else {
-                                            echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
-                                        }
-                                        ?>
-                                    </dd>
-
-                                    <dt class="col-sm-3">Nome</dt>
-                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
-
-                                    <dt class="col-sm-3">Titulação</dt>
-                                    <dd class="col-sm-9"><?php echo $row_autor_vis['nome_titulo']; ?></dd>
-
-                                    <dt class="col-sm-3">Área de Conhecimento</dt>
-                                    <dd class="col-sm-9"><?php echo $row_autor_vis['nome_area']; ?></dd>
-
-                                    <dt class="col-sm-3">CPF</dt>
-                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['cpf']; ?></dd>
-
-                                    <dt class="col-sm-3">Telefone</dt>
-                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['telefone']; ?></dd>
-
-                                    <dt class="col-sm-3">E-mail</dt>
-                                    <dd class="col-sm-9"><?php echo $row_artigo_vis['email']; ?></dd>
-
-                                    <dt class="col-sm-3">Endereço</dt>
-                                    <dd class="col-sm-6"><?php echo $row_artigo_vis['rua']; ?></dd>
-                                    <dd class="col-sm-3">Nº <?php echo $row_artigo_vis['num_end']; ?></dd>
-
-                                    <dt class="col-sm-3"></dt>
-                                    <dd class="col-sm-4">Bairro: <?php echo $row_artigo_vis['bairro']; ?></dd>
-                                    <dd class="col-sm-4">Complemento: <?php echo $row_artigo_vis['complemento']; ?></dd>
-
-                                    <dt class="col-sm-3"></dt>
-                                    <dd class="col-sm-4">Cidade: <?php echo $row_artigo_vis['cidade']; ?></dd>
-                                    <dd class="col-sm-2">Estado: <?php echo $row_artigo_vis['estado']; ?></dd>
-                                    <dd class="col-sm-3">CEP: <?php echo $row_artigo_vis['cep']; ?></dd>
-
-                                    <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
-                                    <?php
-                                    if ($row_artigo_vis['recebe_email'] == 1) {
-                                        ?>
-                                        <dd class = "col-sm-9">Sim</dd>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <dd class = "col-sm-9">Não</dd>
-                                        <?php
-                                    }
-                                    ?>
-                                </dl>
-                                </dl>
-                            </div>
-                            <div class="modal-footer">
-
+                                <form method="POST" action="<?php echo pg; ?>/processa/proc_arquivar">
+                                    <input type="hidden" name="id" id="id" value="<?php
+                                    echo $row_artigo_vis['id_artigo'];
+                                    ?>">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input name = "SendArquivar" id = "SendArquivar" type = "submit" class = "btn btn-success" value = "Sim">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <script>
+                    <div class="modal fade" id="info_autor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <?php
+                        $result_autor_vis = "SELECT 
+                                    area.nome nome_area,
+                                    titu.nome nome_titulo
+                                    FROM adms_usuarios user
+                                    INNER JOIN adms_areas area ON area.id=user.adms_area_id
+                                    INNER JOIN adms_titulacoes titu ON titu.id=user.adms_titulacao_id
+                                    WHERE user.id=" . $row_artigo_vis['id_user'] . " LIMIT 1";
+                        $resultado_autor_vis = mysqli_query($conn, $result_autor_vis);
+                        $row_autor_vis = mysqli_fetch_assoc($resultado_autor_vis);
+                        ?>
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Infomações do Autor</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p></p>
+                                    <dl class="row">
+                                        <dt class="col-sm-3">Imagem</dt>
+                                        <dd class="col-sm-9">
+                                            <?php
+                                            if (!empty($row_artigo_vis['imagem'])) {
+                                                echo "<img src='" . pg . "/assets/imagens/usuario/" . $row_artigo_vis['user_id'] . "/" . $row_artigo_vis['imagem'] . "' width='200' height='200'>";
+                                            } else {
+                                                echo "<img src='" . pg . "/assets/imagens/usuario/preview_img.png' width='200' height='200'>";
+                                            }
+                                            ?>
+                                        </dd>
 
-                    $('#confirma_publicacao').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget)
-                        var id = button.data('id')
-                        var pg = button.data('pg')
-                        var modal = $(this)
-                        modal.find('.modal-title').text('Confirmar Publicação')
-                        modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
-                        modal.find('#id').val(id)
-                        modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
-                    })
+                                        <dt class="col-sm-3">Nome</dt>
+                                        <dd class="col-sm-9"><?php echo $row_artigo_vis['nome']; ?></dd>
 
-                    $('#confirma_aceite').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget)
-                        var id = button.data('id')
-                        var pg = button.data('pg')
-                        var modal = $(this)
-                        modal.find('.modal-title').text('Confirmar Aceite')
-                        modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
-                        modal.find('#id').val(id)
-                    })
+                                        <dt class="col-sm-3">Titulação</dt>
+                                        <dd class="col-sm-9"><?php echo $row_autor_vis['nome_titulo']; ?></dd>
 
-                    $('#confirma_rejeita').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget)
-                        var id = button.data('id')
-                        var pg = button.data('pg')
-                        var modal = $(this)
-                        modal.find('.modal-title').text('Confirmar Rejeição')
-                        modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
-                        modal.find('#id').val(id)
-                        modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
-                    })
+                                        <dt class="col-sm-3">Área de Conhecimento</dt>
+                                        <dd class="col-sm-9"><?php echo $row_autor_vis['nome_area']; ?></dd>
 
-                    $('#confirma_aceite_livro').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget)
-                        var id = button.data('id')
-                        var pg = button.data('pg')
-                        var modal = $(this)
-                        modal.find('.modal-title').text('Confirmar Aceite')
-                        modal.find('.modal-body p').text('Confirmar aceite do livro número: ' + id + ' ?')
-                        modal.find('#id').val(id)
-                    })
+                                        <dt class="col-sm-3">CPF</dt>
+                                        <dd class="col-sm-9"><?php echo $row_artigo_vis['cpf']; ?></dd>
 
-                </script>
-        </body>
-        <?php
-    } else {
-        $_SESSION['msg'] = "<div class='alert alert-danger'>Artigo não encontrado!</div>";
-        $url_destino = pg . '/listar/list_artigo';
-        header("Location: $url_destino");
-    }
-} else {
-    $_SESSION['msg'] = "<div class='alert alert-danger'>Página não encontrada!</div>";
-    $url_destino = pg . ' / acesso / login';
-    header("Location: $url_destino");
-}    
+                                        <dt class="col-sm-3">Telefone</dt>
+                                        <dd class="col-sm-9"><?php echo $row_artigo_vis['telefone']; ?></dd>
+
+                                        <dt class="col-sm-3">E-mail</dt>
+                                        <dd class="col-sm-9"><?php echo $row_artigo_vis['email']; ?></dd>
+
+                                        <dt class="col-sm-3">Endereço</dt>
+                                        <dd class="col-sm-6"><?php echo $row_artigo_vis['rua']; ?></dd>
+                                        <dd class="col-sm-3">Nº <?php echo $row_artigo_vis['num_end']; ?></dd>
+
+                                        <dt class="col-sm-3"></dt>
+                                        <dd class="col-sm-4">Bairro: <?php echo $row_artigo_vis['bairro']; ?></dd>
+                                        <dd class="col-sm-4">Complemento: <?php echo $row_artigo_vis['complemento']; ?></dd>
+
+                                        <dt class="col-sm-3"></dt>
+                                        <dd class="col-sm-4">Cidade: <?php echo $row_artigo_vis['cidade']; ?></dd>
+                                        <dd class="col-sm-2">Estado: <?php echo $row_artigo_vis['estado']; ?></dd>
+                                        <dd class="col-sm-3">CEP: <?php echo $row_artigo_vis['cep']; ?></dd>
+
+                                        <dt class="col-sm-3">Recebe e-mail de chamadas?</dt>
+                                        <?php
+                                        if ($row_artigo_vis['recebe_email'] == 1) {
+                                            ?>
+                                            <dd class = "col-sm-9">Sim</dd>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <dd class = "col-sm-9">Não</dd>
+                                            <?php
+                                        }
+                                        ?>
+                                    </dl>
+                                    </dl>
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+
+                        $('#confirma_publicacao').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget)
+                            var id = button.data('id')
+                            var pg = button.data('pg')
+                            var modal = $(this)
+                            modal.find('.modal-title').text('Confirmar Publicação')
+                            modal.find('.modal-body p').text('Confirmar publicação do artigo número: ' + id + ' ?')
+                            modal.find('#id').val(id)
+                            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_publicado?id=' + id)
+                        })
+
+                        $('#confirma_aceite').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget)
+                            var id = button.data('id')
+                            var pg = button.data('pg')
+                            var modal = $(this)
+                            modal.find('.modal-title').text('Confirmar Aceite')
+                            modal.find('.modal-body p').text('Confirmar aceite do artigo número: ' + id + ' ?')
+                            modal.find('#id').val(id)
+                        })
+
+                        $('#confirma_rejeita').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget)
+                            var id = button.data('id')
+                            var pg = button.data('pg')
+                            var modal = $(this)
+                            modal.find('.modal-title').text('Confirmar Rejeição')
+                            modal.find('.modal-body p').text('Confirmar rejeição do artigo número: ' + id + ' ?')
+                            modal.find('#id').val(id)
+                            modal.find('.modal-footer a').attr("href", pg + '/processa/proc_rejeita?id=' + id)
+                        })
+
+                        $('#confirma_aceite_livro').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget)
+                            var id = button.data('id')
+                            var pg = button.data('pg')
+                            var modal = $(this)
+                            modal.find('.modal-title').text('Confirmar Aceite')
+                            modal.find('.modal-body p').text('Confirmar aceite do livro número: ' + id + ' ?')
+                            modal.find('#id').val(id)
+                        })
+                        
+                        $('#confirma_arquivar').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget)
+                            var id = button.data('id')
+                            var pg = button.data('pg')
+                            var modal = $(this)
+                            modal.find('.modal-title').text('Confirmar Arquivar')
+                            modal.find('.modal-body p').text('Confirmar o arquivamento do artigo número: ' + id + ' ?')
+                            modal.find('#id').val(id)
+                        })
+
+                    </script>
+                    </body>
+                    <?php
+                } else {
+                    $_SESSION['msg'] = "<div class='alert alert-danger'>Artigo não encontrado!</div>";
+                    $url_destino = pg . '/listar/list_artigo';
+                    header("Location: $url_destino");
+                }
+            } else {
+                $_SESSION['msg'] = "<div class='alert alert-danger'>Página não encontrada!</div>";
+                $url_destino = pg . ' / acesso / login';
+                header("Location: $url_destino");
+            }    

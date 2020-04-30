@@ -1,6 +1,6 @@
 <?php
 if (!isset($seg)) {
-    exit;
+exit;
 }
 include_once 'app/adms/include/head.php';
 ?>
@@ -22,15 +22,15 @@ include_once 'app/adms/include/head.php';
                         <?php
                         $btn_cad = carregar_btn('cadastrar/cad_artigo', $conn);
                         if ($btn_cad) {
-                            echo "<a href='" . pg . "/visualizar/escolhe_tp_subm' class='btn btn-outline-success btn-sm'>Nova Submissão</a>";
+                        echo "<a href='" . pg . "/visualizar/escolhe_tp_subm' class='btn btn-outline-success btn-sm'>Nova Submissão</a>";
                         }
                         ?>
                     </div>
                 </div>
                 <?php
                 if (isset($_SESSION['msg'])) {
-                    echo $_SESSION['msg'];
-                    unset($_SESSION['msg']);
+                echo $_SESSION['msg'];
+                unset($_SESSION['msg']);
                 }
 
                 $resul_artigo = "SELECT artigo.id, artigo.tituloArtigo, artigo.tituloLivro, artigo.arquivo, artigo.adms_livro_id, sitartigo.nome nome_sitartigo, cors.cor cor_cors, artigo.adms_sit_artigo_id, livro.nome nome_livro
@@ -38,7 +38,8 @@ include_once 'app/adms/include/head.php';
                             LEFT JOIN adms_livros livro ON livro.id=artigo.adms_livro_id
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
-                            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id";
+                            INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
+                            WHERE artigo.adms_usuario_id = ".$_SESSION['id']."";
 
                 $resultado_artigo = mysqli_query($conn, $resul_artigo);
                 if (($resultado_artigo) AND ( $resultado_artigo->num_rows != 0)) {
@@ -78,15 +79,15 @@ include_once 'app/adms/include/head.php';
                                                 <?php
                                                 $btn_vis = carregar_btn('visualizar/vis_artigo', $conn);
                                                 if ($btn_vis) {
-                                                    echo "<a href='" . pg . "/visualizar/vis_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
+                                                    echo "<a href='" . pg . "/visualizar/vis_artigo?id = " . $row_artigo['id'] . "' class='btn btn-outline-primary btn-sm'>Visualizar</a> ";
                                                 }
                                                 $btn_edit = carregar_btn('editar/edit_artigo', $conn);
                                                 if ($btn_edit) {
-                                                    echo "<a href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
+                                                    echo "<a href='" . pg . "/editar/edit_artigo?id = " . $row_artigo['id'] . "' class='btn btn-outline-warning btn-sm'>Editar </a> ";
                                                 }
                                                 $btn_pagar = carregar_btn('pagseguro/checkout', $conn);
                                                 if (($btn_pagar) && ($row_artigo['adms_sit_artigo_id'] == 2)) {
-                                                    echo "<a href='" . pg . "/pagseguro/checkout?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
+                                                    echo "<a href='" . pg . "/pagseguro/checkout?id = " . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
                                                 }
                                                 ?>
                                             </span>
@@ -97,13 +98,13 @@ include_once 'app/adms/include/head.php';
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                                     <?php
                                                     if ($btn_vis) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_artigo?id=" . $row_artigo['id'] . "'>Visualizar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/visualizar/vis_artigo?id = " . $row_artigo['id'] . "'>Visualizar</a>";
                                                     }
                                                     if ($btn_edit) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_artigo?id=" . $row_artigo['id'] . "'>Editar</a>";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/editar/edit_artigo?id = " . $row_artigo['id'] . "'>Editar</a>";
                                                     }
                                                     if (($btn_pagar) && ($row_artigo['adms_sit_artigo_id'] == 2)) {
-                                                        echo "<a class='dropdown-item' href='" . pg . "/pagseguro/checkout?id=" . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
+                                                        echo "<a class='dropdown-item' href='" . pg . "/pagseguro/checkout?id = " . $row_artigo['id'] . "' class='btn btn-outline-danger btn-sm'>Pagar</a> ";
                                                     }
                                                     ?>
                                                 </div>
@@ -131,38 +132,38 @@ include_once 'app/adms/include/head.php';
             $('#tableArtigos').DataTable({
                 "order": [[0, "desc"]],
                 "language": {
-                    "sEmptyTable": "Nenhum registro encontrado",
-                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ".",
-                    "sLengthMenu": "_MENU_ resultados por página",
-                    "sLoadingRecords": "Carregando...",
-                    "sProcessing": "Processando...",
-                    "sZeroRecords": "Nenhum registro encontrado",
-                    "sSearch": "Pesquisar",
-                    "oPaginate": {
-                        "sNext": "Próximo",
-                        "sPrevious": "Anterior",
-                        "sFirst": "Primeiro",
-                        "sLast": "Último"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Ordenar colunas de forma ascendente",
-                        "sSortDescending": ": Ordenar colunas de forma descendente"
-                    },
-                    "select": {
-                        "rows": {
-                            "_": "Selecionado %d linhas",
-                            "0": "Nenhuma linha selecionada",
-                            "1": "Selecionado 1 linha"
-                        }
-                    }
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                "sNext": "Próximo",
+                "sPrevious": "Anterior",
+                "sFirst": "Primeiro",
+                "sLast": "Último"
+                },
+                "oAria": {
+                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "select": {
+                "rows": {
+                "_": "Selecionado %d linhas",
+                "0": "Nenhuma linha selecionada",
+                "1": "Selecionado 1 linha"
                 }
-            });
-        });
-    </script>
-</body>
+                }
+                }
+                });
+                });
+                </script>
+                </body>
 
 

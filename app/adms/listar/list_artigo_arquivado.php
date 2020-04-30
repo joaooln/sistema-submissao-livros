@@ -16,7 +16,7 @@ include_once 'app/adms/include/head.php';
             <div class="list-group-item">
                 <div class="d-flex">
                     <div class="mr-auto p-2">
-                        <h2 class="display-4 titulo">Submissões Rejeitadas</h2>
+                        <h2 class="display-4 titulo">Submissões Arquivadas</h2>
                     </div>
                     <div class="p-2">
                     </div>
@@ -34,7 +34,7 @@ include_once 'app/adms/include/head.php';
                             INNER JOIN adms_usuarios user ON user.id=artigo.adms_usuario_id
                             INNER JOIN adms_sits_artigos sitartigo ON sitartigo.id=artigo.adms_sit_artigo_id
                             INNER JOIN adms_cors cors ON cors.id=sitartigo.adms_cor_id
-                            WHERE artigo.adms_sit_artigo_id = 4";
+                            WHERE artigo.adms_sit_artigo_id = 7";
 
 
                 $resultado_artigo = mysqli_query($conn, $resul_artigo);
